@@ -1,0 +1,23 @@
+{
+  "name": "sailsAngularElectron",
+  "main": "app.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jasancheg/sails-angular-electron",
+  "authors": [
+    "Jose Antonio Sanchez"
+  ],
+  "description": "Basic cross platform desktop application built with SailsJS, AngularJS and Electron",
+  "keywords": [
+    "sails",
+    "angular",
+    "electron"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

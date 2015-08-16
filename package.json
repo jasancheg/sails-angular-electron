@@ -1,0 +1,40 @@
+{
+  "name": "sails-angular-electron",
+  "appName": "BasicApp",
+  "version": "0.0.1",
+  "description": "Basic cross platform desktop application built with SailsJS, AngularJS and Electron",
+  "main": "app.js",
+  "license": "MIT",
+  "author": {
+    "name": "Jose Antonio Sanchez",
+    "email": "your@email.com",
+    "url": "inideaweb.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "start": "node ./app/server/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasancheg/sails-angular-electron.git"
+  },
+  "keywords": [
+    "SailsJS",
+    "AngularJS",
+    "ELectron",
+    "Rest API",
+    "UI"
+  ],
+  "bugs": {
+    "url": "https://github.com/jasancheg/sails-angular-electron/issues"
+  },
+  "homepage": "https://github.com/jasancheg/sails-angular-electron#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  },
+  "dependencies": {
+  }
+}
