@@ -1,5 +1,4 @@
-#
-
+# Sails REST API
 
 generated with:
 
