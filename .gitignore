@@ -51,6 +51,7 @@ app/server/db
 */db/*
 .tmp/*
 .sass-cache
+.grunt
 
 ################################################
 # Node.js / NPM / Logs / Runtime data
@@ -80,12 +81,10 @@ pids
 *#
 .DS_STORE
 .idea
+/build
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
 
 # node-waf configuration
 .lock-wscript

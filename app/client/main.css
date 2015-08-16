@@ -1,0 +1,17 @@
+html,
+body {
+    -webkit-app-region: drag;
+    padding: 0;
+    margin: 0;
+    background-color: #2b3e50;
+    height: 100%;
+}
+h1 {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 100;
+    color: #df691a;
+    margin: 0;
+    padding: 30% 0 0 0;
+}
