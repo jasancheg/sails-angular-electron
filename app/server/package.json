@@ -1,7 +1,7 @@
 {
   "name": "serverapp",
   "version": "0.0.1",
-  "description": "modules required specifically on the server app side on the server app",
+  "description": "modules required specifically on the server app folder",
   "main": "app.js",
   "repository": {
     "type": "git",
