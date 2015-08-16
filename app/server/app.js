@@ -37,6 +37,6 @@ process.chdir(__dirname);
         }
     }
 
-    // Start server
-    sails.lift(rc('sails'));
+    // Start server && disable grunt
+    sails.lift(rc('sails', {hooks:{grunt:false}}));
 })();
