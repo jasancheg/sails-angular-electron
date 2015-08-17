@@ -26,7 +26,10 @@ function createMainWindow () {
     });
 
     win.loadUrl('file://' + __dirname + '/client/loading.html');
-    //win.openDevTools({detach: true});
+
+    if(process.env.NODE_ENV === "development") {
+        win.openDevTools({detach: true});
+    }
 
     win.on('closed', onClosed);
 

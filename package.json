@@ -16,6 +16,7 @@
   },
   "scripts": {
     "start": "electron ./app/app.js",
+    "startd": "NODE_ENV='dev' electron ./app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --all",
     "build-mac": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=darwin --arch=x64",
