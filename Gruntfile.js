@@ -176,7 +176,7 @@ module.exports = function (grunt) {
         wiredep: {
             app: {
                 src: ['<%= config.app %>/index.html'],
-                ignorePath:  /\.\.\//
+                ignorePath:  /\.\.\/\.\.\//
             },
             // test: {
             //     devDependencies: true,
@@ -319,7 +319,7 @@ module.exports = function (grunt) {
         ngtemplates: {
             dist: {
                 options: {
-                    module: 'nobuildedcodeApp',
+                    module: 'angularsailsApp',
                     htmlmin: '<%= htmlmin.dist.options %>',
                     usemin: 'scripts/scripts.js'
                 },
@@ -411,7 +411,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'wiredep',
-            'compass:server',
+            'concurrent:server',
             'autoprefixer:server',
             'connect:livereload',
             'watch'

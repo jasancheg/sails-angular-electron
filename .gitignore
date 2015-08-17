@@ -82,6 +82,7 @@ pids
 .DS_STORE
 .idea
 /build
+/dist
 
 # Coverage directory used by tools like istanbul
 coverage
