@@ -25,7 +25,7 @@ function createMainWindow () {
         }
     });
 
-    win.loadUrl('file://' + __dirname + '/client/index.html');
+    win.loadUrl('file://' + __dirname + '/client/loading.html');
     //win.openDevTools({detach: true});
 
     win.on('closed', onClosed);
@@ -83,7 +83,7 @@ io.sails.url = 'http://localhost:1337';
 
 // Send a GET request to `http://localhost:1337/`:
 io.socket.get('/', function serverResponded (body, JWR) {
-    console.log(io.socket._raw.connected);
+    console.log('server loaded: ', io.socket._raw.connected);
     mainWindow.loadUrl('file://' + __dirname + '/client/loaded.html');
     io.socket.disconnect();
 });
