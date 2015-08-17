@@ -56,9 +56,7 @@ Force reload the window.
 $ npm start
 ```
 
-*or* 
-
-run with developers tools open from the begining
+**or** run with developer tools open from the begining
 ```
 $ npm run startd
 ```
