@@ -69,7 +69,7 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    open: true,
+                    open: false,
                     middleware: function (connect) {
                         return [
                             connect.static('.tmp'),
@@ -390,6 +390,30 @@ module.exports = function (grunt) {
                 'imagemin',
                 'svgmin'
             ]
+        },
+
+        shell: {
+            multiple: {
+                command: [
+                    'mkdir test',
+                    'cd test',
+                    'ls'
+                ].join('&&')
+            },
+            startelectron: {
+                command:'electron ./app/app.js'
+            }
+        },
+        exec: {
+            startelectron: 'electron ./app/app.js'
+        },
+        bgShell: {
+            _defaults: {
+                bg: true
+            },
+            startelectron: {
+                cmd: 'electron ./app/app.js'
+            }
         }
         //,
 
@@ -421,6 +445,22 @@ module.exports = function (grunt) {
     grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server mode of the Electron App.');
         grunt.task.run(['serve:' + target]);
+    });
+
+    grunt.registerTask('start', 'Compile then start the Electron App', function (target) {
+        if (target === 'dev') {
+            return grunt.task.run(['build', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            'wiredep',
+            'concurrent:server',
+            'autoprefixer:server',
+            'connect:livereload',
+            'bgShell:startelectron',
+            'watch'
+        ]);
     });
 
     // grunt.registerTask('test', [
