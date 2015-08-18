@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= config.app %>/{,*/}*.html',
-                    '.tmp/styles/{,*/}*.css',
+                    '.tmp/app/client/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
@@ -157,17 +157,17 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '.tmp/styles/',
+                    cwd: '.tmp/app/client/styles/',
                     src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
+                    dest: '.tmp/app/client/styles/'
                 }]
             },
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/styles/',
+                    cwd: '.tmp/app/client/styles/',
                     src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
+                    dest: '.tmp/app/client/styles/'
                 }]
             }
         },
@@ -204,8 +204,8 @@ module.exports = function (grunt) {
         compass: {
             options: {
                 sassDir: '<%= config.app %>/styles',
-                cssDir: '.tmp/styles',
-                generatedImagesDir: '.tmp/images/generated',
+                cssDir: '.tmp/app/client/styles',
+                generatedImagesDir: '.tmp/app/client/images/generated',
                 imagesDir: '<%= config.app %>/images',
                 javascriptsDir: '<%= config.app %>/scripts',
                 fontsDir: '<%= config.app %>/styles/fonts',
@@ -216,6 +216,12 @@ module.exports = function (grunt) {
                 relativeAssets: false,
                 assetCacheBuster: false,
                 raw: 'Sass::Script::Number.precision = 10\n'
+            },
+            electron: {
+                options: {
+                    sourcemap: true,
+                    cssDir:'<%= config.app %>/styles'
+                }
             },
             dist: {
                 options: {
@@ -359,7 +365,7 @@ module.exports = function (grunt) {
                     ]
                 }, {
                     expand: true,
-                    cwd: '.tmp/images',
+                    cwd: '.tmp/app/client/images',
                     dest: '<%= config.dist %>/images',
                     src: ['generated/*']
                 }, {
@@ -372,13 +378,16 @@ module.exports = function (grunt) {
             styles: {
                 expand: true,
                 cwd: '<%= config.app %>/styles',
-                dest: '.tmp/styles/',
+                dest: '.tmp/app/client/styles/',
                 src: '{,*/}*.css'
             }
         },
 
         // Run some tasks in parallel to speed up the build process
         concurrent: {
+            electron: [
+                'compass:electron'
+            ],
             server: [
                 'compass:server'
             ],
@@ -459,7 +468,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'wiredep',
-            'concurrent:server',
+            'concurrent:electron',
             'bgShell:startelectron',
             'watch'
         ]);

@@ -47,6 +47,8 @@ app/server/.tmp
 app/server/dump.rdb
 app/server/.tmp/localDiskDb.db
 app/server/db
+app/client/styles/*.css
+app/client/styles/*.css.map
 *.nedb
 */db/*
 .tmp/*

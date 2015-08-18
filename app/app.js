@@ -96,6 +96,6 @@ io.sails.url = 'http://localhost:1337';
 // Send a GET request to `http://localhost:1337/`:
 io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
-    mainWindow.loadUrl('file://' + __dirname + '/client/loaded.html');
+    mainWindow.loadUrl('file://' + __dirname + '/client/index.html');
     io.socket.disconnect();
 });
