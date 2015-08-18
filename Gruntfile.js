@@ -176,7 +176,11 @@ module.exports = function (grunt) {
         wiredep: {
             app: {
                 src: ['<%= config.app %>/index.html'],
-                ignorePath:  /\.\.\/\.\.\//
+                // Check if app is run on 'Browser mode' to ignore jquery, it will be loaded through require
+                // To know more about what is this, please refer to the issue https://github.com/atom/electron/issues/254
+                exclude: [ (process.env.ELECTRON_ENV) ? /jquery/ : '' ],
+                // check if app is run on 'Browser mode' to set correct path
+                ignorePath: (process.env.ELECTRON_ENV) ? '/\.\.\/{2}/' : '/\.\.\/\.\.\//'
             },
             // test: {
             //     devDependencies: true,
@@ -436,7 +440,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('serve', 'Compile then start a connect `web server mode` for the Electron App', function (target) {
+    grunt.registerTask('serve', 'Compile then start a connect in `Browser Mode` for the Electron App', function (target) {
 
         grunt.log.warn("The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly");
         if (target === 'dist') {
@@ -454,7 +458,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server mode of the Electron App.');
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start in a `Browser Mode` of the Electron App.');
         grunt.task.run(['serve:' + target]);
     });
 
@@ -464,6 +468,9 @@ module.exports = function (grunt) {
         // a flag is set `gipd` on the current process.env to be used from the electron browser process
         var env = process.env;
         env.gpid = process.pid;
+
+        // Used by Grunt to differentiate between 'Electron App' and 'Browser mode'
+        env.ELECTRON_ENV = 'dev';
 
         grunt.task.run([
             'clean:server',
