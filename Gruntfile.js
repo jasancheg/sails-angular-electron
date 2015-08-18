@@ -69,7 +69,7 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    open: false,
+                    open: true,
                     middleware: function (connect) {
                         return [
                             connect.static('.tmp'),
@@ -428,6 +428,8 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('serve', 'Compile then start a connect `web server mode` for the Electron App', function (target) {
+
+        grunt.log.warn("The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly");
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
