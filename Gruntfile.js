@@ -392,6 +392,7 @@ module.exports = function (grunt) {
             ]
         },
 
+        // run single or multiple command shell (temp, `grunt-shell` dependencie)
         shell: {
             multiple: {
                 command: [
@@ -404,9 +405,8 @@ module.exports = function (grunt) {
                 command:'electron ./app/app.js'
             }
         },
-        exec: {
-            startelectron: 'electron ./app/app.js'
-        },
+
+        // run command shel in the background process or in parallel
         bgShell: {
             _defaults: {
                 bg: true
@@ -427,7 +427,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('serve', 'Compile then start a connect web server mode for the Electron App', function (target) {
+    grunt.registerTask('serve', 'Compile then start a connect `web server mode` for the Electron App', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -447,20 +447,30 @@ module.exports = function (grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('start', 'Compile then start the Electron App', function (target) {
-        if (target === 'dev') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
+    grunt.registerTask('start', 'Compile then start the Electron App', function () {
+
+        // this is a limited way to have access to the current level of the process from the electron app
+        // a flag is set `gipd` on the current process.env to be used from the electron browser process
+        var env = process.env;
+        env.gpid = process.pid;
 
         grunt.task.run([
             'clean:server',
             'wiredep',
             'concurrent:server',
-            'autoprefixer:server',
-            'connect:livereload',
             'bgShell:startelectron',
             'watch'
         ]);
+    });
+
+    grunt.registerTask('stop', 'stop the current process, it have sense when is run from nodejs call', function (gpid) {
+
+        if (gpid && process.env.gpid === gpid) {
+            grunt.log.ok('Grunt processes have been stopped: ', gpid );
+            return process.kill(gpid);
+        }
+
+        grunt.log.warn('There is no running processes or is a invalid process id');
     });
 
     // grunt.registerTask('test', [

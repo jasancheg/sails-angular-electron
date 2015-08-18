@@ -70,6 +70,15 @@ app.on('activate-with-no-open-windows', function () {
     }
 });
 
+// run before the app quit
+app.on('before-quit', function (event) {
+    // uses the flat that was created when the app is run from `grunt start`
+    if(process.env.gpid) {
+        console.info('stoping grunt process...');
+        require('grunt').tasks('stop:'+process.env.gpid);
+    }
+});
+
 // init the sails server app
 var serverDir = '/server/app.js'
 var sapp = require(__dirname + serverDir);
@@ -87,6 +96,6 @@ io.sails.url = 'http://localhost:1337';
 // Send a GET request to `http://localhost:1337/`:
 io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
-    mainWindow.loadUrl('http://localhost:9000');
+    mainWindow.loadUrl('file://' + __dirname + '/client/loaded.html');
     io.socket.disconnect();
 });
