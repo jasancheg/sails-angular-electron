@@ -13,6 +13,8 @@
 - User authentication and session control (JWT, register, login, logout)
 - Simple Dashboard
 - Custom context menu
+- Grunt automatization, `compass, jshint, bower injection, watch, build, start the app, others...`
+- Browser mode (The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly)
 
 ## Dev
 
