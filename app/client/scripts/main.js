@@ -27,13 +27,12 @@ function runScriptsInRenderedProcess() {
     }, 10);
 
 }
-
+// check when it is working on browser mode
 try {
     var rq = require;
     if(rq) {
         runScriptsInRenderedProcess();
     }
 } catch (e0) {
-    //
     console.info('Probably this is not an error and the application is currently running in Browser mode: \n', e0);
 }
