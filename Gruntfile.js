@@ -11,11 +11,36 @@ module.exports = function (grunt) {
         ngtemplates: 'grunt-angular-templates'
     });
 
-    // Configurable paths for the application
+    // Configurable paths and config for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'app/client',
-        dist: 'dist/app/client'
+        dist: 'dist/app/client',
+        jsPathExpresion:'',
+        jsPathExclude: '',
+        cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//
     };
+
+    // set run configuration for wiredep
+    // targets [dev/dist/browser]
+    function setConfigWiredep(target) {
+
+        if(target === 'dev') {
+            // set expresion path for js files
+            appConfig.jsPathExpresion = '';
+            // set exclude paths
+            appConfig.jsPathExclude = /jquery/;
+        } else {
+            if(target === 'dist'){
+                // jquery will be loaded through require on dist/dev targets, to know more about what
+                // is this, please refer to the issue https://github.com/atom/electron/issues/254
+                appConfig.jsPathExclude = /jquery/
+            } else {
+                appConfig.jsPathExclude = ''
+            }
+            // set expresion path for js files
+            appConfig.jsPathExpresion=/\.\.\/\.\.\//;
+        }
+    }
 
     // Define the configuration for all the tasks
     grunt.initConfig({
@@ -176,11 +201,10 @@ module.exports = function (grunt) {
         wiredep: {
             app: {
                 src: ['<%= config.app %>/index.html'],
-                // Check if app is run on 'Browser mode' to ignore jquery, it will be loaded through require
-                // To know more about what is this, please refer to the issue https://github.com/atom/electron/issues/254
-                exclude: [ (process.env.ELECTRON_ENV) ? /jquery/ : '' ],
-                // check if app is run on 'Browser mode' to set correct path
-                ignorePath: (process.env.ELECTRON_ENV) ? '/\.\.\/{2}/' : '/\.\.\/\.\.\//'
+                // exclude files path depends of the target and is define in the origin of the call
+                exclude: ['<%= config.jsPathExclude %>'],
+                // currentJs Path depends of the target and is define in the origin of the call
+                ignorePath: '<%= config.jsPathExpresion %>'
             },
             // test: {
             //     devDependencies: true,
@@ -200,7 +224,7 @@ module.exports = function (grunt) {
             // },
             sass: {
                 src: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
-                ignorePath: /(\.\.\/){1,2,3}bower_components\//
+                ignorePath: '<%= config.cssPathExpresion %>'
             }
         },
 
@@ -447,6 +471,9 @@ module.exports = function (grunt) {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
+        // set config for wiredep
+        setConfigWiredep('browser');
+
         grunt.task.run([
             'clean:server',
             'wiredep',
@@ -466,11 +493,10 @@ module.exports = function (grunt) {
 
         // this is a limited way to have access to the current level of the process from the electron app
         // a flag is set `gipd` on the current process.env to be used from the electron browser process
-        var env = process.env;
-        env.gpid = process.pid;
+        process.env.gpid = process.pid;
 
-        // Used by Grunt to differentiate between 'Electron App' and 'Browser mode'
-        env.ELECTRON_ENV = 'dev';
+        // set config for wiredep
+        setConfigWiredep('dev');
 
         grunt.task.run([
             'clean:server',
@@ -500,22 +526,28 @@ module.exports = function (grunt) {
     //     'karma'
     // ]);
 
-    grunt.registerTask('build', [
-        'clean:dist',
-        'wiredep',
-        'useminPrepare',
-        'concurrent:dist',
-        'autoprefixer',
-        'ngtemplates',
-        'concat',
-        'ngAnnotate',
-        'copy:dist',
-        'cssmin',
-        'uglify',
-        'filerev',
-        'usemin',
-        'htmlmin'
-    ]);
+    grunt.registerTask('build', 'Build the distribution folder', function (target) {
+
+        // set config for wiredep
+        setConfigWiredep('dist');
+
+        grunt.task.run([
+            'clean:dist',
+            'wiredep',
+            'useminPrepare',
+            'concurrent:dist',
+            'autoprefixer',
+            'ngtemplates',
+            'concat',
+            'ngAnnotate',
+            'copy:dist',
+            'cssmin',
+            'uglify',
+            'filerev',
+            'usemin',
+            'htmlmin'
+        ]);
+    });
 
     grunt.registerTask('default', [
         'newer:jshint',
