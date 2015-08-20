@@ -33,9 +33,9 @@ module.exports = function (grunt) {
             if(target === 'dist'){
                 // jquery will be loaded through require on dist/dev targets, to know more about what
                 // is this, please refer to the issue https://github.com/atom/electron/issues/254
-                appConfig.jsPathExclude = /jquery/
+                appConfig.jsPathExclude = /jquery/;
             } else {
-                appConfig.jsPathExclude = ''
+                appConfig.jsPathExclude = '';
             }
             // set expresion path for js files
             appConfig.jsPathExpresion=/\.\.\/\.\.\//;
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= config.app %>/{,*/}*.html',
-                    '.tmp/app/client/styles/{,*/}*.css',
+                    '.tmp/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
@@ -103,8 +103,8 @@ module.exports = function (grunt) {
                                 connect.static('./bower_components')
                             ),
                             connect().use(
-                                '/app/client/styles',
-                                connect.static('./app/client/styles')
+                                '/styles',
+                                connect.static('./styles')
                             ),
                             connect.static(appConfig.app)
                         ];
@@ -182,17 +182,17 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '.tmp/app/client/styles/',
+                    cwd: '.tmp/styles/',
                     src: '{,*/}*.css',
-                    dest: '.tmp/app/client/styles/'
+                    dest: '.tmp/styles/'
                 }]
             },
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/app/client/styles/',
+                    cwd: '.tmp/styles/',
                     src: '{,*/}*.css',
-                    dest: '.tmp/app/client/styles/'
+                    dest: '.tmp/styles/'
                 }]
             }
         },
@@ -232,8 +232,8 @@ module.exports = function (grunt) {
         compass: {
             options: {
                 sassDir: '<%= config.app %>/styles',
-                cssDir: '.tmp/app/client/styles',
-                generatedImagesDir: '.tmp/app/client/images/generated',
+                cssDir: '.tmp/styles',
+                generatedImagesDir: '.tmp/images/generated',
                 imagesDir: '<%= config.app %>/images',
                 javascriptsDir: '<%= config.app %>/scripts',
                 fontsDir: '<%= config.app %>/styles/fonts',
@@ -393,7 +393,7 @@ module.exports = function (grunt) {
                     ]
                 }, {
                     expand: true,
-                    cwd: '.tmp/app/client/images',
+                    cwd: '.tmp/images',
                     dest: '<%= config.dist %>/images',
                     src: ['generated/*']
                 }, {
@@ -406,7 +406,7 @@ module.exports = function (grunt) {
             styles: {
                 expand: true,
                 cwd: '<%= config.app %>/styles',
-                dest: '.tmp/app/client/styles/',
+                dest: '.tmp/styles/',
                 src: '{,*/}*.css'
             }
         },
@@ -526,7 +526,7 @@ module.exports = function (grunt) {
     //     'karma'
     // ]);
 
-    grunt.registerTask('build', 'Build the distribution folder', function (target) {
+    grunt.registerTask('build', 'Build the distribution folder', function () {
 
         // set config for wiredep
         setConfigWiredep('dist');
