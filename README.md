@@ -55,7 +55,7 @@ Force reload the window.
 ### Run
 
 ```
-$ npm start
+$ grunt start
 ```
 
 **or** run with developer tools open from the begining

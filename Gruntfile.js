@@ -463,7 +463,6 @@ module.exports = function (grunt) {
         // }
     });
 
-
     grunt.registerTask('serve', 'Compile then start a connect in `Browser Mode` for the Electron App', function (target) {
 
         grunt.log.warn("The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly");
@@ -491,6 +490,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('start', 'Compile then start the Electron App', function () {
 
+        // set NODE_ENV
+        process.env.NODE_ENV='development'
+
         // this is a limited way to have access to the current level of the process from the electron app
         // a flag is set `gipd` on the current process.env to be used from the electron browser process
         process.env.gpid = process.pid;
@@ -511,7 +513,8 @@ module.exports = function (grunt) {
 
         if (gpid && process.env.gpid === gpid) {
             grunt.log.ok('Grunt processes have been stopped: ', gpid );
-            return process.kill(gpid);
+            process.kill(gpid);
+            return process.exit(1);
         }
 
         grunt.log.warn('There is no running processes or is a invalid process id');
