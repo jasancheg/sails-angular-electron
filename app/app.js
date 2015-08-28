@@ -27,7 +27,7 @@ function createMainWindow () {
 
     win.loadUrl('file://' + __dirname + '/client/loading.html');
 
-    if(process.env.NODE_ENV === "development") {
+    if(process.env.NODE_ENV === "devtools") {
         win.openDevTools({detach: true});
     }
 

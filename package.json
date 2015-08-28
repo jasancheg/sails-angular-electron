@@ -8,22 +8,25 @@
   "license": "MIT",
   "author": {
     "name": "Jose Antonio Sanchez",
-    "email": "your@email.com",
+    "email": "jasancheg@email.com",
     "url": "inideaweb.com"
   },
   "engines": {
     "node": ">=0.10.0"
   },
+  "electron-version": "0.30.0",
+  "clientAppPath": "app/client",
+  "serverAppPath": "app/server",
   "scripts": {
-    "start": "echo \"Warning: use 'grunt start' to run the App\" && exit 0",
-    "startd": "NODE_ENV='dev' electron ./app/app.js",
+    "start": "grunt start",
+    "startd": "grunt start:devtools",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --all",
-    "build-mac": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=darwin --arch=x64",
-    "build-win32": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=win32 --arch=ia32 ",
-    "build-win64": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=win32 --arch=x64",
-    "build-linux32": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=linux --arch=ia32",
-    "build-linux64": "electron-packager ./ BasicApp --out=build --ignore=build --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=linux --arch=x64"
+    "build": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --all",
+    "build-mac": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=darwin --arch=x64",
+    "build-win32": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=win32 --arch=ia32 ",
+    "build-win64": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=win32 --arch=x64",
+    "build-linux32": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=linux --arch=ia32",
+    "build-linux64": "electron-packager ./ BasicApp --out=releasebuilds --ignore=releasebuilds --prune --asar --version=0.30.0 --icon=./app/icons/smile_128x128.ico --overwrite --platform=linux --arch=x64"
   },
   "repository": {
     "type": "git",

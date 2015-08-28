@@ -1,5 +1,7 @@
 'use strict';
 
+var packagejson = require('./package.json');
+
 // # Globbing
 module.exports = function (grunt) {
     // Time how long tasks take. Can help when optimizing build times
@@ -13,10 +15,10 @@ module.exports = function (grunt) {
 
     // Configurable paths and config for the application
     var appConfig = {
-        app: require('./bower.json').appPath || 'app/client',
-        dist: 'dist/app/client',
-        jsPathExpresion:'',
-        jsPathExclude: '',
+        app: packagejson['clientAppPath'] || 'app/client',
+        dist: 'dist/' + packagejson['clientAppPath'],
+        jsPathExpresion:'', // value will be modified in run time
+        jsPathExclude: '', // value will be modified in run time
         cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//
     };
 
@@ -429,27 +431,13 @@ module.exports = function (grunt) {
             ]
         },
 
-        // run single or multiple command shell (temp, `grunt-shell` dependencie)
-        shell: {
-            multiple: {
-                command: [
-                    'mkdir test',
-                    'cd test',
-                    'ls'
-                ].join('&&')
-            },
-            startelectron: {
-                command:'electron ./app/app.js'
-            }
-        },
-
-        // run command shel in the background process or in parallel
+        // run command shells in the background process or in parallel
         bgShell: {
             _defaults: {
                 bg: true
             },
             startelectron: {
-                cmd: 'electron ./app/app.js'
+                cmd: 'electron ' + packagejson['main']
             }
         }
         //,
@@ -488,10 +476,14 @@ module.exports = function (grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('start', 'Compile then start the Electron App', function () {
+    grunt.registerTask('start', 'Compile then start the Electron App', function (target) {
 
-        // set NODE_ENV
-        process.env.NODE_ENV='development'
+        // Set NODE_ENV
+        if(target === 'devtools' || target === 'staging') {
+            process.env.NODE_ENV = target;
+        } else {
+            process.env.NODE_ENV = 'development';
+        }
 
         // this is a limited way to have access to the current level of the process from the electron app
         // a flag is set `gipd` on the current process.env to be used from the electron browser process
@@ -513,7 +505,9 @@ module.exports = function (grunt) {
 
         if (gpid && process.env.gpid === gpid) {
             grunt.log.ok('Grunt processes have been stopped: ', gpid );
+            // additionaly kill process by id when it is run by npm command
             process.kill(gpid);
+            grunt.task.run(['bgShell:startelectron:kill']);
             return process.exit(1);
         }
 
@@ -556,4 +550,10 @@ module.exports = function (grunt) {
         'newer:jshint',
         'start'
     ]);
+
+    // kill the electron process
+    process.on('SIGINT', function () {
+        grunt.task.run(['bgShell:startelectron:kill']);
+        process.exit(1);
+    });
 };
