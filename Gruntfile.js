@@ -1,8 +1,18 @@
+/* jshint -W069 */ //disable dot notation on Gruntfile
+
 'use strict';
 
-var packagejson = require('./package.json');
+/**
+ * @description Important variables and params used:
+ *
+ * @var {[NODE_ENV]} used by node process for define targets [devtools|development|staging]
+ * @var {[GRUNT_ENV | target:@param]} used by grunt for define targets [server|electron|distribution]
+ */
 
-// # Globbing
+// Some Utility functions
+var GruntHelper =  require('./gruntHelper.js');
+
+// #Globbing
 module.exports = function (grunt) {
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -13,17 +23,21 @@ module.exports = function (grunt) {
         ngtemplates: 'grunt-angular-templates'
     });
 
-    // Configurable paths and config for the application
+    var packagejson = require('./package.json');
+
+    // Configurable paths and options for the application
     var appConfig = {
         app: packagejson['clientAppPath'] || 'app/client',
         dist: 'dist/' + packagejson['clientAppPath'],
         jsPathExpresion:'', // value will be modified in run time
         jsPathExclude: '', // value will be modified in run time
-        cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//
+        compassWatchTarget: '', // value will be modified in run time
+        cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//,
+        env: process.env.GRUNT_ENV // value will be modified in run time
     };
 
     // set run configuration for wiredep
-    // targets [dev/dist/browser]
+    // targets [dev|dist|server]
     function setConfigWiredep(target) {
 
         if(target === 'dev') {
@@ -44,6 +58,32 @@ module.exports = function (grunt) {
         }
     }
 
+    // set run configuration for wiredep
+    // targets [server|electron]
+    function setCompassWatchTarget(target) {
+        var compassTarget = (target === 'dev') ? 'electron' : 'server';
+        appConfig.compassWatchTarget = compassTarget;
+    }
+
+    // define Grunt environment
+    // targets [server|electron|distribution]
+    function defineGruntEnvironment(target) {
+        // define GRUNT_ENV: Grunt environment
+        if(target === 'dev'){
+            appConfig.env = 'electron';
+        } else {
+            appConfig.env = target === 'server' ? 'server' : 'distribution';
+        }
+        process.env.GRUNT_ENV = appConfig.env;
+    }
+
+    // Modify config for grunt targets
+    function setGruntTasksTargets(target) {
+        setConfigWiredep(target);
+        setCompassWatchTarget(target);
+        defineGruntEnvironment(target);
+    }
+
     // Define the configuration for all the tasks
     grunt.initConfig({
 
@@ -58,7 +98,7 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
-                tasks: ['newer:jshint:all'],
+                tasks: ['newer:jshint:all', 'appreload:<%= config.env %>'],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
@@ -69,7 +109,8 @@ module.exports = function (grunt) {
             // },
             compass: {
                 files: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server', 'autoprefixer:server']
+                options: { livereload: true },
+                tasks: ['compass:<%= config.compassWatchTarget %>', 'autoprefixer:<%= config.compassWatchTarget %>']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -83,6 +124,11 @@ module.exports = function (grunt) {
                     '.tmp/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
+            },
+            electroncss: {
+                files: ['<%= config.app %>/styles/{,*/}*.css'],
+                options: { livereload: true },
+                tasks: ['appreload:<%= config.env %>']
             }
         },
 
@@ -196,6 +242,8 @@ module.exports = function (grunt) {
                     src: '{,*/}*.css',
                     dest: '.tmp/styles/'
                 }]
+            },
+            electron: {
             }
         },
 
@@ -451,15 +499,28 @@ module.exports = function (grunt) {
         // }
     });
 
-    grunt.registerTask('serve', 'Compile then start a connect in `Browser Mode` for the Electron App', function (target) {
+    grunt.registerTask('appreload', 'reload the electron browser window', function (target) {
+
+        if(target === 'electron') {
+            // Tell grunt this task is asynchronous
+            var done = this.async();
+            // get reload the electron app
+            GruntHelper.getElectronAppReload(done, process.env.gpid);
+        } else{
+            grunt.log.warn('No need to reload electron because the application is running in `Server Mode`');
+        }
+
+    });
+
+    grunt.registerTask('serve', 'Compile then start a connect in `Server Mode` for the Electron App', function (target) {
 
         grunt.log.warn("The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly");
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
-        // set config for wiredep
-        setConfigWiredep('browser');
+        // set config targets
+        setGruntTasksTargets('server');
 
         grunt.task.run([
             'clean:server',
@@ -472,7 +533,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start in a `Browser Mode` of the Electron App.');
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start in a `Server Mode` of the Electron App.');
         grunt.task.run(['serve:' + target]);
     });
 
@@ -489,8 +550,8 @@ module.exports = function (grunt) {
         // a flag is set `gipd` on the current process.env to be used from the electron browser process
         process.env.gpid = process.pid;
 
-        // set config for wiredep
-        setConfigWiredep('dev');
+        // set  grunt config targets
+        setGruntTasksTargets('dev');
 
         grunt.task.run([
             'clean:server',
@@ -525,8 +586,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', 'Build the distribution folder', function () {
 
-        // set config for wiredep
-        setConfigWiredep('dist');
+        // set config targets
+        setGruntTasksTargets('dist');
 
         grunt.task.run([
             'clean:dist',

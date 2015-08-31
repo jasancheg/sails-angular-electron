@@ -1,7 +1,7 @@
 'use strict';
-var app = require('app');
-var BrowserWindow = require('browser-window');
-var ipc = require('ipc');
+var app = require('app'),
+    BrowserWindow = require('browser-window'),
+    ipc = require('ipc');
 
 // report crashes to the Electron project
 require('crash-reporter').start();
@@ -70,22 +70,13 @@ app.on('activate-with-no-open-windows', function () {
     }
 });
 
-// run before the app quit
-app.on('before-quit', function (event) {
-    // uses the flat that was created when the app is run from `grunt start`
-    if(process.env.gpid) {
-        console.info('stoping grunt process...');
-        require('grunt').tasks('stop:'+process.env.gpid);
-    }
-});
-
 // init the sails server app
-var serverDir = '/server/app.js'
-var sapp = require(__dirname + serverDir);
+var serverDir = '/server/app.js',
+    sapp = require(__dirname + serverDir);
 
 // check sails lifted
-var socketIOClient = require('socket.io-client');
-var sailsIOClient = require('sails.io.js');
+var socketIOClient = require('socket.io-client'),
+    sailsIOClient = require('sails.io.js');
 
 // Instantiate the socket client (`io`)
 var io = sailsIOClient(socketIOClient);
@@ -93,9 +84,45 @@ var io = sailsIOClient(socketIOClient);
 // specify the host and port of the Sails
 io.sails.url = 'http://localhost:1337';
 
-// Send a GET request to `http://localhost:1337/`:
+// Send a GET request to `http://localhost:1337/` for check if BE is working
 io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
     mainWindow.loadUrl('file://' + __dirname + '/client/index.html');
-    io.socket.disconnect();
+
+    // if app is working on one of the development modes (prebuilt|server)
+    if(process.env.GRUNT_ENV) {
+        enableGruntTasks();
+    } else {
+        // disconned from socket comunication
+        io.socket.disconnect();
+    }
 });
+
+// it runs only in prebuilt environment
+function enableGruntTasks() {
+
+    var grunt = require('grunt'),
+        fnAppReload =  function(data) {
+            // reload browser window
+            mainWindow.reload();
+        };
+
+    // hear reload socket notifications
+    io.socket.on('electronreload', fnAppReload);
+
+    // run before the app quit
+    app.on('before-quit', function (event) {
+        // uses the flat that was created when the app is run from `grunt start`
+        if(process.env.gpid) {
+            console.info('stoping grunt process...');
+            grunt.tasks('stop:'+process.env.gpid);
+        }
+    });
+
+    console.log('process.env.GRUNT_ENV: ', process.env.GRUNT_ENV);
+    console.log('process.env.NODE_ENV: ', process.env.NODE_ENV);
+    console.log('process.env.gpid: ', process.env.gpid);
+    console.log('process.gid: ' + process.getgid());
+    console.log('process.pid: ' + process.pid);
+
+}
