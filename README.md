@@ -55,6 +55,11 @@ Force reload the window.
 ### Run
 
 ```
+$ npm start
+```
+
+**or** directly run
+```
 $ grunt start
 ```
 
