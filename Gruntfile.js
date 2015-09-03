@@ -28,7 +28,9 @@ module.exports = function (grunt) {
     // Configurable paths and options for the application
     var appConfig = {
         app: packagejson['clientAppPath'] || 'app/client',
+        serverApp: packagejson['serverAppPath'] || 'app/server',
         dist: 'dist/' + packagejson['clientAppPath'],
+        distServer: 'dist/' + packagejson['serverAppPath'],
         jsPathExpresion:'', // value will be modified in run time
         jsPathExclude: '', // value will be modified in run time
         compassWatchTarget: '', // value will be modified in run time
@@ -206,7 +208,7 @@ module.exports = function (grunt) {
 
         // Empties folders to start fresh
         clean: {
-            dist: {
+            distClient: {
                 files: [{
                     dot: true,
                     src: [
@@ -216,7 +218,34 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
-            server: '.tmp'
+            distServer: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= config.distServer %>/{,*/}*',
+                        '!<%= config.distServer %>/node_modules{,*/}*'
+                    ]
+                }]
+            },
+            distServerModules: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= config.distServer %>/node_modules{,*/}*'
+                    ]
+                }]
+            },
+            configFiles: {
+                files: [{
+                    dot: true,
+                    src: [
+                        'dist/package.json',
+                        'dist/app/app.js',
+                        'dist/app/icons{,*/}*'
+                    ]
+                }]
+            },
+            clientServer: '.tmp'
         },
 
         // Add vendor prefixed styles
@@ -428,7 +457,7 @@ module.exports = function (grunt) {
 
         // Copies remaining files to places other tasks can use
         copy: {
-            dist: {
+            distClient: {
                 files: [{
                     expand: true,
                     dot: true,
@@ -451,6 +480,46 @@ module.exports = function (grunt) {
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
                     dest: '<%= config.dist %>'
+                }]
+            },
+            distServer: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.serverApp %>',
+                    dest: '<%= config.distServer %>',
+                    src: [
+                        'package.json',
+                        'app.js',
+                        '.sailsrc',
+                        'api/**',
+                        'config/**',
+                        'db/**',
+                        'views/**'
+                    ]
+                }]
+            },
+            distServerModules: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.serverApp %>',
+                    dest: '<%= config.distServer %>',
+                    src: [
+                        'node_modules/**'
+                    ]
+                }]
+            },
+            configFiles: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: './app',
+                    dest: './dist/app',
+                    src: [
+                        'app.js',
+                        'icons/**'
+                    ]
                 }]
             },
             styles: {
@@ -509,7 +578,6 @@ module.exports = function (grunt) {
         } else{
             grunt.log.warn('No need to reload electron because the application is running in `Server Mode`');
         }
-
     });
 
     grunt.registerTask('serve', 'Compile then start a connect in `Server Mode` for the Electron App', function (target) {
@@ -523,7 +591,7 @@ module.exports = function (grunt) {
         setGruntTasksTargets('server');
 
         grunt.task.run([
-            'clean:server',
+            'clean:clientServer',
             'wiredep',
             'concurrent:server',
             'autoprefixer:server',
@@ -554,7 +622,7 @@ module.exports = function (grunt) {
         setGruntTasksTargets('dev');
 
         grunt.task.run([
-            'clean:server',
+            'clean:clientServer',
             'wiredep',
             'concurrent:electron',
             'bgShell:startelectron',
@@ -575,22 +643,13 @@ module.exports = function (grunt) {
         grunt.log.warn('There is no running processes or is a invalid process id');
     });
 
-    // grunt.registerTask('test', [
-    //     'clean:server',
-    //     'wiredep',
-    //     'concurrent:test',
-    //     'autoprefixer',
-    //     'connect:test',
-    //     'karma'
-    // ]);
-
-    grunt.registerTask('build', 'Build the distribution folder', function () {
+    grunt.registerTask('buildclient', 'Build the distribution folder for the client app', function () {
 
         // set config targets
         setGruntTasksTargets('dist');
 
         grunt.task.run([
-            'clean:dist',
+            'clean:distClient',
             'wiredep',
             'useminPrepare',
             'concurrent:dist',
@@ -598,7 +657,7 @@ module.exports = function (grunt) {
             'ngtemplates',
             'concat',
             'ngAnnotate',
-            'copy:dist',
+            'copy:distClient',
             'cssmin',
             'uglify',
             'filerev',
@@ -607,10 +666,44 @@ module.exports = function (grunt) {
         ]);
     });
 
+    grunt.registerTask('buildserver', 'Build the distribution folder for the server app', function () {
+
+        grunt.task.run([
+            'clean:distServer',
+            'copy:distServer',
+            'clean:distServerModules',
+            'copy:distServerModules'
+        ]);
+    });
+
+    grunt.registerTask('createpackagejson', 'Create the package.json for the distribution app', function () {
+
+        var done = this.async();
+        GruntHelper.createNewPackageJson(packagejson, done);
+    });
+
+    grunt.registerTask('buildconfigfiles', 'Build the distribution config files for the app', function () {
+
+        grunt.task.run([
+            'clean:configFiles',
+            'copy:configFiles',
+            'createpackagejson'
+        ]);
+    });
+
     grunt.registerTask('default', [
         'newer:jshint',
         'start'
     ]);
+
+    // grunt.registerTask('test', [
+    //     'clean:clientServer',
+    //     'wiredep',
+    //     'concurrent:test',
+    //     'autoprefixer',
+    //     'connect:test',
+    //     'karma'
+    // ]);
 
     // kill the electron process
     process.on('SIGINT', function () {

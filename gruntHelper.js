@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var http = require('http');
 
 module.exports = {
@@ -32,6 +33,28 @@ module.exports = {
             // Tell grunt the async task failed
             done(false);
         });
-    }
+    },
+    createNewPackageJson: function(packagejson, done) {
 
+        var str = '',
+            jsonStr = packagejson,
+            destPath = 'dist/',
+            fileName = 'package.json',
+            callback = function (err) {
+                if (err) throw err;
+                // Tell grunt task is complete
+                done();
+            },
+            // To format JSON
+            options = {
+                spaces: 2
+            };
+
+        delete jsonStr.devDependencies;
+        delete jsonStr.scripts;
+
+        str = JSON.stringify(jsonStr, null, options.spaces) + '\n';
+        //console.log(str);
+        fs.writeFile(destPath + fileName, str, callback);
+    }
 }
