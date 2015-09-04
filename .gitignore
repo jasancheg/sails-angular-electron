@@ -85,6 +85,7 @@ pids
 .idea
 /build
 /dist
+/releases
 
 # Coverage directory used by tools like istanbul
 coverage

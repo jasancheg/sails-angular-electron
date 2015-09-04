@@ -553,8 +553,21 @@ module.exports = function (grunt) {
             _defaults: {
                 bg: true
             },
-            startelectron: {
+            startElectron: {
                 cmd: 'electron ' + packagejson['main']
+            }
+        },
+
+        // run command shell
+        shell: {
+            subfolderInstall: {
+                command: 'npm install',
+                options: {
+                    stderr: false,
+                    execOptions: {
+                        cwd: 'dist'
+                    }
+                }
             }
         }
         //,
@@ -625,7 +638,7 @@ module.exports = function (grunt) {
             'clean:clientServer',
             'wiredep',
             'concurrent:electron',
-            'bgShell:startelectron',
+            'bgShell:startElectron',
             'watch'
         ]);
     });
@@ -636,7 +649,7 @@ module.exports = function (grunt) {
             grunt.log.ok('Grunt processes have been stopped: ', gpid );
             // additionaly kill process by id when it is run by npm command
             process.kill(gpid);
-            grunt.task.run(['bgShell:startelectron:kill']);
+            grunt.task.run(['bgShell:startElectron:kill']);
             return process.exit(1);
         }
 
@@ -691,6 +704,13 @@ module.exports = function (grunt) {
         ]);
     });
 
+    grunt.registerTask('installdistributionsmodules', 'Install the npm distribution modules', function () {
+
+        grunt.task.run([
+            'shell:subfolderInstall'
+        ]);
+    });
+
     grunt.registerTask('default', [
         'newer:jshint',
         'start'
@@ -707,7 +727,7 @@ module.exports = function (grunt) {
 
     // kill the electron process
     process.on('SIGINT', function () {
-        grunt.task.run(['bgShell:startelectron:kill']);
+        grunt.task.run(['bgShell:startElectron:kill']);
         process.exit(1);
     });
 };

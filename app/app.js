@@ -70,6 +70,10 @@ app.on('activate-with-no-open-windows', function () {
     }
 });
 
+// app.on('will-quit', function (event) {
+//     event.preventDefault();
+// });
+
 // init the sails server app
 var serverDir = '/server/app.js',
     sapp = require(__dirname + serverDir);
@@ -122,7 +126,6 @@ function enableGruntTasks() {
     console.log('process.env.GRUNT_ENV: ', process.env.GRUNT_ENV);
     console.log('process.env.NODE_ENV: ', process.env.NODE_ENV);
     console.log('process.env.gpid: ', process.env.gpid);
-    console.log('process.gid: ' + process.getgid());
     console.log('process.pid: ' + process.pid);
 
 }
