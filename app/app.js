@@ -9,6 +9,9 @@ require('crash-reporter').start();
 // adds debug features like hotkeys for triggering dev tools and reload
 require('electron-debug')();
 
+// path to load on create window
+var pathToLoad = '/client/loading.html';
+
 function createMainWindow () {
 
     var win = new BrowserWindow({
@@ -25,22 +28,13 @@ function createMainWindow () {
         }
     });
 
-    win.loadUrl('file://' + __dirname + '/client/loading.html');
+    win.loadUrl('file://' + __dirname + pathToLoad);
 
     if(process.env.NODE_ENV === "devtools") {
         win.openDevTools({detach: true});
     }
 
     win.on('closed', onClosed);
-
-    // listen when the web content is loaded.
-    ipc.on('ready', function () {
-        win.show();
-    });
-    // listen to dev tools events from rendered process
-    ipc.on('toggle-dev-tools', function () {
-        win.toggleDevTools();
-    });
 
     return win;
 }
@@ -50,6 +44,16 @@ function onClosed() {
     // for multiple windows store them in an array
     mainWindow = null;
 }
+
+// listen when the web content is loaded.
+ipc.on('ready', function () {
+    mainWindow.show();
+});
+
+// listen to dev tools events from rendered process
+ipc.on('toggle-dev-tools', function () {
+    mainWindow.toggleDevTools();
+});
 
 // prevent window being GC'd
 let mainWindow;
@@ -70,13 +74,22 @@ app.on('activate-with-no-open-windows', function () {
     }
 });
 
-// app.on('will-quit', function (event) {
-//     event.preventDefault();
-// });
+app.on('will-quit', function (event) {
+    event.preventDefault();
+});
 
 // init the sails server app
 var serverDir = '/server/app.js',
-    sapp = require(__dirname + serverDir);
+    sapp;
+
+fs.exists(__dirname + serverDir, function(exists){
+    if(!exists){
+        sapp = require('.' + serverDir);
+    }else{
+        sapp = require(__dirname + serverDir);
+    }
+});
+
 
 // check sails lifted
 var socketIOClient = require('socket.io-client'),
@@ -91,7 +104,8 @@ io.sails.url = 'http://localhost:1337';
 // Send a GET request to `http://localhost:1337/` for check if BE is working
 io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
-    mainWindow.loadUrl('file://' + __dirname + '/client/index.html');
+    pathToLoad = '/client/index.html';
+    mainWindow.loadUrl('file://' + __dirname + pathToLoad);
 
     // if app is working on one of the development modes (prebuilt|server)
     if(process.env.GRUNT_ENV) {

@@ -479,7 +479,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                    dest: '<%= config.dist %>'
+                    dest: 'dist/'
                 }]
             },
             distServer: {
@@ -648,8 +648,9 @@ module.exports = function (grunt) {
         if (gpid && process.env.gpid === gpid) {
             grunt.log.ok('Grunt processes have been stopped: ', gpid );
             // additionaly kill process by id when it is run by npm command
-            process.kill(gpid);
-            grunt.task.run(['bgShell:startElectron:kill']);
+            if(process.platform === 'darwin'){
+                process.kill(gpid);
+            }
             return process.exit(1);
         }
 
@@ -725,9 +726,4 @@ module.exports = function (grunt) {
     //     'karma'
     // ]);
 
-    // kill the electron process
-    process.on('SIGINT', function () {
-        grunt.task.run(['bgShell:startElectron:kill']);
-        process.exit(1);
-    });
 };
