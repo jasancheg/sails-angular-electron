@@ -6,10 +6,6 @@
  *
  **/
 
-// Ensure we're in the project directory, so relative paths work as expected
-// no matter where we actually lift from.
-process.chdir(__dirname);
-
 // Ensure a "sails" can be located:
 (function() {
     var sails;
@@ -37,6 +33,6 @@ process.chdir(__dirname);
         }
     }
 
-    // Start server && disable grunt
+    // Start server && disable grunt hooks
     sails.lift(rc('sails', {hooks:{grunt:false}}));
 })();

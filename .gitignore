@@ -86,6 +86,7 @@ pids
 /build
 /dist
 /releases
+/electron-packager
 
 # Coverage directory used by tools like istanbul
 coverage

@@ -35,7 +35,17 @@ module.exports = function (grunt) {
         jsPathExclude: '', // value will be modified in run time
         compassWatchTarget: '', // value will be modified in run time
         cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//,
-        env: process.env.GRUNT_ENV // value will be modified in run time
+        env: process.env.GRUNT_ENV, // value will be modified in run time
+        packagerBaseCommand: [
+            'electron-packager',
+            './dist',
+            'BasicApp',
+            '--out=releases',
+            '--prune',
+            '--asar',
+            '--version=0.30.0',
+            '--overwrite'
+        ].join(' ')
     };
 
     // set run configuration for wiredep
@@ -214,6 +224,7 @@ module.exports = function (grunt) {
                     src: [
                         '.tmp',
                         '<%= config.dist %>/{,*/}*',
+                        'dist/bower_components',
                         '!<%= config.dist %>/.git{,*/}*'
                     ]
                 }]
@@ -499,17 +510,6 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
-            distServerModules: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= config.serverApp %>',
-                    dest: '<%= config.distServer %>',
-                    src: [
-                        'node_modules/**'
-                    ]
-                }]
-            },
             configFiles: {
                 files: [{
                     expand: true,
@@ -519,6 +519,18 @@ module.exports = function (grunt) {
                     src: [
                         'app.js',
                         'icons/**'
+                    ]
+                }]
+            },
+            // temp: currently no used
+            distServerModules: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.serverApp %>',
+                    dest: '<%= config.distServer %>',
+                    src: [
+                        'node_modules/**'
                     ]
                 }]
             },
@@ -560,13 +572,219 @@ module.exports = function (grunt) {
 
         // run command shell
         shell: {
-            subfolderInstall: {
+            mainInstall: {
                 command: 'npm install',
                 options: {
                     stderr: false,
                     execOptions: {
                         cwd: 'dist'
                     }
+                }
+            },
+            serverInstall: {
+                command: 'npm install',
+                options: {
+                    stderr: false,
+                    execOptions: {
+                        cwd: 'dist/app/server'
+                    }
+                }
+            },
+            buildAll: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.ico',
+                    '--all'
+                ].join(' ')
+            },
+            buildMac: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.icns',
+                    '--platform=darwin',
+                    '--arch=x64'
+                ].join(' ')
+            },
+            buildWin32: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.ico',
+                    '--platform=win32',
+                    '--arch=ia32'
+                ].join(' ')
+            },
+            buildWin64: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.ico',
+                    '--platform=win32',
+                    '--arch=x64'
+                ].join(' ')
+            },
+            buildLinux32: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.png',
+                    '--platform=linux',
+                    '--arch=ia32'
+                ].join(' ')
+            },
+            buildLinux64: {
+                command: [
+                    '<%= config.packagerBaseCommand %>',
+                    '--icon=./dist/app/icons/smile_128x128.png',
+                    '--platform=linux',
+                    '--arch=x64'
+                ].join(' ')
+            }
+        },
+
+        // manage the configuration for the distribution folder build
+        prompt: {
+            distributionBuild: {
+                options: {
+                    questions: [{
+                        config: 'distributionBuild.build.continue',
+                        type: 'list',
+                        message: 'Some actions may need administrator permissions, first make sure you are running this `Grunt` task with: \n `sudo` on MacOs \n `Run as administrator` on Windows \n',
+                        default: true,
+                        choices: [{
+                            value: false,
+                            name: 'I want stop to run the task with administrator permissions'
+                        }, {
+                            value: true,
+                            name: 'Continue'
+                        }]
+                    },{
+                        config: 'distributionBuild.build.type',
+                        type: 'list',
+                        message: 'Select the type of build that you want:',
+                        default:'complete',
+                        choices: [{
+                            value: 'complete',
+                            name: 'Build the complete distribution folder'
+                        }, {
+                            value: 'specific',
+                            name: 'I want to select the specific sections for the distribution folder'
+                        }],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'];
+                        }
+                    },{
+                        config: 'distributionBuild.build.areas',
+                        type: 'checkbox',
+                        message: 'What sections would you like to build: ',
+                        choices: [{
+                            value: 'buildclient',
+                            name: 'Client folder'
+                        }, {
+                            value: 'buildserver',
+                            name: 'Server folder'
+                        }, {
+                            value: 'buildconfigfiles',
+                            name: 'Config files'
+                        }],
+                        when: function(answers) {
+                            return answers['distributionBuild.build.continue'] && answers['distributionBuild.build.type'] === 'specific';
+                        },
+                        validate: function (value) {
+                            var valid = value.length > 0;
+                            return valid || 'Must select at least one section';
+                        }
+                    },{
+                        config: 'distributionBuild.build.clean',
+                        type: 'list',
+                        message: 'Do you want to clean node modules of previous builds in distribution folder: ',
+                        default:'no',
+                        choices: [{
+                            value: 'no',
+                            name: 'No'
+                        },{
+                            value: 'yes',
+                            name: 'Yes'
+                        },{
+                            value: 'server',
+                            name: 'Just on server App'
+                        },{
+                            value: 'main',
+                            name: 'Just main modules'
+                        }],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'];
+                        }
+                    },{
+                        config: 'distributionBuild.build.install',
+                        type: 'list',
+                        message: 'Do you want to install the `main` node modules for the distribution folder: ',
+                        default:true,
+                        choices: [{
+                            value: true,
+                            name: 'Yes'
+                        }, {
+                            value: false,
+                            name: 'No'
+                        }],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'];
+                        }
+                    },{
+                        config: 'distributionBuild.build.serverInstall',
+                        type: 'list',
+                        message: 'Do you want to install the `server app` node modules for the distribution folder: ',
+                        default:true,
+                        choices: [{
+                            value: true,
+                            name: 'Yes'
+                        }, {
+                            value: false,
+                            name: 'No'
+                        }],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'];
+                        }
+                    },{
+                        config: 'distributionBuild.build.release',
+                        type: 'list',
+                        message: 'Do you want to build the release app: ',
+                        default:true,
+                        choices: [{
+                            value: true,
+                            name: 'Yes'
+                        },{
+                            value: false,
+                            name: 'No'
+                        }],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'];
+                        }
+                    },{
+                        config: 'distributionBuild.build.os',
+                        type: 'checkbox',
+                        message: 'Select the OS for which you want to build:',
+                        choices: [{
+                            value: 'buildMac',
+                            name: 'Mac OS'
+                        },{
+                            value: 'buildWin32',
+                            name: 'Windows 32'
+                        },{
+                            value: 'buildWin64',
+                            name: 'Windows 64'
+                        },{
+                            value: 'buildLinux32',
+                            name: 'Linux 32'
+                        },{
+                            value: 'buildLinux64',
+                            name: 'Linux 64'
+                        },],
+                        when: function(answers){
+                            return answers['distributionBuild.build.continue'] && answers['distributionBuild.build.release'];
+                        },
+                        validate: function (value) {
+                            var valid = value.length > 0;
+                            return valid || 'Must select at least one OS';
+                        }
+                    }]
                 }
             }
         }
@@ -682,12 +900,31 @@ module.exports = function (grunt) {
 
     grunt.registerTask('buildserver', 'Build the distribution folder for the server app', function () {
 
-        grunt.task.run([
-            'clean:distServer',
-            'copy:distServer',
-            'clean:distServerModules',
-            'copy:distServerModules'
-        ]);
+        var tasks = [
+                'clean:distServer',
+                'copy:distServer'
+            ],
+            buildConfig = grunt.config.data.distributionBuild;
+
+        if(!buildConfig) {
+            grunt.log.ok('Running `buildserver` task directly');
+            grunt.log.warn('This task may need administrator permissions');
+            tasks.push('clean:distServerModules','shell:serverInstall');
+            // run defined tasks
+            grunt.task.run(tasks);
+        } else{
+            if(buildConfig.build.continue) {
+                if(buildConfig.build.clean === 'yes' || buildConfig.build.clean === 'server') {
+                    tasks.push('clean:distServerModules');
+                }
+                if(buildConfig.build.serverInstall){
+                    grunt.log.warn('This task may need administrator permissions');
+                    tasks.push('shell:serverInstall');
+                }
+                // run defined tasks
+                grunt.task.run(tasks);
+            }
+        }
     });
 
     grunt.registerTask('createpackagejson', 'Create the package.json for the distribution app', function () {
@@ -705,10 +942,74 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('installdistributionsmodules', 'Install the npm distribution modules', function () {
+    grunt.registerTask('installdistributionmainmodules', 'Install the npm distribution modules', function () {
+
+        grunt.log.warn('This task may need administrator permissions');
+
+        var tasks = [
+                'shell:mainInstall'
+            ],
+            buildConfig = grunt.config.data.distributionBuild;
+
+        if(!buildConfig) {
+            grunt.log.ok('Running `installdistributionmainmodules` task directly');
+            tasks.unshift('clean:distServer');
+            // run defined tasks
+            grunt.task.run(tasks);
+        } else{
+            if(buildConfig.build.continue) {
+                if(buildConfig.build.clean === 'yes' || buildConfig.build.clean === 'main') {
+                    tasks.unshift('clean:distServer');
+                }
+                // run defined tasks
+                grunt.task.run(tasks);
+            }
+        }
+    });
+
+    grunt.registerTask('applyBuild', 'Build full distribution folder and release App', function () {
+
+        var tasks = [],
+            buildConfig = grunt.config.data.distributionBuild;
+
+        if(!buildConfig) {
+            grunt.log.warn('There is not configuration for distribution build defined');
+        } else{
+
+            if(!buildConfig.build.continue) {
+                grunt.log.warn('Build was stopped');
+            } else {
+                if(buildConfig.build.type === 'complete') {
+                    tasks = ['buildclient', 'buildserver', 'buildconfigfiles'];
+                } else {
+                    tasks = buildConfig.build.areas;
+                }
+
+                if(buildConfig.build.install){
+                    tasks.push('installdistributionmainmodules');
+                }
+
+                if(buildConfig.build.release){
+                    if(buildConfig.build.os.length === 5){
+                        tasks.push('shell:buildAll');
+                    } else{
+                        for(var i=0; i<buildConfig.build.os.length; i++){
+                            tasks.push('shell:'+ buildConfig.build.os[i]);
+                        }
+                    }
+                }
+
+                // run defined tasks
+                grunt.task.run(tasks);
+            }
+        }
+    });
+
+    grunt.registerTask('build', 'Build full distribution folder and release App', function () {
 
         grunt.task.run([
-            'shell:subfolderInstall'
+            'prompt:distributionBuild',
+            'applyBuild'
         ]);
     });
 

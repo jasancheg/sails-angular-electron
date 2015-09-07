@@ -74,22 +74,9 @@ app.on('activate-with-no-open-windows', function () {
     }
 });
 
-app.on('will-quit', function (event) {
-    event.preventDefault();
-});
-
 // init the sails server app
 var serverDir = '/server/app.js',
-    sapp;
-
-fs.exists(__dirname + serverDir, function(exists){
-    if(!exists){
-        sapp = require('.' + serverDir);
-    }else{
-        sapp = require(__dirname + serverDir);
-    }
-});
-
+    sapp = require(__dirname + serverDir);
 
 // check sails lifted
 var socketIOClient = require('socket.io-client'),
