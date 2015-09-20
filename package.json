@@ -74,6 +74,7 @@
     "electron-debug": "^0.1.1",
     "jquery": "^2.1.4",
     "sails.io.js": "^0.11.6",
-    "socket.io-client": "^1.3.6"
+    "socket.io-client": "^1.3.6",
+    "titlebar": "^1.3.0"
   }
 }

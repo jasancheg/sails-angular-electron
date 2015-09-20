@@ -34,7 +34,7 @@ module.exports = function (grunt) {
         jsPathExpresion:'', // value will be modified in run time
         jsPathExclude: '', // value will be modified in run time
         compassWatchTarget: '', // value will be modified in run time
-        cssPathExpresion:/(\.\.\/){1,2,3}bower_components\//,
+        cssPathExpresion:/(\.\.\/){1,2,3,4}bower_components\//,
         env: process.env.GRUNT_ENV, // value will be modified in run time
         packagerBaseCommand: [
             'electron-packager',
@@ -119,10 +119,27 @@ module.exports = function (grunt) {
             //     files: ['test/spec/{,*/}*.js'],
             //     tasks: ['newer:jshint:test', 'karma']
             // },
-            compass: {
-                files: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
+            compassAssets: {
+                files: ['<%= config.app %>/assets/css/{,*/}*.{scss,sass}'],
                 options: { livereload: true },
-                tasks: ['compass:<%= config.compassWatchTarget %>', 'autoprefixer:<%= config.compassWatchTarget %>']
+                tasks: ['compass:assets', 'concat:assets', 'autoprefixer:<%= config.compassWatchTarget %>']
+            },
+            compassComponents: {
+                files: ['<%= config.app %>/scripts/components/{,*/}*.{scss,sass}'],
+                tasks: ['compass:components', 'concat:components', 'autoprefixer:<%= config.compassWatchTarget %>']
+            },     
+            compassDirectives: {
+                files: ['<%= config.app %>/scripts/directives/{,*/}*.{scss,sass}'],
+                tasks: ['compass:directives', 'concat:directives', 'autoprefixer:<%= config.compassWatchTarget %>']
+            },
+            compassLayout: {
+                files: ['<%= config.app %>/scripts/layout/{,*/}*.{scss,sass}'],
+                tasks: ['compass:layouts', 'concat:layout', 'autoprefixer:<%= config.compassWatchTarget %>']
+            },
+            electroncss: {
+                files: ['<%= config.app %>/styles/{,*/}*.css'],
+                options: { livereload: true },
+                tasks: ['appreload:<%= config.env %>']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -136,11 +153,6 @@ module.exports = function (grunt) {
                     '.tmp/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
-            },
-            electroncss: {
-                files: ['<%= config.app %>/styles/{,*/}*.css'],
-                options: { livereload: true },
-                tasks: ['appreload:<%= config.env %>']
             }
         },
 
@@ -256,7 +268,7 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
-            clientServer: '.tmp'
+            clientServer: ['.tmp','<%= config.app %>/styles/fonts']
         },
 
         // Add vendor prefixed styles
@@ -313,32 +325,77 @@ module.exports = function (grunt) {
             //     }
             // },
             sass: {
-                src: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
+                src: ['<%= config.app %>/assets/css/{,*/}*.{scss,sass}'],
                 ignorePath: '<%= config.cssPathExpresion %>'
+            }
+        },
+
+        // concat the css files in modules 
+        concat: {
+            components: {
+                src: ['<%= config.app %>/scripts/components/**/*.css'],
+                dest: '<%= config.app %>/styles/components.css'
+            },
+            directives: {
+                src: ['<%= config.app %>/scripts/directives/**/*.css'],
+                dest: '<%= config.app %>/styles/directives.css'
+            },
+            layouts: {
+                src: ['<%= config.app %>/scripts/layout/**/*.css'],
+                dest: '<%= config.app %>/styles/layout.css'
+            },
+            assets: {
+                src: ['<%= config.app %>/assets/css/**.css'],
+                dest: '<%= config.app %>/styles/main.css'
+            },
+            vendor: {
+                src: ['<%= config.app %>/assets/vendor/css/*.css'],
+                dest: '<%= config.app %>/styles/vendor.css'
             }
         },
 
         // Compiles Sass to CSS and generates necessary files if requested
         compass: {
             options: {
-                sassDir: '<%= config.app %>/styles',
+                sassDir: '<%= config.app %>/assets/css',
                 cssDir: '.tmp/styles',
                 generatedImagesDir: '.tmp/images/generated',
                 imagesDir: '<%= config.app %>/images',
                 javascriptsDir: '<%= config.app %>/scripts',
-                fontsDir: '<%= config.app %>/styles/fonts',
+                fontsDir: '<%= config.app %>/assets/css/fonts',
                 importPath: './bower_components',
-                httpImagesPath: '/images',
+                httpImagesPath: '/assets/images',
                 httpGeneratedImagesPath: '/images/generated',
-                httpFontsPath: '/styles/fonts',
+                httpFontsPath: '/assets/css/fonts',
                 relativeAssets: false,
                 assetCacheBuster: false,
                 raw: 'Sass::Script::Number.precision = 10\n'
             },
-            electron: {
+            assets: {
                 options: {
                     sourcemap: true,
-                    cssDir:'<%= config.app %>/styles'
+                    cssDir:'<%= config.app %>/assets/css'
+                }
+            },
+            components: {
+                options: {
+                    sourcemap: true,
+                    sassDir: '<%= config.app %>/scripts/components',
+                    cssDir:'<%= config.app %>/scripts/components'
+                }
+            },
+            directives: {
+                options: {
+                    sourcemap: true,
+                    sassDir: '<%= config.app %>/scripts/directives',
+                    cssDir:'<%= config.app %>/scripts/directives'
+                }
+            },
+            layout: {
+                options: {
+                    sourcemap: true,
+                    sassDir: '<%= config.app %>/scripts/layout',
+                    cssDir:'<%= config.app %>/scripts/layout'
                 }
             },
             dist: {
@@ -353,14 +410,46 @@ module.exports = function (grunt) {
             }
         },
 
+        // minified server js files
+        minified : {
+            controllers: {
+                src: ['<%= config.distServer %>/api/controllers/*.js'],
+                dest: '<%= config.distServer %>/api/controllers/'
+            },
+            models: {
+                src: ['<%= config.distServer %>/api/models/*.js'],
+                dest: '<%= config.distServer %>/api/models/'
+            },
+            policies: {
+                src: ['<%= config.distServer %>/api/policies/*.js'],
+                dest: '<%= config.distServer %>/api/policies/'
+            },
+            responses: {
+                src: ['<%= config.distServer %>/api/responses/*.js'],
+                dest: '<%= config.distServer %>/api/responses/'
+            },
+            services: {
+                src: ['<%= config.distServer %>/api/services/*.js'],
+                dest: '<%= config.distServer %>/api/services/'
+            },
+            config: {
+                src: ['<%= config.distServer %>/config/*.js'],
+                dest: '<%= config.distServer %>/config/'
+            },
+            options : {
+                sourcemap: false,
+                allinone: false
+            }
+        },
+
         // Renames files for browser caching purposes
         filerev: {
             dist: {
                 src: [
                     '<%= config.dist %>/scripts/{,*/}*.{js,css}',
                     '<%= config.dist %>/styles/{,*/}*.css',
-                    '<%= config.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= config.dist %>/styles/fonts/*'
+                    '<%= config.dist %>/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                    '<%= config.dist %>/assets/fonts/*'
                 ]
             }
         },
@@ -386,7 +475,10 @@ module.exports = function (grunt) {
 
         // Performs rewrites based on filerev and the useminPrepare configuration
         usemin: {
-            html: ['<%= config.dist %>/{,*/}*.html'],
+            html: [
+                '<%= config.dist %>/{,*/}*.html',
+                '<%= config.dist %>/assets/views/*.html'
+            ],
             css: ['<%= config.dist %>/styles/{,*/}*.css'],
             js: ['<%= config.dist %>/scripts/{,*/}*.js'],
             options: {
@@ -405,9 +497,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= config.app %>/images',
+                    cwd: '<%= config.app %>/assets/images',
                     src: '{,*/}*.{png,jpg,jpeg,gif}',
-                    dest: '<%= config.dist %>/images'
+                    dest: '<%= config.dist %>/assets/images'
                 }]
             }
         },
@@ -416,9 +508,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= config.app %>/images',
+                    cwd: '<%= config.app %>/assets/images',
                     src: '{,*/}*.svg',
-                    dest: '<%= config.dist %>/images'
+                    dest: '<%= config.dist %>/assets/images'
                 }]
             }
         },
@@ -436,6 +528,11 @@ module.exports = function (grunt) {
                     cwd: '<%= config.dist %>',
                     src: ['*.html'],
                     dest: '<%= config.dist %>'
+                },{
+                    expand: true,
+                    cwd: '<%= config.dist %>/assets/views',
+                    src: ['*.html'],
+                    dest: '<%= config.dist %>/assets/views'
                 }]
             }
         },
@@ -448,7 +545,7 @@ module.exports = function (grunt) {
                     usemin: 'scripts/scripts.js'
                 },
                 cwd: '<%= config.app %>',
-                src: 'views/{,*/}*.html',
+                src: 'assets/views/{,*/}*.html',
                 dest: '.tmp/templateCache.js'
             }
         },
@@ -478,20 +575,16 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
-                        'images/{,*/}*.{webp}',
-                        'styles/fonts/{,*/}*.*'
+                        'assets/images/{,*/}*.{webp}',
+                        'assets/images/{,*/}*.*',
+                        'assets/views/{,*/}*.html',
+                        'assets/fonts/{,*/}*.*'
                     ]
-                }, {
-                    expand: true,
-                    cwd: '.tmp/images',
-                    dest: '<%= config.dist %>/images',
-                    src: ['generated/*']
                 }, {
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                    dest: '<%= config.dist %>/fonts',
-                    flatten: true
+                    dest: 'dist'
                 }]
             },
             distServer: {
@@ -544,50 +637,29 @@ module.exports = function (grunt) {
             }
         },
 
-        // minified server js files
-        // minified : {
-        //     controllers: {
-        //         src: ['<%= config.distServer %>/api/controllers/*.js'],
-        //         dest: '<%= config.distServer %>/api/controllers/'
-        //     },
-        //     models: {
-        //         src: ['<%= config.distServer %>/api/models/*.js'],
-        //         dest: '<%= config.distServer %>/api/models/'
-        //     },
-        //     policies: {
-        //         src: ['<%= config.distServer %>/api/policies/*.js'],
-        //         dest: '<%= config.distServer %>/api/policies/'
-        //     },
-        //     responses: {
-        //         src: ['<%= config.distServer %>/api/responses/*.js'],
-        //         dest: '<%= config.distServer %>/api/responses/'
-        //     },
-        //     services: {
-        //         src: ['<%= config.distServer %>/api/services/*.js'],
-        //         dest: '<%= config.distServer %>/api/services/'
-        //     },
-        //     config: {
-        //         src: ['<%= config.distServer %>/config/*.js'],
-        //         dest: '<%= config.distServer %>/config/'
-        //     },
-        //     options : {
-        //         sourcemap: false,
-        //         allinone: false
-        //     }
-        // },
-
         // Run some tasks in parallel to speed up the build process
         concurrent: {
             electron: [
-                'compass:electron'
+                'compass:assets',
+                'compass:directives',
+                'compass:components',
+                'compass:layout'
             ],
             server: [
-                'compass:server'
+                'compass:server',
+                'compass:assets',
+                'compass:directives',
+                'compass:components',
+                'compass:layout'
             ],
             // test: [
             //     'compass'
             // ],
             dist: [
+                'compass:assets',
+                'compass:directives',
+                'compass:components',
+                'compass:layout',
                 'compass:dist',
                 'imagemin',
                 'svgmin'
@@ -860,6 +932,7 @@ module.exports = function (grunt) {
             'wiredep',
             'concurrent:server',
             'autoprefixer:server',
+            'concat',
             'connect:livereload',
             'watch'
         ]);
@@ -890,6 +963,7 @@ module.exports = function (grunt) {
             'clean:clientServer',
             'wiredep',
             'concurrent:electron',
+            'concat',
             'bgShell:startElectron',
             'watch'
         ]);

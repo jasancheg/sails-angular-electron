@@ -49,6 +49,10 @@ app/server/.tmp/localDiskDb.db
 app/server/db
 app/client/styles/*.css
 app/client/styles/*.css.map
+app/client/assets/css/*.css
+app/client/assets/css/*.css.map
+app/client/scripts/**/**/*.css
+app/client/scripts/**/**/*.css.map
 *.nedb
 */db/*
 .tmp/*

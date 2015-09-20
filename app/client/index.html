@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Web App</title>
+        <title>Desktop Web App</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -12,10 +12,15 @@
         <!-- build:css(app/client) styles/vendor.css -->
         <!-- bower:css -->
         <!-- endbower -->
-        <link rel="stylesheet" href="styles/vendor/superhero-theme.css">
+        <link rel="stylesheet" href="styles/vendor.css">
+        <!-- endbuild -->
+        <!-- build:css(app/client) styles/core.css -->
+        <link rel="stylesheet" href="styles/layout.css">
+        <link rel="stylesheet" href="styles/components.css">
+        <link rel="stylesheet" href="styles/directives.css">
         <!-- endbuild -->
         <!-- build:js(app/client) scripts/main.js -->
-        <script src="scripts/main.js"></script>
+        <script src="assets/js/rendered-process.js"></script>
         <!-- endbuild -->
     </head>
     <body ng-app="angularsailsApp">
@@ -41,7 +46,7 @@
             </div>
         </div>
         <div class="container">
-            <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+            <div ng-include="'assets/views/main.html'" ng-controller="MainCtrl"></div>
         </div>
         <div class="footer">
             <div class="container">
@@ -65,10 +70,11 @@
 
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
-        <script src="../../bower_components/angular/angular.js"></script>
-        <script src="../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="../../bower_components/angular-animate/angular-animate.js"></script>
-        <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
