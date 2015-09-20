@@ -27,12 +27,20 @@ function runScriptsInRenderedProcess() {
     }, 10);
 
 }
-// check when it is working on browser mode
+// check when it is working on browser mode or if nodejs is not installed
 try {
     var rq = require;
     if(rq) {
         runScriptsInRenderedProcess();
     }
 } catch (e0) {
-    console.info('Probably this is not an error and the application is currently running in Browser mode: \n', e0);
+    try {
+        var isNode = process.versions.node;
+        console.info('Probably this is not an error and the application is currently running in Browser mode: \n', e0);      
+    } catch(e1){
+        // invite user to install nodejs first 
+        document.getElementById('loadingServer').style.display = 'none';
+        document.getElementById('nodejsInstall').style.display = 'block';
+        console.info('No nodejs js detected\n', e1);
+    }
 }

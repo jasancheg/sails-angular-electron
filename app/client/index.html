@@ -6,14 +6,15 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css(.) styles/vendor.css -->
-        <!-- bower:css -->
-        <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:css(.tmp) styles/main.css -->
+        <!-- build:css(app/client) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
-        <!-- build:js({.tmp,app/client}) scripts/main.js -->
+        <!-- build:css(app/client) styles/vendor.css -->
+        <!-- bower:css -->
+        <!-- endbower -->
+        <link rel="stylesheet" href="styles/vendor/superhero-theme.css">
+        <!-- endbuild -->
+        <!-- build:js(app/client) scripts/main.js -->
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
     </head>
@@ -64,6 +65,10 @@
 
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
+        <script src="../../bower_components/angular/angular.js"></script>
+        <script src="../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 

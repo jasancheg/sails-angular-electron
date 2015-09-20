@@ -42,8 +42,8 @@ module.exports = function (grunt) {
             'BasicApp',
             '--out=releases',
             '--prune',
-            '--asar',
-            '--version=0.30.0',
+            //'--asar',
+            '--version=0.30.1',
             '--overwrite'
         ].join(' ')
     };
@@ -490,7 +490,8 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-                    dest: 'dist/'
+                    dest: '<%= config.dist %>/fonts',
+                    flatten: true
                 }]
             },
             distServer: {
@@ -506,6 +507,7 @@ module.exports = function (grunt) {
                         'api/**',
                         'config/**',
                         'db/**',
+                        //'!db/nedb/*.nedb',
                         'views/**'
                     ]
                 }]
@@ -541,6 +543,38 @@ module.exports = function (grunt) {
                 src: '{,*/}*.css'
             }
         },
+
+        // minified server js files
+        // minified : {
+        //     controllers: {
+        //         src: ['<%= config.distServer %>/api/controllers/*.js'],
+        //         dest: '<%= config.distServer %>/api/controllers/'
+        //     },
+        //     models: {
+        //         src: ['<%= config.distServer %>/api/models/*.js'],
+        //         dest: '<%= config.distServer %>/api/models/'
+        //     },
+        //     policies: {
+        //         src: ['<%= config.distServer %>/api/policies/*.js'],
+        //         dest: '<%= config.distServer %>/api/policies/'
+        //     },
+        //     responses: {
+        //         src: ['<%= config.distServer %>/api/responses/*.js'],
+        //         dest: '<%= config.distServer %>/api/responses/'
+        //     },
+        //     services: {
+        //         src: ['<%= config.distServer %>/api/services/*.js'],
+        //         dest: '<%= config.distServer %>/api/services/'
+        //     },
+        //     config: {
+        //         src: ['<%= config.distServer %>/config/*.js'],
+        //         dest: '<%= config.distServer %>/config/'
+        //     },
+        //     options : {
+        //         sourcemap: false,
+        //         allinone: false
+        //     }
+        // },
 
         // Run some tasks in parallel to speed up the build process
         concurrent: {
@@ -863,13 +897,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('stop', 'stop the current process, it have sense when is run from nodejs call', function (gpid) {
 
+        // try kill current process by id
         if (gpid && process.env.gpid === gpid) {
             grunt.log.ok('Grunt processes have been stopped: ', gpid );
-            // additionaly kill process by id when it is run by npm command
-            if(process.platform === 'darwin'){
+            try{
                 process.kill(gpid);
+                process.exit(0);
+                return;
+            } catch(e) {
+                grunt.log.error('BIG ERROR npm :P');
             }
-            return process.exit(1);
+            
         }
 
         grunt.log.warn('There is no running processes or is a invalid process id');
@@ -1011,6 +1049,15 @@ module.exports = function (grunt) {
             'prompt:distributionBuild',
             'applyBuild'
         ]);
+    });
+
+    grunt.registerTask('cliAppinfo', 'some Run information of the application', function (target) {
+        if(target !== 'full') {
+            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'grunt start'['yellow'].bold + ' or ' + 'grunt start:devtools'['yellow'].bold + ' to run the App');
+            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'npm run info'['yellow'].bold + ' to see complete cli options for the App');
+        }else {
+            grunt.log.writeln( '>>'['yellow'].bold + ' ...pending data :P, it will be added soon...'['grey'].bold);
+        }
     });
 
     grunt.registerTask('default', [

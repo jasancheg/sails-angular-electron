@@ -1,4 +1,4 @@
-// temp on loading html
+// loading html
 html,
 body#loading {
     -webkit-app-region: drag;
@@ -6,7 +6,7 @@ body#loading {
     margin: 0;
     height: 100%;
 }
-body#loading > h1 {
+body#loading > div > h1 {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     text-align: center;
     font-size: 16px;
@@ -14,14 +14,18 @@ body#loading > h1 {
     margin: 0;
     padding: 30% 0 0 0;
 }
-body#loading > h1 img{
+body#loading > div > h1 img{
     margin-top: -6px
+}
+#nodejsInstall {
+    display:none;
 }
 
 // this path will be set dynamically
 $icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 // bower:scss
+@import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
 .browsehappy {
