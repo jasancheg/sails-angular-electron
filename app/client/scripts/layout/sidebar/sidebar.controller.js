@@ -6,8 +6,6 @@
 
     function SideBarCtrl ($scope, $window) {
         console.log("sideBar controller");
-
-       
     }
 
     angular
