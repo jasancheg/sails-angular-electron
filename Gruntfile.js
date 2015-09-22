@@ -349,7 +349,7 @@ module.exports = function (grunt) {
                 dest: '<%= config.app %>/styles/main.css'
             },
             vendor: {
-                src: ['<%= config.app %>/assets/vendor/css/*.css'],
+                src: ['<%= config.app %>/assets/vendor/css/_*.css'],
                 dest: '<%= config.app %>/styles/vendor.css'
             }
         },
