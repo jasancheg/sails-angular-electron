@@ -12,6 +12,9 @@ require('electron-debug')();
 // path to load on create window
 var pathToLoad = '/client/loading.html';
 
+// set frame false for Mac OS and windows
+const frame = process.platform !== 'win32' && process.platform !== 'darwin';
+
 function createMainWindow () {
 
     var win = new BrowserWindow({
@@ -20,6 +23,7 @@ function createMainWindow () {
         height: 600,
         center: true,
         show: false,
+        frame: frame,
         resizable: true,
         'min-width': 600,
         'min-height': 500,

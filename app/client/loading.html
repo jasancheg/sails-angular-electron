@@ -14,15 +14,34 @@
         <!-- endbuild -->
     </head>
     <body id="loading">
-        <div id="loadingServer">
-            <h1><img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api"> Initializing Server</h1>
+        <div data-titlebar></div>
+        <div id="titlebar"></div>
+        <div id="loading">
+            <div id="loadingServer">
+                <h1><img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api"> Initializing Server</h1>
+            </div>
+            <div id="nodejsInstall">
+                <h1>
+                    <img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api">
+                    <br><br>
+                    To run the Application you must isntall <a href="https://nodejs.org/en/">nodejs</a> first.
+                </h1>
+            </div>
         </div>
-        <div id="nodejsInstall">
-            <h1>
-                <img src="images/redpreloader.gif" width="25" height="25" alt="loading Rest Api">
-                <br><br>
-                To run the Application you must isntall <a href="https://nodejs.org/en/">nodejs</a> first.
-            </h1>
-        </div>
+
+        <!-- build:js(.) scripts/vendor.js -->
+        <script src="../../bower_components/angular/angular.js"></script>
+        <script src="../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp,app/client}) scripts/scripts.js -->
+        <script src="scripts/app.module.js"></script>
+        <script src="scripts/directives/directives.module.js"></script>
+        <script src="scripts/directives/titlebar/titlebar.controller.js"></script>
+        <script src="scripts/directives/titlebar/titlebar.directive.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <!-- endbuild -->
     </body>
 </html>

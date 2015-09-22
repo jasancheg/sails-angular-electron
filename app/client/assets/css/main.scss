@@ -2,17 +2,27 @@
 $icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "../../../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "../../../../bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
 
 // loading.html
 html,
-body#loading {
-    -webkit-app-region: drag;
+body {
     padding: 0;
     margin: 0;
     height: 100%;
 }
-body#loading > div > h1 {
+body {
+    padding-top: 75px;
+    //background-color: #e0e0e0!important;
+    //color:#101!important;
+}
+body div#loading {
+    -webkit-app-region: inherit;
+    padding: 0;
+    margin: 0;
+}
+body div#loading > div > h1 {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     text-align: center;
     font-size: 16px;
@@ -20,7 +30,7 @@ body#loading > div > h1 {
     margin: 0;
     padding: 30% 0 0 0;
 }
-body#loading > div > h1 img{
+body div#loading > div > h1 img{
     margin-top: -6px
 }
 #nodejsInstall {
@@ -28,15 +38,6 @@ body#loading > div > h1 img{
 }
 
 // layout
-.header {
-    border-bottom: 1px solid #4e5d6c;
-    margin-bottom: 10px;
-}
-.footer {
-    padding-top: 19px;
-    color: #777;
-    border-top: 1px solid #4e5d6c;
-}
 .jumbotron {
     text-align: center;
     border-bottom: none;
