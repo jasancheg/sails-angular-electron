@@ -56,7 +56,7 @@ module.exports = function (grunt) {
             // set expresion path for js files
             appConfig.jsPathExpresion = '';
             // set exclude paths
-            appConfig.jsPathExclude = /jquery/;
+            //appConfig.jsPathExclude = /jquery/;
         } else {
             if(target === 'dist'){
                 // jquery will be loaded through require on dist/dev targets, to know more about what
@@ -134,7 +134,7 @@ module.exports = function (grunt) {
             },
             compassLayout: {
                 files: ['<%= config.app %>/scripts/layout/{,*/}*.{scss,sass}'],
-                tasks: ['compass:layouts', 'concat:layout', 'autoprefixer:<%= config.compassWatchTarget %>']
+                tasks: ['compass:layout', 'concat:layout', 'autoprefixer:<%= config.compassWatchTarget %>']
             },
             electroncss: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
@@ -340,7 +340,7 @@ module.exports = function (grunt) {
                 src: ['<%= config.app %>/scripts/directives/**/*.css'],
                 dest: '<%= config.app %>/styles/directives.css'
             },
-            layouts: {
+            layout: {
                 src: ['<%= config.app %>/scripts/layout/**/*.css'],
                 dest: '<%= config.app %>/styles/layout.css'
             },
@@ -374,6 +374,7 @@ module.exports = function (grunt) {
             assets: {
                 options: {
                     sourcemap: true,
+                    sassDir: '<%= config.app %>/assets/css',
                     cssDir:'<%= config.app %>/assets/css'
                 }
             },
@@ -538,15 +539,35 @@ module.exports = function (grunt) {
         },
 
         ngtemplates: {
-            dist: {
+            layout: {
                 options: {
-                    module: 'angularsailsApp',
+                    module: 'app.layout',
                     htmlmin: '<%= htmlmin.dist.options %>',
-                    usemin: 'scripts/scripts.js'
+                    usemin: 'scripts/layout.js'
                 },
                 cwd: '<%= config.app %>',
-                src: 'assets/views/{,*/}*.html',
-                dest: '.tmp/templateCache.js'
+                src: 'scripts/layout/{,*/}*.html',
+                dest: '.tmp/layoutTemplateCache.js'
+            },
+            directives: {
+                options: {
+                    module: 'app.directives',
+                    htmlmin: '<%= htmlmin.dist.options %>',
+                    usemin: 'scripts/directives.js'
+                },
+                cwd: '<%= config.app %>',
+                src: 'scripts/directives/{,*/}*.html',
+                dest: '.tmp/directivesTemplateCache.js'
+            },
+            components: {
+                options: {
+                    module: 'app.components',
+                    htmlmin: '<%= htmlmin.dist.options %>',
+                    usemin: 'scripts/components.js'
+                },
+                cwd: '<%= config.app %>',
+                src: 'scripts/components/{,*/}*.html',
+                dest: '.tmp/componentsTemplateCache.js'
             }
         },
 

@@ -1,0 +1,10 @@
+/*
+ * Footer
+ */
+@import "../../assets/css/variables";
+.footer {
+    border-top: 1px solid $color-divider;
+    background-color: $white-bg;    
+    padding-top: 8px;
+    color: #777;
+}
