@@ -3,11 +3,10 @@
 
     angular
         .module('app.components.dashboard')
-        .controller('Dashboard', Dashboard);
+        .controller('Home', Home);
 
-    Dashboard.$inject = ['$q', 'dataservice', 'logger'];
 
-    function Dashboard($q, dataservice, logger) {
+    function Home($q, dataservice, logger) {
 
         /*jshint validthis: true */
         var vm = this;
@@ -18,7 +17,7 @@
         };
         vm.avengerCount = 0;
         vm.avengers = [];
-        vm.title = 'Dashboard';
+        vm.title = 'Home';
 
         activate();
 
@@ -27,7 +26,7 @@
 //            Using a resolver on all routes or dataservice.ready in every controller
 //            return dataservice.ready(promises).then(function(){
             return $q.all(promises).then(function() {
-                logger.info('Activated Dashboard View');
+                logger.info('Activated Home View');
             });
         }
 
