@@ -1,88 +1,60 @@
-(function() {
+/* global angular */
+
+(function () {
+
     'use strict';
 
-    angular
-        .module('app.core')
-        .factory('dataservice', dataservice);
+    function DataService (Restangular, exception, logger) {
+        
+        var _baseApi = Restangular.one('api'),
+            factory = {
+                // getBaseApi : getBaseApi,
+                // getDashboard: getDashboard,
+                // getAvengers: getAvengers
+            };
 
-    /* @ngInject */
-    function dataservice($http, $location, $q, exception, logger) {
-        var isPrimed = false;
-        var primePromise;
+        return factory; 
 
-        var service = {
-            getAvengersCast: getAvengersCast,
-            getAvengerCount: getAvengerCount,
-            getAvengers: getAvengers,
-            ready: ready
+
+        /**
+         * Log In/Sign Up
+         * @return {Restagular Object} [Contains the /api/ connection added to the base url]
+         */
+        function getBaseApi () {
+            return _baseApi;
         };
 
-        return service;
+        /**
+         * Project
+         * @return {Restagular Object} [Contains the /home/ connection added to the base url]
+         */
+        function getHome () {
+            return _baseApi.one('home');
+        };
 
-        function getAvengers() {
-            return $http.get('/api/maa')
-                .then(getAvengersComplete)
-                .catch(function(message) {
-                    exception.catcher('XHR Failed for getAvengers')(message);
-                    $location.url('/');
-                });
+        /**
+         * Project
+         * @return {Restagular Object} [Contains the /dashboard/ connection added to the base url]
+         */
+        function getDashboard () {
+            return _baseApi.one('dashboard');
+        };
 
-            function getAvengersComplete(data, status, headers, config) {
-                return data.data[0].data.results;
-            }
-        }
-
-        function getAvengerCount() {
-            var count = 0;
-            return getAvengersCast()
-                .then(getAvengersCastComplete)
-                .catch(exception.catcher('XHR Failed for getAvengerCount'));
-
-            function getAvengersCastComplete (data) {
-                count = data.length;
-                return $q.when(count);
-            }
-        }
-
-        function getAvengersCast() {
-            var cast = [
-                {name: 'Robert Downey Jr.', character: 'Tony Stark / Iron Man'},
-                {name: 'Chris Hemsworth', character: 'Thor'},
-                {name: 'Chris Evans', character: 'Steve Rogers / Captain America'},
-                {name: 'Mark Ruffalo', character: 'Bruce Banner / The Hulk'},
-                {name: 'Scarlett Johansson', character: 'Natasha Romanoff / Black Widow'},
-                {name: 'Jeremy Renner', character: 'Clint Barton / Hawkeye'},
-                {name: 'Gwyneth Paltrow', character: 'Pepper Potts'},
-                {name: 'Samuel L. Jackson', character: 'Nick Fury'},
-                {name: 'Paul Bettany', character: 'Jarvis'},
-                {name: 'Tom Hiddleston', character: 'Loki'},
-                {name: 'Clark Gregg', character: 'Agent Phil Coulson'}
-            ];
-            return $q.when(cast);
-        }
-
-        function prime() {
-            // This function can only be called once.
-            if (primePromise) {
-                return primePromise;
-            }
-
-            primePromise = $q.when(true).then(success);
-            return primePromise;
-
-            function success() {
-                isPrimed = true;
-                logger.info('Primed data');
-            }
-        }
-
-        function ready(nextPromises) {
-            var readyPromise = primePromise || prime();
-
-            return readyPromise
-                .then(function() { return $q.all(nextPromises); })
-                .catch(exception.catcher('"ready" function failed'));
-        }
+        /**
+        * Test Group
+        * @param {String} projectId [The Id of the project]
+        * @returns {Restagular Object} [Contains the /avengers/ connection added to the base url]
+        */
+        function getAvengers () {
+            return _baseApi.one('avengers');
+        };
 
     }
+
+    angular
+        .module('dataService', [
+            'restangular'
+        ])
+        .factory('DataService', DataService);
+
 })();

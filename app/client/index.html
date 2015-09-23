@@ -25,15 +25,21 @@
     </head>
     <body ng-app="app">
         <titlebar></titlebar>
-        <header-nav></header-nav>
-        <side-bar></side-bar>
-        <main-view></main-view>
-        <footer-nav></footer-nav>
-
-        <!-- Application content -->
-        <!-- <div class="container">
-            <div ng-include="'assets/views/main.html'" ng-controller="MainCtrl"></div>
-        </div> -->
+        <app-shell></app-shell>
+        <div id="splash-page" data-ng-show="false">
+            <div id="loading">
+                <div id="loadingServer">
+                    <h1><img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api"> Initializing Server</h1>
+                </div>
+                <div id="nodejsInstall">
+                    <h1>
+                        <img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api">
+                        <br><br>
+                        To run the Application you must isntall <a href="https://nodejs.org/en/">nodejs</a> first.
+                    </h1>
+                </div>
+            </div>
+        </div>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
         <script>
@@ -48,13 +54,19 @@
 
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/angular-animate/angular-animate.js"></script>
-        <script src="bower_components/angular-route/angular-route.js"></script>
-        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/extras.angular.plus/ngplus-overlay.js"></script>
-        <script src="bower_components/moment/moment.js"></script>
+        <script src="../../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../../bower_components/angular/angular.js"></script>
+        <script src="../../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../../bower_components/angular-route/angular-route.js"></script>
+        <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../../bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+        <script src="../../bower_components/moment/moment.js"></script>
+        <script src="../../bower_components/sails.io.js/dist/sails.io.js"></script>
+        <script src="../../bower_components/angular-sails/dist/angular-sails.js"></script>
+        <script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="../../bower_components/lodash/lodash.js"></script>
+        <script src="../../bower_components/restangular/dist/restangular.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -70,11 +82,11 @@
         <script src="scripts/blocks/logger/logger.module.js"></script>
         <script src="scripts/blocks/logger/logger.js"></script>
         <script src="scripts/blocks/router/router.module.js"></script>
-        <script src="scripts/blocks/router/routehelper.js"></script>
+        <script src="scripts/blocks/router/router.js"></script>
         <!-- core module -->
         <script src="scripts/core/core.module.js"></script>
         <script src="scripts/core/constants.js"></script>
-        <!--<script src="scripts/core/config.js"></script>-->
+        <script src="scripts/core/config.js"></script>
         <script src="scripts/core/dataservice.js"></script>
         <!-- endbuild -->
         <!-- build:js({.tmp,app/client}) scripts/layout.js -->
@@ -82,6 +94,8 @@
         <script src="scripts/layout/layout.module.js"></script>
         <script src="scripts/layout/titlebar/titlebar.controller.js"></script>
         <script src="scripts/layout/titlebar/titlebar.directive.js"></script>
+        <script src="scripts/layout/shell/shell.controller.js"></script>
+        <script src="scripts/layout/shell/shell.directive.js"></script>
         <script src="scripts/layout/header/header.controller.js"></script>
         <script src="scripts/layout/header/header.directive.js"></script>
         <script src="scripts/layout/sidebar/sidebar.controller.js"></script>
@@ -99,13 +113,18 @@
         <!-- build:js({.tmp,app/client}) scripts/components.js -->
         <script src="scripts/components/components.module.js"></script>
         <!-- dashboard -->
+        <!-- 
         <script src="scripts/components/dashboard/dashboard.module.js"></script>
         <script src="scripts/components/dashboard/config.route.js"></script>
-        <script src="scripts/components/dashboard/dashboard.js"></script>
+        <script src="scripts/components/dashboard/dashboard.js"></script> -->
         <!--avengers module-->
-        <script src="scripts/components/avengers/avengers.module.js"></script>
+        <!-- <script src="scripts/components/avengers/avengers.module.js"></script>
         <script src="scripts/components/avengers/config.route.js"></script>
-        <script src="scripts/components/avengers/avengers.js"></script>
+        <script src="scripts/components/avengers/avengers.js"></script> -->
+        <!--home module-->
+        <!-- <script src="scripts/components/home/home.module.js"></script>
+        <script src="scripts/components/home/config.route.js"></script>
+        <script src="scripts/components/home/home.js"></script> -->
         <!-- endbuild -->
     </body>
 </html>
