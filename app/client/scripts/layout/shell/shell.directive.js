@@ -14,20 +14,21 @@
 
     'use strict';
 
+    angular
+        .module('app.layout')
+        .directive('appShell', ShellDrtv);
+
     function ShellDrtv () {
         return {
             restrict: 'E',
             replace: 'true',
             templateUrl: 'scripts/layout/shell/shell.html',
             controller: 'ShellCtrl',
+            controllerAs: 'vm',
             link: function (scope, element, attrs, ctrl) {
-                console.log("shell directive");
+                console.log("UI loaded - shell directive");
             }
         };
     }
-
-    angular
-        .module('app.layout')
-        .directive('appShell', ShellDrtv);
 
 })();

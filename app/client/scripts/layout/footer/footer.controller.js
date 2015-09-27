@@ -4,12 +4,12 @@
 
     'use strict';
 
-    function FooterNavCtrl ($scope, $window) {
-        console.log("footer nav controller");
-    }
-
     angular
         .module('app.layout')
         .controller('FooterNavCtrl', FooterNavCtrl);
+
+    function FooterNavCtrl (logger) {
+        logger.success('footer nav loaded!', null);
+    }
 
 })();

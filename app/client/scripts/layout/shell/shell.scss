@@ -1,34 +1,33 @@
+body #shell,
 section#shell {
     width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
     top: 0;
+    position:absolute;
 }
-/*#region Splash */
-#splash-page {
-    z-index: 99999 !important;
-}
-    
-.flag-haschanges {
-    position: fixed !important;
-    display: inline;
-}
-.fa-asterisk.fa-asterisk-large {
-    font-size: 180%;
-    vertical-align: middle;
-    color: #F58A00;
+.preloader {
+    background: url("../assets/images/preloader.gif") 0 0 no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin: -4px 0px 0 -30px;
+    position: absolute;
 }
 
-.fa-asterisk.fa-asterisk-alert {
-    color: #F58A00;
+/*#region Splash */
+#splash-page {
+    z-index: 99998;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    position: fixed;
+    background:#fff;
 }
-.fa-asterisk-inline {
-    padding: 0 4px 0 0;
-}
-.progress,
-.page-progress-bar {
-    margin: 30px 10% !important;
+#shell #splash-page {
+    background:#fff;
+    //z-index: 99995!important;   
 }
 .ngplus-overlay-background {
     top: 0px;

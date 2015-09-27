@@ -1,10 +1,11 @@
 /*
  * Footer
  */
-@import "../../assets/css/variables";
+@import "../../assets/css/_variables";
 .footer {
     border-top: 1px solid $color-divider;
     background-color: $white-bg;    
     padding-top: 8px;
     color: #777;
+    z-index:99998;
 }

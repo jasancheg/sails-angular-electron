@@ -3,13 +3,10 @@
 
     angular
         .module('app.components.home')
-        .controller('Home', Home);
+        .controller('HomeCtrl', HomeCtrl);
 
-    Home.$inject = ['$q', 'dataservice', 'logger'];
+    function HomeCtrl($q, dataservice, logger) {
 
-    function Home($q, dataservice, logger) {
-
-        /*jshint validthis: true */
         var vm = this;
 
         vm.news = {
@@ -19,5 +16,16 @@
         vm.avengerCount = 0;
         vm.avengers = [];
         vm.title = 'Home';
+        
+        vm.awesomeThings = [
+            'HTML5 Boilerplate',
+            'AngularJS',
+            'SailsJS',
+            'Electron Atom',
+            'Karma'
+        ];
+
+        logger.info('Activated Home View');
+
     }
 })();

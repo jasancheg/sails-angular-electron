@@ -14,23 +14,21 @@
 
     'use strict';
 
+    angular
+        .module('app.layout')
+        .directive('headerNav', HeaderNavDrtv);
+
     function HeaderNavDrtv () {
         return {
             restrict: 'E',
             replace: 'true',
             templateUrl: 'scripts/layout/header/header.html',
             controller: 'HeaderNavCtrl',
+            controllerAs: 'vm',
             link: function (scope, element, attrs, ctrl) {
-                console.log("paso por aca");
-                // if(scope.elementToMatchHeight) {
-                //     scope.activateKeepHeightWithElement();
-                // }
+                console.log("header  nav directive");
             }
         };
     }
-
-    angular
-        .module('app.layout')
-        .directive('headerNav', HeaderNavDrtv);
 
 })();

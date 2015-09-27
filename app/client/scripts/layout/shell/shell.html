@@ -1,16 +1,17 @@
-<section id="shell" data-ng-controller="ShellCtrl as vm">
-    <div id="splash-page" data-ng-show="vm.showSplash" class="dissolve-animation">
-        <div id="loading">
-            <div id="loadingServer">
-                <h1><img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api"> Initializing Server</h1>
-            </div>
-        </div>
-    </div>
+<section id="shell">
     <header-nav></header-nav>
     <side-bar></side-bar>
     <main-view></main-view>
     <footer-nav></footer-nav>
 
+    <div id="splash-page" data-ng-show="vm.showSplash" class="dissolve-animation">
+        <div id="loading">
+            <div id="loadingServer">
+                <h1><span class="preloader" title="loading Rest Api">&nbsp;</span> Initializing UI</h1>
+            </div>
+        </div>
+    </div>
+    
     <div ngplus-overlay
          ngplus-overlay-delay-in="50"
          ngplus-overlay-delay-out="700"

@@ -2,7 +2,7 @@
  * Sidebar
  */
 
-@import "../../assets/css/variables";
+@import "../../assets/css/_variables";
 
 /* Hide for mobile, show later */
 #sidebar {
@@ -20,6 +20,30 @@
     min-height: calc(100% - 65px);
     z-index: 810;
 }
+li.nPurple > a:hover, #sidebar .navi > li.open.nPurple > a, #sidebar .navi > li.current.nPurple > a {
+    //background: $purple-darker !important;
+    //color: #fff;
+    -webkit-transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+    transition: background 0.5s ease;
+}
+/* Sidebar navigation */
+.nav-sidebar {
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+.nav-sidebar > li.nPurple > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+.nav-sidebar > li.nPurple.current > a,
+.nav-sidebar > li.nPurple.current > a:hover,
+.nav-sidebar > li.nPurple.current > a:focus {
+    color: #fff;
+    background-color: $purple-darker;
+}
 @media (min-width: 768px) {
     #sidebar {
         display: block;
@@ -30,24 +54,5 @@
         -moz-transition: -moz-transform .3s ease-in-out,width .3s ease-in-out;
         -o-transition: -o-transform .3s ease-in-out,width .3s ease-in-out;
         transition: transform .3s ease-in-out,width .3s ease-in-out;
-
-    }
-    
-    /* Sidebar navigation */
-    .nav-sidebar {
-        margin-right: -21px; /* 20px padding + 1px border */
-        margin-bottom: 20px;
-        margin-left: -20px;
-    }
-    .nav-sidebar > li > a {
-        padding-right: 20px;
-        padding-left: 20px;
-    }
-    .nav-sidebar > .active > a,
-    .nav-sidebar > .active > a:hover,
-    .nav-sidebar > .active > a:focus {
-        color: #fff;
-        background-color: $purple-darker;
     }
 }
-

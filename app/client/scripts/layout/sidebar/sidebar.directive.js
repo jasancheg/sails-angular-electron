@@ -14,20 +14,46 @@
 
     'use strict';
 
+    angular
+        .module('app.layout')
+        .directive('sideBar', SideBarDrtv);
+
     function SideBarDrtv () {
-        return {
+
+        var directive = {
             restrict: 'E',
             replace: 'true',
             templateUrl: 'scripts/layout/sidebar/sidebar.html',
             controller: 'SideBarCtrl',
-            link: function (scope, element, attrs, ctrl) {
-                console.log("side nav directive");
-            }
-        };
-    }
+            controllerAs: 'vm',
+            scope: {
+                whenDoneAnimating: '&?'
+            },
+            link: link
+        }
+        
+        return directive;
 
-    angular
-        .module('app.layout')
-        .directive('sideBar', SideBarDrtv);
+        function link(scope, element, attrs) {
+            console.log("side nav directive");
+                
+            var $sidebarInner = element.find('.sidebar-inner');
+            var $dropdownElement = element.find('.sidebar-dropdown a');
+            element.addClass('sidebar');
+            $dropdownElement.click(dropdown);
+
+            function dropdown(e) {
+                var dropClass = 'dropy';
+                e.preventDefault();
+                if (!$dropdownElement.hasClass(dropClass)) {
+                    $sidebarInner.slideDown(350, scope.whenDoneAnimating);
+                    $dropdownElement.addClass(dropClass);
+                } else if ($dropdownElement.hasClass(dropClass)) {
+                    $dropdownElement.removeClass(dropClass);
+                    $sidebarInner.slideUp(350, scope.whenDoneAnimating);
+                }
+            }
+        }
+    }
 
 })();

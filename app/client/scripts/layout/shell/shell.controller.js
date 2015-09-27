@@ -8,7 +8,6 @@
         .controller('ShellCtrl', ShellCtrl);
 
     function ShellCtrl ($timeout, config, logger) {
-        console.log("shell controller");
         var vm = this;
 
         vm.title = config.appTitle;
@@ -19,7 +18,7 @@
         activate();
 
         function activate() {
-            logger.success(config.appTitle + ' loaded!', null);
+            logger.success('UI loaded!', null);
             hideSplash();
         }
 
