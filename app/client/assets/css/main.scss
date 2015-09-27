@@ -1,5 +1,7 @@
-// this path will be set dynamically
+// Bootstrap path to bower fonts's folder
 $icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// Font awesome path to fonts's folder
+$fa-font-path:   "../../../bower_components/font-awesome/fonts" !default;
 // bower:scss
 @import "../../../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "../../../../bower_components/font-awesome/scss/font-awesome.scss";

@@ -26,10 +26,10 @@
     <body ng-app="app">
         <titlebar></titlebar>
         <app-shell></app-shell>
-        <div id="splash-page" data-ng-show="false">
+        <!-- <div id="splash-page" data-ng-show="false">
             <div id="loading">
                 <div id="loadingServer">
-                    <h1><img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api"> Initializing Server</h1>
+                    <h1><span class="preloader" title="loading Rest Api">&nbsp;</span> Initializing Server</h1>
                 </div>
                 <div id="nodejsInstall">
                     <h1>
@@ -39,7 +39,7 @@
                     </h1>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
         <script>
@@ -58,14 +58,13 @@
         <script src="../../bower_components/angular/angular.js"></script>
         <script src="../../bower_components/angular-animate/angular-animate.js"></script>
         <script src="../../bower_components/angular-route/angular-route.js"></script>
+        <script src="../../bower_components/sails.io.js/dist/sails.io.js"></script>
+        <script src="../../bower_components/angular-sails/dist/angular-sails.js"></script>
         <script src="../../bower_components/angular-sanitize/angular-sanitize.js"></script>
         <script src="../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
         <script src="../../bower_components/extras.angular.plus/ngplus-overlay.js"></script>
-        <script src="../../bower_components/moment/moment.js"></script>
-        <script src="../../bower_components/sails.io.js/dist/sails.io.js"></script>
-        <script src="../../bower_components/angular-sails/dist/angular-sails.js"></script>
-        <script src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="../../bower_components/lodash/lodash.js"></script>
+        <script src="../../bower_components/moment/moment.js"></script>
         <script src="../../bower_components/restangular/dist/restangular.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
@@ -82,13 +81,14 @@
         <script src="scripts/blocks/logger/logger.module.js"></script>
         <script src="scripts/blocks/logger/logger.js"></script>
         <script src="scripts/blocks/router/router.module.js"></script>
-        <script src="scripts/blocks/router/router.js"></script>
+        <script src="scripts/blocks/router/routehelper.js"></script>
         <!-- core module -->
         <script src="scripts/core/core.module.js"></script>
         <script src="scripts/core/constants.js"></script>
         <script src="scripts/core/config.js"></script>
         <script src="scripts/core/dataservice.js"></script>
         <!-- endbuild -->
+
         <!-- build:js({.tmp,app/client}) scripts/layout.js -->
         <!-- layout -->
         <script src="scripts/layout/layout.module.js"></script>
@@ -105,26 +105,27 @@
         <script src="scripts/layout/footer/footer.controller.js"></script>
         <script src="scripts/layout/footer/footer.directive.js"></script>
         <!-- endbuild -->
+        
         <!-- directives -->
         <!-- build:js({.tmp,app/client}) scripts/directives.js -->
         <script src="scripts/directives/directives.module.js"></script>
         <!-- endbuild -->
+        
         <!-- components -->
         <!-- build:js({.tmp,app/client}) scripts/components.js -->
         <script src="scripts/components/components.module.js"></script>
         <!-- dashboard -->
-        <!-- 
         <script src="scripts/components/dashboard/dashboard.module.js"></script>
         <script src="scripts/components/dashboard/config.route.js"></script>
-        <script src="scripts/components/dashboard/dashboard.js"></script> -->
+        <script src="scripts/components/dashboard/dashboard.js"></script>
         <!--avengers module-->
-        <!-- <script src="scripts/components/avengers/avengers.module.js"></script>
+        <script src="scripts/components/avengers/avengers.module.js"></script>
         <script src="scripts/components/avengers/config.route.js"></script>
-        <script src="scripts/components/avengers/avengers.js"></script> -->
+        <script src="scripts/components/avengers/avengers.js"></script>
         <!--home module-->
-        <!-- <script src="scripts/components/home/home.module.js"></script>
+        <script src="scripts/components/home/home.module.js"></script>
         <script src="scripts/components/home/config.route.js"></script>
-        <script src="scripts/components/home/home.js"></script> -->
+        <script src="scripts/components/home/home.js"></script>
         <!-- endbuild -->
     </body>
 </html>

@@ -18,12 +18,12 @@
                 url: '/avengers',
                 config: {
                     templateUrl: 'scripts/components/avengers/avengers.html',
-                    controller: 'Avengers',
+                    controller: 'AvengersCtrl',
                     controllerAs: 'vm',
                     title: 'avengers',
                     settings: {
-                        nav: 2,
-                        content: '<i class="fa fa-lock"></i> Avengers'
+                        nav: 3,
+                        content: '<i class="fa fa-star"></i> Avengers'
                     }
                 }
             }

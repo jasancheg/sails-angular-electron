@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @ngdoc overview
  * @name app
@@ -21,14 +19,10 @@
         'app.core',
         'app.layout',
         'app.directives',
-
         /*
          * Feature areas
          */
         'app.components'
-        // 'app.avengers',
-        // 'app.dashboard',
-        // 'app.layout'
     ]);
 
 })();

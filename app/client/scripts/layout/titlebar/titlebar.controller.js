@@ -4,12 +4,12 @@
 
     'use strict';
 
-    function TitlebarCtrl ($scope, $window) {
-        console.log("titlebar controller");
-    }
-
     angular
         .module('app.layout')
         .controller('TitlebarCtrl', TitlebarCtrl);
+
+    function TitlebarCtrl (logger) {
+        logger.success('titlebar loaded!', null);
+    }
 
 })();

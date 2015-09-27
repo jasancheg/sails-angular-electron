@@ -5,14 +5,14 @@
         /*
          * Angular modules
          */
-        'ngAnimate', 'ngSanitize',
+        'ngAnimate', 'ngRoute', 'ngSanitize',
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.logger', 'blocks.router', 'dataService',
+        'blocks.exception', 'blocks.logger', 'blocks.router', //'dataService',
         /*
          * 3rd Party modules
          */
-        'ngplus', 'ngSails'
+        'ngplus', 'ngSails'//, 'Restangular' //, 'ui.router' 
     ]);
 })();

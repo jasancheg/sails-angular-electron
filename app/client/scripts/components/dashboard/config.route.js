@@ -5,8 +5,6 @@
         .module('app.components.dashboard')
         .run(appRun);
 
-    // appRun.$inject = ['routehelper'];
-
     /* @ngInject */
     function appRun(routehelper) {
         routehelper.configureRoutes(getRoutes());
@@ -15,15 +13,15 @@
     function getRoutes() {
         return [
             {
-                url: '/',
+                url: '/dashboard',
                 config: {
                     templateUrl: 'scripts/components/dashboard/dashboard.html',
-                    controller: 'Dashboard',
+                    controller: 'DashboardCtrl',
                     controllerAs: 'vm',
                     title: 'dashboard',
                     settings: {
-                        nav: 1,
-                        content: '<i class="fa fa-dashboard"></i> Dashboard'
+                        nav: 2,
+                        content: '<i class="fa fa-tachometer"></i> Dashboard'
                     }
                 }
             }

@@ -14,6 +14,10 @@
 
     'use strict';
 
+    angular
+        .module('app.layout')
+        .directive('mainView', MainViewDrtv);
+    
     function MainViewDrtv () {
         return {
             restrict: 'E',
@@ -25,9 +29,5 @@
             }
         };
     }
-
-    angular
-        .module('app.layout')
-        .directive('mainView', MainViewDrtv);
 
 })();
