@@ -10,14 +10,14 @@
 
     function HeaderNavCtrl ($route, routehelper, logger) {
         
-        logger.success('header nav loaded!', null);
-    
-        var vm = this;
-        var routes = routehelper.getRoutes();
+        var vm = this,
+            routes = routehelper.getRoutes({settings:{type: 'mainnav'}});
+        
         vm.isActive = isActive;
         vm.headerReady = function(){console.log('done animating menu')}; // example
         
         activate();
+        logger.success('header nav loaded!', null);
 
         function activate() { getNavRoutes(); }
 

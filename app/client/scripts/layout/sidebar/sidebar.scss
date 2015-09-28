@@ -26,21 +26,18 @@
          -o-transition: -o-transform .3s ease-in-out,all .3s ease-in-out;
             transition: transform .3s ease-in-out,all .3s ease-in-out;
 }
+.hide-navs #sidebar {
+    -moz-transition: ease-out all 0.3s 0.4s;
+      -o-transition: ease-out all 0.3s 0.4s;
+    -webkit-transition: ease-out all 0.3s 0.4s;
+            transition: ease-out all 0.3s 0.4s;
+    margin-left: -230px;     
+}
+
 @media (min-width: 768px) {
     #sidebar {
-        display: block;
-        //background-color: #4e5d6c;
-        //border-top: 1px solid #2b3e50;
         width: 230px;
     }
-}
-li.nPurple > a:hover, #sidebar .navi > li.open.nPurple > a, #sidebar .navi > li.current.nPurple > a {
-    //background: $purple-darker !important;
-    //color: #fff;
-    -webkit-transition: background 0.5s ease;
-    -moz-transition: background 0.5s ease;
-    -o-transition: background 0.5s ease;
-    transition: background 0.5s ease;
 }
 /* Sidebar navigation */
 .nav-sidebar {
@@ -51,6 +48,10 @@ li.nPurple > a:hover, #sidebar .navi > li.open.nPurple > a, #sidebar .navi > li.
 .nav-sidebar > li.nPurple > a {
     padding-right: 20px;
     padding-left: 20px;
+    -webkit-transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+    transition: background 0.5s ease;
 }
 .nav-sidebar > li.nPurple.current > a,
 .nav-sidebar > li.nPurple.current > a:hover,

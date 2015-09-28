@@ -6,7 +6,7 @@
         .controller('AvengersCtrl', AvengersCtrl);
 
     /* @ngInject */
-    function AvengersCtrl($q, RestFactory, logger) {
+    function AvengersCtrl($location, $q, $routeParams, exception, logger, RestFactory) {
         var vm = this;
 
         vm.avengers = [];
@@ -26,15 +26,25 @@
             });
         }
 
+        /**
+         * API: /api/avengers/show
+         */
         function getAvengers() {
+
             var avengersConnection = RestFactory.getAvengers();
-            /**
-             * API: /api/avengers/show
-             */
-            avengersConnection.one('show').get().then(function (response) {
+            
+            return avengersConnection.one('show').get()
+                .then(getAvengersComplete)
+                .catch(function(message) {
+                    exception.catcher('XHR Failed for getAvengers')(message);
+                    $location.url('/');
+                });
+
+            function getAvengersComplete(response) {
                 vm.avengers = response.data[0].data.results;
                 return vm.avengers;
-            });
+            }
+
         }
     }
 })();

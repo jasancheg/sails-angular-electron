@@ -1,9 +1,17 @@
 <div id="sidebar" >
     <ul class="nav nav-sidebar">
         <li class="nPurple fade-selection-animation" 
-            data-ng-class="vm.isCurrent(r)"
-            data-ng-repeat="r in vm.navRoutes">
-            <a href="#{{r.originalPath}}" data-ng-bind-html="r.settings.content"></a>
+            data-ng-class="vm.isCurrent(m)"
+            data-ng-repeat="m in vm.mainNavRoutes">
+            <a href="#{{m.originalPath}}" data-ng-bind-html="m.settings.content"></a>
+        </li>
+    </ul>
+    <hr>
+    <ul class="nav nav-sidebar">
+        <li class="nPurple fade-selection-animation" 
+            data-ng-class="vm.isCurrent(a)"
+            data-ng-repeat="a in vm.adminNavRoutes">
+            <a href="#{{a.originalPath}}" data-ng-bind-html="a.settings.content"></a>
         </li>
     </ul>
 </div>

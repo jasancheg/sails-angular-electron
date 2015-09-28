@@ -8,8 +8,18 @@ header > .navbar.navbar-fixed-top {
     top: 24px;
     border-bottom: 1px solid $color-divider;
     background: $white-bg;
+    -moz-transition: ease-out all 0.3s 0.4s;
+          -o-transition: ease-out all 0.3s 0.4s;
+        -webkit-transition: ease-out all 0.3s 0.4s;
+                transition: ease-out all 0.3s 0.4s;
 }
 header.header {
-    //border-bottom: 1px solid #4e5d6c;
-    margin-bottom: 10px;
+}
+
+.hide-navs header > .navbar.navbar-fixed-top {
+    top: -51px;
+    -moz-transition: ease-out all 0.3s 0.4s;
+          -o-transition: ease-out all 0.3s 0.4s;
+        -webkit-transition: ease-out all 0.3s 0.4s;
+                transition: ease-out all 0.3s 0.4s;
 }
