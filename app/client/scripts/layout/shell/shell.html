@@ -5,10 +5,8 @@
     <footer-nav></footer-nav>
 
     <div id="splash-page" data-ng-show="vm.showSplash" class="dissolve-animation">
-        <div id="loading">
-            <div id="loadingServer">
-                <h1><span class="preloader" title="loading Rest Api">&nbsp;</span> Initializing UI</h1>
-            </div>
+        <div class="loading">
+            <span class="preloader" title="loading Rest Api"></span> <span class="preloader-text">Initializing UI</span>
         </div>
     </div>
     
@@ -16,8 +14,8 @@
          ngplus-overlay-delay-in="50"
          ngplus-overlay-delay-out="700"
          ngplus-overlay-animation="dissolve-animation">
-        <img src="assets/images/busy.gif"/>
-
-        <div class="page-spinner-message overlay-message">{{vm.busyMessage}}</div>
+        <div class="loading">
+            <span class="preloader"></span> <span class="preloader-text">Please wait</span>
+        </div>
     </div>
 </section>

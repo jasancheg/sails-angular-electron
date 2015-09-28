@@ -6,40 +6,14 @@ function runScriptsInRenderedProcess() {
     // to know more about what is this, refer to the issue https://github.com/atom/electron/issues/254
     window.$ = window.jQuery = require('jquery');
 
-    var titleDOM,
+    var dataOs,
         ipc = require('ipc'),
         remote = require('remote'),
         Menu = remote.require('menu'),
         MenuItem = remote.require('menu-item'),
-        // create main bar menu
-        //titlebar = require('titlebar')(),
-        //$$ = require('dombo'),
+        $htmlElem = $('html'),
         // create a context menu
-        menu = new Menu(),
-        // flag
-        isFullscreen = false,
-        onfullscreentoggle = function (e) {
-
-            if (!isFullscreen && e.shiftKey) {
-                ipc.send('resize', {
-                //width: media.width,
-                //height: media.height,
-                //ratio: media.ratio
-                });
-                return
-            }
-
-            if (isFullscreen) {
-                isFullscreen = false
-                //$('#titlebar')[0].style.display = 'block';
-                ipc.send('exit-full-screen');
-            } else {
-                isFullscreen = true;
-                //$('#titlebar')[0].style.display = 'none';
-                ipc.send('enter-full-screen');
-            }
-
-        };
+        menu = new Menu();
 
     // active context menu
     menu.append(new MenuItem({ label: 'Toggle Dev Tools', click: function() { ipc.send('toggle-dev-tools'); } }));
@@ -48,29 +22,11 @@ function runScriptsInRenderedProcess() {
         menu.popup(remote.getCurrentWindow());
     }, false);
 
-    // append custom header frame to page on PC and Mac
-    if (process.platform !== 'linux') {
-        // console.log(titlebar);    
-        // titleDOM = document.getElementById('titlebar').append(titlebar);
-        // titleDOM.appendChild(titlebar);
-        //titlebar.appendTo('#titlebar');
-    }
-
-    // titlebar.on('close', function () {
-    //     ipc.send('close');
-    // });
-
-    // titlebar.on('minimize', function () {
-    //     ipc.send('minimize');
-    // });
-
-    // titlebar.on('maximize', function () {
-    //     ipc.send('maximize');
-    // });
-
-    // titlebar.on('fullscreen', onfullscreentoggle);
-
-    
+    // set flag, set global object with current OS info
+    $htmlElem.attr('data-os', dataOs);
+    window.dataOs = {
+        platform: process.platform
+    };
 
     // web contens loaded
     setTimeout(function () {

@@ -1,7 +1,7 @@
-<div id="titlebar" class="webkit-draggable">
+<div id="titlebar" class="{{vm.osCls}} webkit-draggable">
     <div class="titlebar-stoplight">
-        <div class="titlebar-close"></div>
-        <div class="titlebar-minimize"></div>
-        <div class="titlebar-fullscreen"></div>
+        <button type="button" data-ng-repeat="e in vm.listBtn" class="{{e.btnCls}}">
+            <i ng-if="e.icoCls" class="{{e.icoCls}}"></i> 
+        </button>
     </div>
 </div>

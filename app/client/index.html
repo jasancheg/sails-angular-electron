@@ -12,7 +12,7 @@
         <!-- build:css(app/client) styles/vendor.css -->
         <!-- bower:css -->
         <!-- endbower -->
-        <!--<link rel="stylesheet" href="styles/vendor.css">-->
+        <link rel="stylesheet" href="styles/vendor.css">
         <!-- endbuild -->
         <!-- build:css(app/client) styles/core.css -->
         <link rel="stylesheet" href="styles/layout.css">
@@ -21,25 +21,12 @@
         <!-- endbuild -->
         <!-- build:js(app/client) scripts/main.js -->
         <script src="assets/js/rendered-process.js"></script>
+        <script src="assets/js/titlebar.js"></script>
         <!-- endbuild -->
     </head>
     <body ng-app="app">
         <titlebar></titlebar>
         <app-shell></app-shell>
-        <!-- <div id="splash-page" data-ng-show="false">
-            <div id="loading">
-                <div id="loadingServer">
-                    <h1><span class="preloader" title="loading Rest Api">&nbsp;</span> Initializing Server</h1>
-                </div>
-                <div id="nodejsInstall">
-                    <h1>
-                        <img src="assets/images/preloader.gif" width="25" height="25" alt="loading Rest Api">
-                        <br><br>
-                        To run the Application you must isntall <a href="https://nodejs.org/en/">nodejs</a> first.
-                    </h1>
-                </div>
-            </div>
-        </div> -->
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
         <script>
@@ -70,7 +57,7 @@
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app/client}) scripts/core.js -->
-        <!-- edited toastr -->
+        <!-- custom toastr -->
         <script src="scripts/layout/toastr/toastr.js"></script>
         <!-- Bootstrapping -->
         <script src="scripts/app.module.js"></script>
@@ -116,16 +103,16 @@
         <script src="scripts/components/components.module.js"></script>
         <!-- dashboard -->
         <script src="scripts/components/dashboard/dashboard.module.js"></script>
-        <script src="scripts/components/dashboard/config.route.js"></script>
-        <script src="scripts/components/dashboard/dashboard.js"></script>
+        <script src="scripts/components/dashboard/dashboard.config.route.js"></script>
+        <script src="scripts/components/dashboard/dashboard.controller.js"></script>
         <!--avengers module-->
         <script src="scripts/components/avengers/avengers.module.js"></script>
-        <script src="scripts/components/avengers/config.route.js"></script>
-        <script src="scripts/components/avengers/avengers.js"></script>
+        <script src="scripts/components/avengers/avengers.config.route.js"></script>
+        <script src="scripts/components/avengers/avengers.controller.js"></script>
         <!--home module-->
         <script src="scripts/components/home/home.module.js"></script>
-        <script src="scripts/components/home/config.route.js"></script>
-        <script src="scripts/components/home/home.js"></script>
+        <script src="scripts/components/home/home.config.route.js"></script>
+        <script src="scripts/components/home/home.controller.js"></script>
         <!-- endbuild -->
     </body>
 </html>

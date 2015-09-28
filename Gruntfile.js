@@ -601,10 +601,15 @@ module.exports = function (grunt) {
                         'assets/views/{,*/}*.html',
                         'assets/fonts/{,*/}*.*'
                     ]
-                }, {
+                },{
                     expand: true,
                     cwd: '.',
                     src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
+                    dest: 'dist'
+                }, {
+                    expand: true,
+                    cwd: '.',
+                    src: 'bower_components/font-awesome/fonts/*',
                     dest: 'dist'
                 }]
             },
@@ -773,7 +778,9 @@ module.exports = function (grunt) {
                     questions: [{
                         config: 'distributionBuild.build.continue',
                         type: 'list',
-                        message: 'Some actions may need administrator permissions, first make sure you are running this `Grunt` task with: \n `sudo` on MacOs \n `Run as administrator` on Windows \n',
+                        message: 'Some actions may need administrator permissions, ' + 
+                                 'first make sure you are running this `Grunt` task ' + 
+                                 'with: \n `sudo` on MacOs \n `Run as administrator` on Windows \n',
                         default: true,
                         choices: [{
                             value: false,
@@ -812,7 +819,8 @@ module.exports = function (grunt) {
                             name: 'Config files'
                         }],
                         when: function(answers) {
-                            return answers['distributionBuild.build.continue'] && answers['distributionBuild.build.type'] === 'specific';
+                            return answers['distributionBuild.build.continue'] && 
+                                   answers['distributionBuild.build.type'] === 'specific';
                         },
                         validate: function (value) {
                             var valid = value.length > 0;
@@ -905,7 +913,8 @@ module.exports = function (grunt) {
                             name: 'Linux 64'
                         },],
                         when: function(answers){
-                            return answers['distributionBuild.build.continue'] && answers['distributionBuild.build.release'];
+                            return answers['distributionBuild.build.continue'] && 
+                                   answers['distributionBuild.build.release'];
                         },
                         validate: function (value) {
                             var valid = value.length > 0;
@@ -938,9 +947,10 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('serve', 'Compile then start a connect in `Server Mode` for the Electron App', function (target) {
+    grunt.registerTask('serve', 'Compile then start a connect in `Server Mode`', function (target) {
 
-        grunt.log.warn("The task is appropiate just if the client side interface don't have dependencie of nodejs, otherwise the application will not work properly");
+        grunt.log.warn('The task is appropiate just if the client side interface don\'t ' +  
+                       'have dependencie of nodejs, otherwise the application will not work properly');
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -960,7 +970,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start in a `Server Mode` of the Electron App.');
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` ' + 
+                       'to start in a `Server Mode` of the Electron App.');
         grunt.task.run(['serve:' + target]);
     });
 
@@ -1148,8 +1159,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask('cliAppinfo', 'some Run information of the application', function (target) {
         if(target !== 'full') {
-            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'grunt start'['yellow'].bold + ' or ' + 'grunt start:devtools'['yellow'].bold + ' to run the App');
-            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'npm run info'['yellow'].bold + ' to see complete cli options for the App');
+            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'grunt start'['yellow'].bold + 
+                               ' or ' + 'grunt start:devtools'['yellow'].bold + ' to run the App');
+            grunt.log.writeln( '>>'['blue'].bold + ' Use ' + 'npm run info'['yellow'].bold + 
+                               ' to see complete cli options for the App');
         }else {
             grunt.log.writeln( '>>'['yellow'].bold + ' ...pending data :P, it will be added soon...'['grey'].bold);
         }

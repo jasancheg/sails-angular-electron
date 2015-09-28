@@ -80,6 +80,12 @@
         }
 
         function getRoutes() {
+            
+            // if routes was already defined
+            if (routes.length) {
+                return routes;
+            }
+
             for (var prop in $route.routes) {
                 if ($route.routes.hasOwnProperty(prop)) {
                     var route = $route.routes[prop];

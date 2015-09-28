@@ -9,8 +9,6 @@
 
     function ShellCtrl ($timeout, config, logger) {
         var vm = this;
-
-        vm.title = config.appTitle;
         vm.busyMessage = 'Please wait ...';
         vm.isBusy = true;
         vm.showSplash = true;

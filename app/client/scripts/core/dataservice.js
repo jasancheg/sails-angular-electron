@@ -4,35 +4,41 @@
     'use strict';
 
     angular
-        .module('app.core')
-        .factory('dataservice', dataservice);
+        .module('restFactory', [
+            'restangular'
+        ])
+        .factory('RestFactory', RestFactory);
 
     /* @ngInject */
-    function dataservice($http, $location, $q, exception, logger) {
-        var isPrimed = false;
-        var primePromise;
-
+    function RestFactory($q, exception, logger, Restangular) {
         var service = {
-            getAvengersCast: getAvengersCast,
-            getAvengerCount: getAvengerCount,
-            getAvengers: getAvengers,
-            ready: ready
-        };
+                getAvengersCast: getAvengersCast,
+                getAvengerCount: getAvengerCount,
+                getAvengers: getAvengers,
+                getBaseApi: getBaseApi,
+                ready: ready
+            },
+            _baseApi = Restangular.one('api'),
+
+            isPrimed = false,
+            primePromise;
 
         return service;
 
-        function getAvengers() {
-            return ['Paco', 'Lola', 'Juancho'];
-            // return $http.get('/api/maa')
-            //     .then(getAvengersComplete)
-            //     .catch(function(message) {
-            //         exception.catcher('XHR Failed for getAvengers')(message);
-            //         $location.url('/');
-            //     });
+        /**
+         * Log In/Sign Up
+         * @return {Restagular Object} [Contains the /api/ connection added to the base url]
+         */
+        function getBaseApi() {
+            return _baseApi;
+        }
 
-            // function getAvengersComplete(data, status, headers, config) {
-            //     return data.data[0].data.results;
-            // }
+        /**
+         * Project
+         * @return {Restagular Object} [Contains the /project/ connection added to the base url]
+         */
+        function getAvengers () {
+            return _baseApi.one('avengers');
         }
 
         function getAvengerCount() {

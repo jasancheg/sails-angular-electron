@@ -9,10 +9,10 @@
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.logger', 'blocks.router', //'dataService',
+        'blocks.exception', 'blocks.logger', 'blocks.router',
         /*
          * 3rd Party modules
          */
-        'ngplus', 'ngSails'//, 'Restangular' //, 'ui.router' 
+        'ngplus', 'ngSails', 'restFactory' //, 'ui.router' 
     ]);
 })();

@@ -24,7 +24,7 @@
             replace: 'true',
             templateUrl: 'scripts/layout/header/header.html',
             controller: 'HeaderNavCtrl',
-            controllerAs: 'vm',
+            controllerAs: 'header',
             link: function (scope, element, attrs, ctrl) {
                 console.log("header  nav directive");
             }
