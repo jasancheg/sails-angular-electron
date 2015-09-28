@@ -8,7 +8,7 @@ module.exports = {
 
         var config = {
             host: 'localhost',
-            path: '/electronreload?gpid='+gpid,
+            path: '/utility/electronreload?gpid='+gpid,
             port: '1337'
         }
 

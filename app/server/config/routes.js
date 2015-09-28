@@ -36,6 +36,5 @@ module.exports.routes = {
         view: 'homepage'
     },
 
-    'GET /electronreload': 'UtilsController.getElectronReload',
     'GET /api/avengers/show': 'AvengersController.showInfo' // Show the Avengers list
 };

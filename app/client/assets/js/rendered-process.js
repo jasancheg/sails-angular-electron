@@ -1,4 +1,6 @@
 'use strict';
+
+// Title var Events
 function titleBar(ipc) {
 
     var ALT = 18;

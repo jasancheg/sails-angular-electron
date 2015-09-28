@@ -14,7 +14,7 @@ module.exports = {
      * @example     /electronreload?gpid=1141
      * @return      {[json]} data:object [status of the socket request]
      */
-    getElectronReload: function (req, res) {
+    electronreload: function (req, res) {
 
         var io = sails.io,
             gpid = req.param('gpid') || '',
