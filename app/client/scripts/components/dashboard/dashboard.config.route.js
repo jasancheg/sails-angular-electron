@@ -20,6 +20,7 @@
                     controllerAs: 'vm',
                     title: 'dashboard',
                     settings: {
+                        type:'mainnav',
                         nav: 2,
                         content: '<i class="fa fa-tachometer"></i> Dashboard'
                     }

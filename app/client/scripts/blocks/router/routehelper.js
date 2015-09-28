@@ -13,9 +13,9 @@
         /* jshint validthis:true */
         this.config = {
             // These are the properties we need to set
-            // $routeProvider: undefined
-            // docTitle: ''
-            // resolveAlways: {ready: function(){ } }
+            $routeProvider: undefined,
+            docTitle: '',
+            resolveAlways: {ready: function(){ } }
         };
 
         this.$get = function() {
@@ -44,7 +44,7 @@
 
         return service;
         ///////////////
-
+    
         function configureRoutes(routes) {
             routes.forEach(function(route) {
                 route.config.resolve =
@@ -74,16 +74,37 @@
             );
         }
 
+        // check all routes called
+        function handleRoutingClasses() {
+            
+            $rootScope.$on('$routeChangeSuccess',
+                function(event, current, previous) {
+                    var destination = (current && (current.title || current.name || current.loadedTemplateUrl)) || 
+                        'unknown target';
+                    var msg = 'Sucsses routing to ' + destination;
+                    logger.success(msg, [current]);
+                    
+                    // define stage area elements
+                    if($route.current.$$route.settings.type === 'admin'){
+                        $('body').addClass('hide-navs');
+                    } else {
+                        $('body').removeClass('hide-navs');
+                    }
+                }
+            );
+        }
+
         function init() {
+            handleRoutingClasses()
             handleRoutingErrors();
             updateDocTitle();
         }
 
-        function getRoutes() {
+        function getRoutes(filter) {
             
             // if routes was already defined
             if (routes.length) {
-                return routes;
+                routes = [];
             }
 
             for (var prop in $route.routes) {
@@ -95,6 +116,11 @@
                     }
                 }
             }
+            
+            if (filter) {
+                routes = _.filter(routes, filter);
+            }
+
             return routes;
         }
 

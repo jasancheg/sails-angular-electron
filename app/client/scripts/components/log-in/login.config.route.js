@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.components.home')
+        .module('app.components.login')
         .run(appRun);
 
     /* @ngInject */
@@ -13,16 +13,16 @@
     function getRoutes() {
         return [
             {
-                url: '/',
+                url: '/login',
                 config: {
-                    templateUrl: 'scripts/components/home/home.html',
-                    controller: 'HomeCtrl',
+                    templateUrl: 'scripts/components/log-in/login.html',
+                    controller: 'LoginCtrl',
                     controllerAs: 'vm',
-                    title: 'home',
+                    title: 'Log in',
                     settings: {
-                        type:'mainnav',
-                        nav: 1,
-                        content: '<i class="fa fa-home"></i> Home'
+                        type:'admin',
+                        nav: 4,
+                        content: '<i class="fa fa-home"></i> Log in'
                     }
                 }
             }

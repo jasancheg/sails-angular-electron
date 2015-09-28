@@ -31,6 +31,10 @@
             var promises = [getAvengerCount(), getAvengersCast()];
             return $q.all(promises).then(function() {
                 logger.info('Activated Dashboard View');
+            })
+            .catch(function(message) {
+                exception.catcher('XHR Failed for getAvengers \'getAvengerCount, getAvengersCast\'')(message);
+                $location.url('/');
             });
 
         }

@@ -13,7 +13,9 @@
         logger.success('Side Bar loaded!', null);
     
         var vm = this;
-        var routes = routehelper.getRoutes();
+        var routesAdmin = routehelper.getRoutes({settings:{type: 'admin'}});
+        var routesMain = routehelper.getRoutes({settings:{type: 'mainnav'}});
+
         vm.isCurrent = isCurrent;
         vm.sidebarReady = function(){console.log('done animating menu')}; // example
         console.log('done animating menu')
@@ -24,7 +26,12 @@
         function activate() { getNavRoutes(); }
 
         function getNavRoutes() {
-            vm.navRoutes = routes.filter(function(r) {
+            vm.mainNavRoutes = routesMain.filter(function(r) {
+                return r.settings && r.settings.nav;
+            }).sort(function(r1, r2) {
+                return r1.settings.nav - r2.settings.nav;
+            });
+            vm.adminNavRoutes = routesAdmin.filter(function(r) {
                 return r.settings && r.settings.nav;
             }).sort(function(r1, r2) {
                 return r1.settings.nav - r2.settings.nav;

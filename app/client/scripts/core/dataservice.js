@@ -10,7 +10,7 @@
         .factory('RestFactory', RestFactory);
 
     /* @ngInject */
-    function RestFactory($q, exception, logger, Restangular) {
+    function RestFactory($q, $location, exception, logger, Restangular) {
         var service = {
                 getAvengersCast: getAvengersCast,
                 getAvengerCount: getAvengerCount,
@@ -45,7 +45,10 @@
             var count = 0;
             return getAvengersCast()
                 .then(getAvengersCastComplete)
-                .catch(exception.catcher('XHR Failed for getAvengerCount'));
+                .catch(function(message) {
+                    exception.catcher('XHR Failed for getAvengers getAvengerCount')(message);
+                    $location.url('/');
+                });
 
             function getAvengersCastComplete (data) {
                 count = data.length;

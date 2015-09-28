@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.components.home')
+        .module('app.components.register')
         .run(appRun);
 
     /* @ngInject */
@@ -13,16 +13,16 @@
     function getRoutes() {
         return [
             {
-                url: '/',
+                url: '/register',
                 config: {
-                    templateUrl: 'scripts/components/home/home.html',
-                    controller: 'HomeCtrl',
+                    templateUrl: 'scripts/components/register/register.html',
+                    controller: 'RegisterCtrl',
                     controllerAs: 'vm',
-                    title: 'home',
+                    title: 'Register',
                     settings: {
-                        type:'mainnav',
-                        nav: 1,
-                        content: '<i class="fa fa-home"></i> Home'
+                        type:'admin',
+                        nav: 5,
+                        content: '<i class="fa fa-home"></i> Register'
                     }
                 }
             }

@@ -22,6 +22,7 @@
                     controllerAs: 'vm',
                     title: 'avengers',
                     settings: {
+                        type:'mainnav',
                         nav: 3,
                         content: '<i class="fa fa-star"></i> Avengers'
                     }
