@@ -1,13 +1,6 @@
-/* global angular */
-
 /**
  * TitleBar Directive
  *
- * Directive use:
- * @uses 1 - to use add <titlebar></titlebar> to html file.
- * @uses 2 - Optional parameters:
- * @parameter xxxx              [string :: Add filter by 'type xxxx' value]
- * @example   <titlebar xxxx='test'></titlebar>
  */
 
 (function () {
@@ -20,9 +13,8 @@
             replace: 'true',
             templateUrl: 'scripts/layout/titlebar/titlebar.html',
             controller: 'TitlebarCtrl',
-            scope: {
-                xxxx: '@'
-            },
+            controllerAs: 'vm',
+            scope: {},
             link: function (scope, element, attrs, ctrl) {
                 console.log("titlebar directive");
             }

@@ -32,10 +32,10 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  },
+    '/': {
+        view: 'homepage'
+    },
 
-  'GET /electronreload': 'UtilsController.getElectronReload'
-
+    'GET /electronreload': 'UtilsController.getElectronReload',
+    'GET /api/avengers/show': 'AvengersController.showInfo' // Show the Avengers list
 };

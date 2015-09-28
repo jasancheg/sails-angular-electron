@@ -1,16 +1,29 @@
-﻿<section id="dashboard-view" class="mainbar">
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
-    <p>test test dashboard</p>
+﻿<section id="dashboard-view" class="main-content">
+    <ol class="breadcrumb">
+        <li class="{{b.cls}}" ng-repeat="b in vm.breadcrumbs">{{b.text}}</li>
+    </ol>
+    <h1>{{vm.title}} <span class="badge pull-right">{{vm.avengerCount}}</span></h1>
+    <div class="col-md-12" role="main">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Character</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="a in vm.avengers">
+                    <td>{{a.name}}</td>
+                    <td>{{a.character}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">{{vm.news.title}}</div>
+            <div class="panel-body">
+                <p>{{vm.news.description}}</p>
+            </div>
+        </div>
+    </div>
 </section>

@@ -11,10 +11,10 @@
                 <a class="navbar-brand" href="#/">angularsails</a>
             </div>
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav navbar-right">
                     <li class="fade-selection-animation" 
-                        data-ng-class="vm.isActive(r)"
-                        data-ng-repeat="r in vm.navRoutes">
+                        data-ng-class="header.isActive(r)"
+                        data-ng-repeat="r in header.navRoutes">
                         <a href="#{{r.originalPath}}" data-ng-bind-html="r.settings.content"></a>
                     </li>
                 </ul>

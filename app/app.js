@@ -29,7 +29,10 @@ function createMainWindow () {
         'min-height': 500,
         'web-preferences': {
             'overlay-scrollbars': true
-        }
+        },
+        'enable-larger-than-screen': true,
+        transparent: true
+
     });
 
     win.loadUrl('file://' + __dirname + pathToLoad);
@@ -58,6 +61,55 @@ ipc.on('ready', function () {
 ipc.on('toggle-dev-tools', function () {
     mainWindow.toggleDevTools();
 });
+
+if(process.platform !== 'linux') {
+
+    // close app on windows and to hide on Mac OS
+    ipc.on('close', function () {
+        console.log("window close");
+        if(process.platform !== 'darwin') {
+            app.quit();
+        } else {
+            mainWindow.hide();
+            mainWindow.minimize();
+        }
+
+    });
+
+    ipc.on('minimize', function () {
+        console.log("window minimize");
+        mainWindow.minimize();
+    });
+
+    ipc.on('maximize', function () {
+        console.log("window toggle maximize");
+        if (mainWindow.isMaximized() && process.platform !== 'darwin') {
+            mainWindow.unmaximize();
+        } else {
+            mainWindow.maximize();    
+        }
+    });
+
+    ipc.on('resize', function (e, message) {
+        console.log("window resize");
+        if (mainWindow.isMaximized()) return;
+        var wid = message.wid | 800;
+        var hei = message.hei | 600;
+        mainWindow.setSize(wid, hei);
+    });
+
+    ipc.on('enter-full-screen', function () {
+        console.log("window enter-full-screen");
+        mainWindow.setFullScreen(true);
+    });
+
+    ipc.on('exit-full-screen', function () {
+        console.log("window exit-full-screen");
+        mainWindow.setFullScreen(false);
+        mainWindow.show();
+    });
+
+}
 
 // prevent window being GC'd
 let mainWindow;

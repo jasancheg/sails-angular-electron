@@ -27,25 +27,29 @@
             $logProvider.debugEnabled(true);
         }
 
-        //RestangularProvider.setBaseUrl('http://localhost:1337/');
-        //$sailsProvider.url = 'http://localhost:1337/';
-
         // Configure the common route provider
         routehelperConfigProvider.config.$routeProvider = $routeProvider;
         routehelperConfigProvider.config.docTitle = 'NG-Modular: ';
-        var resolveAlways = { /* @ngInject */
-            ready: function(dataservice) {
-                return dataservice.ready();
+        
+        // Configure the common exception handler
+        exceptionHandlerProvider.configure(config.appErrorPrefix);
+
+        var resolveAlways = { 
+            /* @ngInject */
+            ready: function(RestFactory) {
+                return RestFactory.ready();
             }
-            // ready: ['dataservice', function (dataservice) {
-            //    return dataservice.ready();
-            // }]
         };
         routehelperConfigProvider.config.resolveAlways = resolveAlways;
 
-        // Configure the common exception handler
-        exceptionHandlerProvider.configure(config.appErrorPrefix);
     }
     core.config(configure);
+
+    /* @ngInject */
+    function Sails ($sailsProvider, RestangularProvider) {
+        RestangularProvider.setBaseUrl('http://localhost:1337/');
+        $sailsProvider.url = 'http://localhost:1337/';
+    }
+    core.config(Sails);
 
 })();

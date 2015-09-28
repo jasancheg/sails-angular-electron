@@ -6,14 +6,8 @@ section#shell {
     margin: 0;
     top: 0;
     position:absolute;
-}
-.preloader {
-    background: url("../assets/images/preloader.gif") 0 0 no-repeat;
-    width: 25px;
-    height: 25px;
-    display: inline-block;
-    margin: -4px 0px 0 -30px;
-    position: absolute;
+    border-radius: 0 0px 8px 8px;
+    overflow:hidden;
 }
 
 /*#region Splash */
@@ -23,34 +17,55 @@ section#shell {
     width: 100%;
     top: 0;
     position: fixed;
-    background:#fff;
+    background: #fff;
+    border-radius: 0 0px 8px 8px;
+    -moz-transition: ease-out all 0.3s 0.4s;
+    -o-transition: ease-out all 0.3s 0.4s;
+    -webkit-transition: ease-out all 0.3s 0.4s;
+    transition: ease-out all 0.3s 0.4s;
 }
-#shell #splash-page {
-    background:#fff;
-    //z-index: 99995!important;   
+.loading {
+    z-index: 99998;
+    height: 60%;
+    width: 100%;
+    top: 40%;
+    position: absolute;
+    text-align: center;
+
+    .preloader-text {
+        font-size: 16px;
+    }
+    .preloader {
+        background: url("../assets/images/preloader.gif") 0 0 no-repeat;
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        margin: 0px 0 -5px 0;
+    }   
 }
+
+#ngplus-overlay-container,
 .ngplus-overlay-background {
     top: 0px;
     left: 0px;
-    padding-left: 100px;
     position: absolute;
-    z-index: 10000;
+    border-radius: 0 0px 8px 8px;
+    z-index: 99;
     height: 100%;
     width: 100%;
+}
+.ngplus-overlay-background {
     background-color: #808080;
     opacity: 0.2;
 }
 .ngplus-overlay-content {
     position: absolute;
-    /*border: 1px solid #000;*/
-    /*background-color: #fff;*/
-    font-weight: bold;
-    height: 100px;
-    width: 300px;
-    height: 15em;
-    width: 20em;
+    height: 100%;
+    width: calc(100% - 230px);
+    top: 0!important;
     z-index: 10000;
     text-align: center;
+    margin: 0 0 0 230px;
 }
 .page-spinner-message {
     text-align: center;
@@ -77,11 +92,7 @@ section#shell {
     left: auto;
     top: auto !important;
 }
-/*#region wrapper for angular ng-include and ng-view animations*/
-.view-container {
-    position: relative;
-    overflow: hidden;
-}
+
 /*#region Angular ng-include, ng-view, ng-repeat shuffle animations*/
 .shuffle-animation.ng-enter,
 .shuffle-animation.ng-leave {
@@ -111,33 +122,7 @@ section#shell {
         left: 2em;
         opacity: 0;
     }
-/*#region Angular ng-include, ng-view, ng-repeat fader animation */
-.fader-animation.ng-enter,
-.fader-animation.ng-leave,
-.fader-animation.ng-move {
-    position: relative;
-}
-.fader-animation.ng-enter,
-.fader-animation.ng-leave {
-    -webkit-transition: cubic-bezier(0.250, 0.460, 0.450, 0.940) all 0.5s;
-    -moz-transition: cubic-bezier(0.250, 0.460, 0.450, 0.940) all 0.5s;
-    -o-transition: cubic-bezier(0.250, 0.460, 0.450, 0.940) all 0.5s;
-    transition: cubic-bezier(0.250, 0.460, 0.450, 0.940) all 0.5s;
-    opacity: 1;
-}
-.fader-animation.ng-enter,
-.fader-animation.ng-leave.ng-leave-active {
-    opacity: 0;
-}
-    .fader-animation.ng-enter.ng-enter-active {
-        opacity: 1;
-    }
-.fader-animation.ng-move {
-  opacity:0.5;
-}
-.fader-animation.ng-move.ng-move-active {
-  opacity:1;
-}
+
 /*#region Angular ng-show dissolve animation */
 .dissolve-animation.ng-hide-remove,
 .dissolve-animation.ng-hide-add {

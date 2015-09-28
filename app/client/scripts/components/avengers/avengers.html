@@ -1,16 +1,34 @@
-﻿<section id="avengers-view" class="mainbar">
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
-    <p>test test avengers</p>
+﻿<section id="avengers-view" class="main-content">
+    <ol class="breadcrumb">
+        <li class="{{b.cls}}" ng-repeat="b in vm.breadcrumbs">{{b.text}}</li>
+    </ol>
+    <h1>{{vm.title}}</h1>
+    <!-- <pre>{{vm.avengers | json}}</pre> -->
+
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+            <input class="form-control" data-ng-model="vm.filter.name" placeholder="Find Avengers by name" type="search">
+            <div class="input-group-addon">&nbsp;&nbsp;</div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <th>&nbsp;</th>
+            <th>Character</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="c in vm.avengers | filter:vm.filter track by c.id">
+                <td class='col-md-2'>
+                    <a href="{{c.thumbnail.path}}.{{c.thumbnail.extension}}" target='_blank' class="thumbnail">
+                        <img ng-src="{{c.thumbnail.path}}.{{c.thumbnail.extension}}" class="avenger-thumb img-rounded" />
+                    </a>
+                </td>
+                <td><span class="avenger-name">{{c.name}}</span></td>
+                <td>{{c.description | limitTo: 2000 }} ...</td>
+            </tr>
+        </tbody>
+    </table>
+    
 </section>
