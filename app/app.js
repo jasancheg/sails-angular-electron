@@ -106,6 +106,11 @@ ipc.on('toggle-dev-tools', function () {
     mainWindow.toggleDevTools();
 });
 
+//
+ipc.on('online-status-changed', function(event, status) {
+    console.log('main process: ', status);
+});
+
 if(process.platform !== 'linux') {
 
     // close app on windows and to hide on Mac OS

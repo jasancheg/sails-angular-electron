@@ -24,6 +24,7 @@
             replace: 'true',
             templateUrl: 'scripts/layout/footer/footer.html',
             controller: 'FooterNavCtrl',
+            controllerAs: 'footer',
             link: function (scope, element, attrs, ctrl) {
                 console.log("footer nav directive");
             }

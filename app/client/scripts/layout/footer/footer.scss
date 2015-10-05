@@ -13,3 +13,27 @@
 .footer .left-section {
     padding-left:20px;
 }
+.footer .right-section {
+    
+    padding-right:20px;
+    
+    .ico-success {
+        color:#5cb85c;
+    }
+    .ico-success:hover {
+        color:#449d44;
+    }
+
+    .btn-notif,
+    .btn-notif:active,
+    .btn-notif:focus {
+        outline: none;
+        outline-offset: 0;
+        background:#fff;
+        border-color: #fff;
+    }
+    .btn-notif.activated {
+        color: #337ab7;
+    }
+}
+

@@ -13,7 +13,8 @@
         titleBar: TitleBar,
         historyBack: HistoryBack,
         historyForward: HistoryForward,
-        historyBtns: HistoryBtns
+        historyBtns: HistoryBtns,
+        managetOnlineOfflineStatus: ManagetOnlineOfflineStatus
     }
 
     /**
@@ -105,6 +106,31 @@
     }
 
     /**
+     * managetOnlineOfflineStatus send a notification to main process and set footer DOM
+     * @return {[false]} asynchronous message to main process
+     */
+    function ManagetOnlineOfflineStatus() {
+        var status = 'offline',
+            $wifiElem = $('.footer .right-section .fa-wifi'),
+            
+            sendOnlineStatus = function() {
+                status = navigator.onLine ? 'online' : 'offline';
+                ipc.send('online-status-changed', status);
+                if(status) {
+                    $wifiElem.addClass('ico-success');
+                } else {
+                    $wifiElem.removeClass('ico-success');
+                }
+                console.log('rendered process: ', status);
+            };
+
+        window.addEventListener('online',  sendOnlineStatus);
+        window.addEventListener('offline',  sendOnlineStatus);
+
+        sendOnlineStatus();
+    }
+
+    /**
      * Title var Events
      * @param {[type]} options [description]
      * @return {[false]} asynchronous message to main process 
@@ -189,9 +215,11 @@
     // listen for 'page back/forward' event
     ipc.on('dev-notifications', function (msg) {
         if(msg.showNotification) {
-            dataOs.logger.notif('Notifications activated', null);
+            dataOs.logger.notif('Debug notifications activated', null);
+            $('.footer .right-section .btn-notif').addClass('activated');
         } else {
-            dataOs.logger.notif('Notifications deactivated', null);
+            dataOs.logger.notif('Debug notifications deactivated', null);
+            $('.footer .right-section .btn-notif').removeClass('activated');
         }
         dataOs.showDevNotifications = msg.showNotification;
     });
