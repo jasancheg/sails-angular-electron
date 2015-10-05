@@ -1,7 +1,8 @@
 'use strict';
 var app = require('app'),
     BrowserWindow = require('browser-window'),
-    ipc = require('ipc');
+    ipc = require('ipc'),
+    globalShortcut = require('global-shortcut');
 
 // report crashes to the Electron project
 require('crash-reporter').start();
@@ -77,6 +78,27 @@ ipc.on('history', function () {
 // listen when the web content is loaded.
 ipc.on('ready', function () {
     mainWindow.show();
+    // Register a 'ctrl+n+i' shortcut listener.
+    var showNotification = false,
+        ret = globalShortcut.register('ctrl+n+i', function() {
+            // toggle state
+            if(showNotification){
+                showNotification = false;
+            } else {
+                showNotification = true;
+            }
+
+            mainWindow.webContents.send('dev-notifications', { 
+                showNotification: showNotification 
+            });
+        })
+
+    if (!ret) {
+        console.log('registration failed');
+    }
+
+    // Check whether a shortcut is registered.
+    console.log(globalShortcut.isRegistered('ctrl+n+i'));
 });
 
 // listen to dev tools events from rendered process
