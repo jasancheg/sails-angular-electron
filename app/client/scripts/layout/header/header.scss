@@ -14,6 +14,30 @@ header > .navbar.navbar-fixed-top {
                 transition: ease-out all 0.3s 0.4s;
 }
 header.header {
+    .box-back-forward {
+        padding: 8px 0 0 10px;
+
+        button,
+        button:active,
+        button:focus {
+            border:none;
+            outline: none;
+            outline-offset: 0
+        }
+        button:active,
+        button:focus,
+        button:hover {
+            background:none;
+        }
+
+        button:active {
+            -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.095);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.095);
+        }
+    }
+    #js-navbar-collapse {
+        padding-right: 36px;
+    }
 }
 
 .hide-navs header > .navbar.navbar-fixed-top {

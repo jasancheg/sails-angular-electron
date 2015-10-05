@@ -52,6 +52,28 @@ function onClosed() {
     mainWindow = null;
 }
 
+// listen for 'page forward' event
+ipc.on('history-back', function () {
+    if(mainWindow.webContents.canGoBack()) {
+        mainWindow.webContents.goBack();
+    }
+});
+
+// listen for 'page forward' event
+ipc.on('history-forward', function () {
+    if(mainWindow.webContents.canGoForward()) {
+        mainWindow.webContents.goForward();
+    }
+});
+
+// listen for 'history check' event
+ipc.on('history', function () {
+    mainWindow.webContents.send('history', { 
+        canGoBack: mainWindow.webContents.canGoBack(),
+        canGoForward: mainWindow.webContents.canGoForward() 
+    });
+});
+
 // listen when the web content is loaded.
 ipc.on('ready', function () {
     mainWindow.show();
@@ -149,6 +171,8 @@ io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
     pathToLoad = '/client/index.html';
     mainWindow.loadUrl('file://' + __dirname + pathToLoad);
+    // clear the browser history
+    mainWindow.webContents.clearHistory();
 
     // if app is working on one of the development modes (prebuilt|server)
     if(process.env.GRUNT_ENV) {
@@ -159,7 +183,11 @@ io.socket.get('/', function serverResponded (body, JWR) {
     }
 });
 
-// it runs only in prebuilt environment
+// 
+/**
+ * Grunt tasks: it runs only in prebuilt environment
+ * @return {[false]}
+ */
 function enableGruntTasks() {
 
     var grunt = require('grunt'),
