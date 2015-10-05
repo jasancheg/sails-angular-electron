@@ -41,7 +41,10 @@
         vm.listBtn = currentBtns;
         
         logger.success('titlebar loaded!', null);
-        
+
+        if(!dataOs.showDevNotifications){
+            logger.notif('Press " ctrl + n + i " to activate debug notifications', null)
+        }
         // activate rendered process envents
         renderedProccessApi.titleBar();
         

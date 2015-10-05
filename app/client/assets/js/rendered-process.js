@@ -76,7 +76,8 @@
             history: {
                 canGoBack: 'disabled',
                 canGoForward: 'disabled'
-            }
+            },
+            showDevNotifications: false
         };
 
         // web contens loaded
@@ -101,22 +102,6 @@
 
         webview.addEventListener("did-start-loading", loadstart);
         webview.addEventListener("did-stop-loading", loadstop);
-    }
-
-    /**
-     * Back Event
-     * @return {[false]} asynchronous message to main process 
-     */
-    function HistoryBack() {
-        ipc.send('history-back');
-    }
-
-    /**
-     * Forward Event
-     * @return {[false]} asynchronous message to main process 
-     */
-    function HistoryForward() {
-        ipc.send('history-forward');
     }
 
     /**
@@ -171,6 +156,22 @@
     }
 
     /**
+     * Back Event
+     * @return {[false]} asynchronous message to main process 
+     */
+    function HistoryBack() {
+        ipc.send('history-back');
+    }
+
+    /**
+     * Forward Event
+     * @return {[false]} asynchronous message to main process 
+     */
+    function HistoryForward() {
+        ipc.send('history-forward');
+    }
+
+    /**
      * check status of back/forward buttons 
      * @return {[false]} asynchronous message to main process 
      */
@@ -183,6 +184,16 @@
         dataOs.history.canGoForward = msg.canGoForward;
         msg.canGoBack ? $('.header .btn-back').removeClass('disabled') : $('.header .btn-back').addClass('disabled');
         msg.canGoForward ? $('.header .btn-forward').removeClass('disabled') : $('.header .btn-forward').addClass('disabled');
+    });
+
+    // listen for 'page back/forward' event
+    ipc.on('dev-notifications', function (msg) {
+        if(msg.showNotification) {
+            dataOs.logger.notif('Notifications activated', null);
+        } else {
+            dataOs.logger.notif('Notifications deactivated', null);
+        }
+        dataOs.showDevNotifications = msg.showNotification;
     });
 
 })();

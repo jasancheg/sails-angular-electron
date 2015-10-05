@@ -8,6 +8,7 @@ header > .navbar.navbar-fixed-top {
     top: 24px;
     border-bottom: 1px solid $color-divider;
     background: $white-bg;
+    -webkit-app-region: drag;
     -moz-transition: ease-out all 0.3s 0.4s;
           -o-transition: ease-out all 0.3s 0.4s;
         -webkit-transition: ease-out all 0.3s 0.4s;
@@ -16,6 +17,7 @@ header > .navbar.navbar-fixed-top {
 header.header {
     .box-back-forward {
         padding: 8px 0 0 10px;
+        -webkit-app-region: no-drag;
 
         button,
         button:active,
@@ -37,6 +39,9 @@ header.header {
     }
     #js-navbar-collapse {
         padding-right: 36px;
+    }
+    #js-navbar-collapse .navbar-nav.navbar-right {
+        -webkit-app-region: no-drag;
     }
 }
 
