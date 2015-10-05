@@ -6,7 +6,6 @@
         .provider('routehelperConfig', routehelperConfig)
         .factory('routehelper', routehelper);
 
-    routehelper.$inject = ['$location', '$rootScope', '$route', 'logger', 'routehelperConfig'];
 
     // Must configure via the routehelperConfigProvider
     function routehelperConfig() {
@@ -25,26 +24,32 @@
         };
     }
 
+    /* @ngInject */
     function routehelper($location, $rootScope, $route, logger, routehelperConfig) {
-        var handlingRouteChangeError = false;
-        var routeCounts = {
-            errors: 0,
-            changes: 0
-        };
-        var routes = [];
-        var $routeProvider = routehelperConfig.config.$routeProvider;
+        var handlingRouteChangeError = false,
+            routeCounts = {
+                errors: 0,
+                changes: 0
+            },
+            routes = [],
+            $routeProvider = routehelperConfig.config.$routeProvider,
 
-        var service = {
-            configureRoutes: configureRoutes,
-            getRoutes: getRoutes,
-            routeCounts: routeCounts
-        };
+            service = {
+                configureRoutes: configureRoutes,
+                getRoutes: getRoutes,
+                routeCounts: routeCounts
+            };
 
         init();
 
         return service;
         ///////////////
     
+        /**
+         * service configureRoutes
+         * @param  {[type]} routes list of routes
+         * @return {[false]}       configure a route
+         */
         function configureRoutes(routes) {
             routes.forEach(function(route) {
                 route.config.resolve =
@@ -54,6 +59,10 @@
             $routeProvider.otherwise({redirectTo: '/'});
         }
 
+        /** 
+         * handle rounting errors
+         * @return {[false]}
+         */
         function handleRoutingErrors() {
             // Route cancellation:
             // On routing error, go to the dashboard.
@@ -69,12 +78,15 @@
                         'unknown target';
                     var msg = 'Error routing to ' + destination + '. ' + (rejection.msg || '');
                     logger.warning(msg, [current]);
-                    $location.path('/');
+                    $location.path('/home');
                 }
             );
         }
 
-        // check all routes called
+        /** 
+         * check all routes called
+         * @return {[false]} manage global class for each page
+         */
         function handleRoutingClasses() {
             
             $rootScope.$on('$routeChangeSuccess',
@@ -90,16 +102,28 @@
                     } else {
                         $('body').removeClass('hide-navs');
                     }
+
+                    // manage back/forward buttons
+                    renderedProccessApi.historyBtns();
                 }
             );
         }
 
+        /**
+         * init
+         * @return {[type]} [description]
+         */
         function init() {
             handleRoutingClasses()
             handleRoutingErrors();
             updateDocTitle();
         }
 
+        /**
+         * get routes by filter
+         * @param  {[prop]} filter optional prop value of object
+         * @return {[type]}        list of routes
+         */
         function getRoutes(filter) {
             
             // if routes was already defined
@@ -124,6 +148,10 @@
             return routes;
         }
 
+        /**
+         * update the global Doc Title [updateDocTitle]
+         * @return {[type]} [description]
+         */
         function updateDocTitle() {
             $rootScope.$on('$routeChangeSuccess',
                 function(event, current, previous) {

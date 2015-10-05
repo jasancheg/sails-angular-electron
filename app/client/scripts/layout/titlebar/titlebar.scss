@@ -6,7 +6,7 @@
 #titlebar {
     
     padding: 0 3px;
-    border-bottom: 1px solid $color-divider;
+    border-bottom: 0px solid $color-divider;
     background-color: $white-bg;
     position:fixed;
     width: 100%;
@@ -14,6 +14,7 @@
     top: 0;
     z-index: 99999;
     height: 24px;
+    border-radius: 5px 5px 0 0;
     
     .titlebar-stoplight {
 

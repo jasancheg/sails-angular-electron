@@ -42,8 +42,9 @@
         
         logger.success('titlebar loaded!', null);
         
-        //run rendered process envents
-        TitleBar();
+        // activate rendered process envents
+        renderedProccessApi.titleBar();
+        
     }
 
 })();
