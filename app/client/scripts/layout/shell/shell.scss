@@ -26,9 +26,8 @@ section#shell {
 }
 .loading {
     z-index: 99998;
-    height: 60%;
     width: 100%;
-    top: 40%;
+    top: 50%;
     position: absolute;
     text-align: center;
 
@@ -65,7 +64,7 @@ section#shell {
     top: 0!important;
     z-index: 10000;
     text-align: center;
-    margin: 0 0 0 230px;
+    padding: 0 0 0 230px;
 }
 .page-spinner-message {
     text-align: center;
