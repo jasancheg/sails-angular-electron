@@ -20,18 +20,38 @@ body {
     //background-color: #e0e0e0!important;
     //color:#101!important;
 }
-body div#loading {
-    -webkit-app-region: inherit;
-    padding: 0;
-    margin: 0;
+body#loadingPage {
+    padding-top:0;
+
+    #loading {
+        z-index: 99998;
+        width: 100%;
+        top: 50%;
+        position: absolute;
+        text-align: center;
+
+        .preloader-text {
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        }
+        .preloader {
+            background: url("../assets/images/preloader.gif") 0 0 no-repeat;
+            width: 25px;
+            height: 25px;
+            display: inline-block;
+            margin: 0px 0 -5px 0;
+        }   
+    }
 }
+
 body div#loading > div > h1 {
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     text-align: center;
     font-size: 16px;
     font-weight: 400;
     margin: 0;
-    padding: 30% 0 0 0;
+    padding: 0;
 }
 body div#loading > div > h1 img{
     margin-top: -6px
