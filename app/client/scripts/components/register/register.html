@@ -1,22 +1,53 @@
 ﻿<section id="register-view" class="main-content">
-    <form class="form-register">
+    <form class="form-register" ng-submit="submit()" name="register" novalidate>
         <h2 class="form-signin-heading">Register</h2>
-        <label for="inputFullName" class="sr-only">Fullname</label>
-        <input type="text" id="inputFullName" class="form-control" placeholder="Fullname" required="" autofocus="">
+        <!-- <label for="inputFullName" class="sr-only">Fullname</label>
+        <input type="text" id="inputFullName" class="form-control" placeholder="Fullname" 
+                required="" autofocus="" ng-model="fullname">
+
         <label for="inputUsername" class="sr-only">Username</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-        <label for="inputConfirmEmail" class="sr-only">COnfirm email address</label>
-        <input type="email" id="inputConfirmEmail" class="form-control" placeholder="Confirm email address" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-        <div class="checkbox">
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username"
+                required="" ng-model="username"> -->
+        <div class="form-group has-feedback" 
+            ng-class="{'has-success': register.input_email.$dirty && register.input_email.$valid, 'has-error': register.input_email.$dirty && register.input_email.$invalid }">
+            <label for="input_email" class="sr-only">Email address</label>
+            <input type="email" id="input_email" class="form-control" placeholder="Email address"
+                required="" ng-model="input_email" name="input_email">
+            <span class="glyphicon form-control-feedback" aria-hidden="true"
+                ng-class="{'hide': register.input_email.$pristine, 'glyphicon-ok': register.input_email.$valid, 'glyphicon-remove': register.input_email.$invalid }"></span>
+            <p class="help-block" ng-show="register.input_email.$dirty && register.input_email.$invalid">Please enter a proper email.</p>
+        </div>
+        <!-- <label for="confirm_email" class="sr-only">Confirm email address</label>
+        <input type="email" id="confirm_email" class="form-control" placeholder="Confirm email address"
+                required="" ng-model="confirm_email">
+        <p class="help-block" ng-show="register.confirm_email.$dirty && register.confirm_email.$invalid">please match the emails.</p> -->
+
+        <div class="form-group has-feedback" 
+            ng-class="{'has-success': register.confirm_password.$dirty && register.confirm_password.$valid, 'has-error': register.confirm_password.$dirty && register.confirm_password.$invalid }">
+        
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" class="form-control" placeholder="Password"
+                    required="" ng-model="password" name="password">
+        </div>
+
+        <div class="form-group has-feedback" 
+            ng-class="{'has-success': register.confirm_password.$dirty && register.confirm_password.$valid, 'has-error': register.confirm_password.$dirty && register.confirm_password.$invalid }">
+
+            <label for="confirm_password" class="sr-only">Password</label>
+            <input type="password" class="form-control" placeholder="Confirm password" name="confirm_password"
+                required="" ng-model="confirm_password" validate-equals='password'>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"
+                ng-class="{'hide': register.confirm_password.$pristine, 'glyphicon-ok': register.confirm_password.$valid, 'glyphicon-remove': register.confirm_password.$invalid }"></span>
+            <p class="help-block" ng-show="register.confirm_password.$dirty && register.confirm_password.$invalid">please match the passwords.</p>
+        </div>
+        
+        <!-- <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> accept
             </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">register</button>
+        </div> -->
+        
+        <button ng-disabled="register.$invalid" class="btn btn-lg btn-primary btn-block" type="submit">register</button>
         <p>have an account? <a class="btn btn-link btn-block" href="#/login">Log-in</a></p>
     </form>
 </section>

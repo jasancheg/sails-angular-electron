@@ -60,11 +60,15 @@ section#shell {
 .ngplus-overlay-content {
     position: absolute;
     height: 100%;
-    width: calc(100% - 230px);
+    width: 100%;
     top: 0!important;
     z-index: 10000;
     text-align: center;
-    padding: 0 0 0 230px;
+    padding: 0;
+    
+    .loading {
+        padding-left: 230px;
+    }
 }
 .page-spinner-message {
     text-align: center;
