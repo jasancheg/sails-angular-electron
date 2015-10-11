@@ -1,3 +1,10 @@
+/**
+ * @ngDoc service
+ * @name blocks:logger
+ * @description
+ * # logger with toast(tooltip) notifications
+ */
+
 (function() {
     'use strict';
 
@@ -5,8 +12,7 @@
         .module('blocks.logger')
         .factory('logger', logger);
 
-    logger.$inject = ['$log', 'toastr'];
-
+    /* @ngInject */
     function logger($log, toastr) {
         var service = {
             showToasts: true,

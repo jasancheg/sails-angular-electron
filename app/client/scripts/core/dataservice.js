@@ -1,5 +1,13 @@
 /* global angular */
 
+/**
+ * @ngdoc function
+ * @name restFactory
+ * @description
+ * # module
+ * define dataservices of the app
+ */
+
 (function() {
     'use strict';
 

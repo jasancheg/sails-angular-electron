@@ -1,0 +1,11 @@
+.jumbotron {
+    text-align: center;
+    border-bottom: none;
+
+    .lead > span.smileImg {
+        width: 128px;
+        height: 128px;
+        background: url("../assets/images/smile_128x128.png");
+        display: inline-block
+    }
+}

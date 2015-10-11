@@ -1,3 +1,11 @@
+/**
+ * @ngdoc function
+ * @name app.controller:AvengersCtrl
+ * @description
+ * # AvengersCtrl
+ * Controller of the app
+ */
+
 (function() {
     'use strict';
 

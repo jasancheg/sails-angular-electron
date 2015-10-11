@@ -1,3 +1,11 @@
+/**
+ * @ngdoc function
+ * @name app.controller:DashboardCtrl
+ * @description
+ * # DashboardCtrl
+ * Controller of the app
+ */
+
 (function() {
     'use strict';
 

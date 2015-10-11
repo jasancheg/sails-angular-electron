@@ -7,7 +7,7 @@ $fa-font-path:   "../../../bower_components/font-awesome/fonts" !default;
 @import "../../../../bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
 
-// loading.html
+// General
 html,
 body {
     padding: 0;
@@ -17,19 +17,36 @@ body {
 }
 body {
     padding-top: 75px;
-    //background-color: #e0e0e0!important;
-    //color:#101!important;
 }
+
+// General: directives
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+// Page: loading.html
 body#loadingPage {
     padding-top:0;
-
     #loading {
         z-index: 99998;
         width: 100%;
         top: 50%;
         position: absolute;
         text-align: center;
-
+        #nodejsInstall {
+            display:none;
+        }
+        #nodejsInstall > h1 {
+            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+        }
+        #nodejsInstall > h1 img{
+            margin-top: -6px;
+        }
         .preloader-text {
             font-size: 16px;
             text-align: center;
@@ -42,33 +59,5 @@ body#loadingPage {
             display: inline-block;
             margin: 0px 0 -5px 0;
         }   
-    }
-}
-
-body div#loading > div > h1 {
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-}
-body div#loading > div > h1 img{
-    margin-top: -6px
-}
-#nodejsInstall {
-    display:none;
-}
-
-// layout
-.jumbotron {
-    text-align: center;
-    border-bottom: none;
-
-    .lead > span.smileImg {
-        width: 128px;
-        height: 128px;
-        background: url("../assets/images/smile_128x128.png");
-        display: inline-block
     }
 }

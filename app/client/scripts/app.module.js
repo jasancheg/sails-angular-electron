@@ -3,7 +3,6 @@
  * @name app
  * @description
  * # app
- *
  * Main module of the application.
  */
 

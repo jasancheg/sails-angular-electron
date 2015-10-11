@@ -1,3 +1,11 @@
+/**
+ * @ngdoc function
+ * @name app.controller:LoginCtrl
+ * @description
+ * # LoginCtrl
+ * Controller of the app
+ */
+
 (function() {
     'use strict';
 
