@@ -1,3 +1,11 @@
+/**
+ * @ngdoc Module
+ * @name app.core
+ * @description
+ * # module
+ * define module of the app
+ */
+
 (function() {
     'use strict';
 
@@ -9,7 +17,7 @@
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.logger', 'blocks.router',
+        'blocks.exception', 'blocks.logger', 'blocks.alert', 'blocks.router',
         /*
          * 3rd Party modules
          */

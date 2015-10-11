@@ -1,5 +1,13 @@
 /* global angular */
 
+/**
+ * @ngdoc Module
+ * @name app.components
+ * @description
+ * # module
+ * define module of the app
+ */
+
 angular
     .module('app.components', [
         'app.components.login',

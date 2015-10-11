@@ -1,6 +1,6 @@
 /**
  * @ngdoc Module
- * @name app.components.avengers
+ * @name blocks.alert
  * @description
  * # module
  * define module of the app
@@ -9,5 +9,5 @@
 (function() {
     'use strict';
 
-    angular.module('app.components.avengers', []);
+    angular.module('blocks.alert', []);
 })();

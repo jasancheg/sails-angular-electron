@@ -1,3 +1,11 @@
+/**
+ * @ngdoc function
+ * @name app.controller:RegisterCtrl
+ * @description
+ * # RegisterCtrl
+ * Controller of the app
+ */
+
 (function() {
     'use strict';
 
@@ -5,16 +13,25 @@
         .module('app.components.register')
         .controller('RegisterCtrl', RegisterCtrl);
 
+    /* @ngInject */
     function RegisterCtrl(logger) {
 
         var vm = this;
 
         vm.title = 'Register';
-        vm.breadcrumbs = [{
-            text:'Register',
-            cls: 'active',
-            url: '/register'
-        }];
+        vm.submit = function () {
+            console.log('yep, llegoooo', vm);
+            // $auth.signup({
+            //     email: $scope.email,
+            //     password: $scope.password
+            // })
+            //     .then(function (res) {
+            //         alert('success', 'Account Created!', 'Welcome, ' + res.data.user.email + '! Please email activate your account in the next several days.');
+            //     })
+            //     .catch(function (err) {
+            //         alert('warning', 'Unable to create account :(', err.message);
+            //     });
+        };
 
         logger.info('Activated Register View');
     }

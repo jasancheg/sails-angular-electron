@@ -1,3 +1,11 @@
+/**
+ * @ngdoc Object
+ * @name app.components:appRun
+ * @description
+ * # routehelper instance
+ * extend Route of the app
+ */
+
 (function() {
     'use strict';
 
