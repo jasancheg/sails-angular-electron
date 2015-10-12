@@ -16,6 +16,10 @@
 .footer .right-section {
     
     padding-right:20px;
+
+    a {
+        padding-left: 8px;
+    }
     
     .ico-success {
         color:#5cb85c;
@@ -31,9 +35,11 @@
         outline-offset: 0;
         background:#fff;
         border-color: #fff;
+        color: #777;
+        cursor: pointer;
     }
     .btn-notif.activated {
-        color: #337ab7;
+        color: #337ab7!important;
     }
 }
 

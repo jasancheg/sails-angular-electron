@@ -14,11 +14,17 @@
         .controller('RegisterCtrl', RegisterCtrl);
 
     /* @ngInject */
-    function RegisterCtrl($scope, $http, $log, logger, alert) {
+    function RegisterCtrl($scope, $http, $log, logger, alert, authToken) {
 
         var vm = this;
 
         vm.title = 'Register';
+
+        if(authToken.isAuthenticated) {
+            logger.info('the user is logged in');
+            //alert('success','STATUS: ', 'the user is logged in');
+        }
+
         vm.submit = function () {
             var url = 'http://localhost:1337/api/auth/register',
                 user = {
@@ -30,6 +36,7 @@
                 .success(function(res) {
                     $log.info('success: ', res);
                     alert('success', 'Hi!', 'You are now registered');
+                    authToken.setToken(res.user.token);
                 })
                 .error(function(err) {
                     $log.error('Error: ', err);

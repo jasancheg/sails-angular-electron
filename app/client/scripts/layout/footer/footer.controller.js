@@ -8,10 +8,14 @@
         .module('app.layout')
         .controller('FooterNavCtrl', FooterNavCtrl);
 
-    function FooterNavCtrl (logger) {
+    function FooterNavCtrl (logger, authToken) {
 
         var footer = this,
             notificationsState = dataOs.showDevNotifications;
+
+        footer.isAuthenticated = function() {
+            return authToken.isAuthenticated;
+        }
 
         footer.notificationsClass = '';
         footer.toggleNotifications = function(e){

@@ -6,9 +6,19 @@
  */
 
 module.exports = {
+    
+    /**
+     * [register description]
+     * @param  {[type]}   req  [description]
+     * @param  {[type]}   res  [description]
+     * @param  {Function} next [description]
+     * @return {[type]}        [description]
+     */
     register: function(req, res, next) {
         
         var successData,
+            payload,
+            token,
             Passwords = require('machinepack-passwords');
 
         Passwords.encryptPassword({
@@ -19,6 +29,7 @@ module.exports = {
                 return res.negotiate(err);
             },
             success: function (encryptedPassword) {
+
                 User.create({
                     email: req.param('email'),
                     password: encryptedPassword,
@@ -34,6 +45,12 @@ module.exports = {
 
                     req.session.user = newUser.id;
 
+                    payload = {
+                        iss: 'localhost',
+                        sub: newUser.id
+                    },
+                    token = JWT.encode(payload, 'shhh..');
+
                     successData = {
                         success: 'E_CREATION',
                         summary: 'User have been created',//req.__('201Code', {type: 'User'}),
@@ -41,7 +58,8 @@ module.exports = {
                         user: {
                             id: newUser.id,
                             email: newUser.email,
-                            isAdmin: !!newUser.admin
+                            isAdmin: !!newUser.admin,
+                            token: token
                         }
                     };
 
