@@ -3,9 +3,12 @@
         <p><span class="glyphicon glyphicon-heart"></span> footer</p>
     </div>
     <div class="right-section pull-right" role="group" aria-label="...">
-        <i class="fa fa-wifi ico-succes"></i>  &nbsp;
-        <button type="button" class="btn btn-default btn-xs btn-options btn-notif {{footer.notificationsClass}}" ng-click="footer.toggleNotifications()">
-            <i class="fa fa-cogs"></i>
-        </button>
+        <div class="btn-group btns-footer" role="group" aria-label="...">
+            <a href="#/logout" class="" ng-show="footer.isAuthenticated()"><i class="fa fa-sign-out"></i> logout</a> 
+            <a href="" class=""><i class="fa fa-wifi ico-succes"></i></a> 
+            <a class="btn-options btn-notif {{footer.notificationsClass}}" ng-click="footer.toggleNotifications()">
+                <i class="fa fa-cogs"></i>
+            </a>
+        </div>
     </div>
 </div>

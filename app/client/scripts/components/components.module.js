@@ -11,6 +11,7 @@
 angular
     .module('app.components', [
         'app.components.login',
+        'app.components.logout',
         'app.components.register',
         'app.components.avengers',
         'app.components.dashboard',
