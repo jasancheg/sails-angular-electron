@@ -16,7 +16,6 @@
     /* @ngInject */
     function AvengersCtrl($location, $q, $routeParams, exception, logger, RestFactory) {
         var vm = this;
-
         vm.avengers = [];
         vm.title = 'Team';
 

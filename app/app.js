@@ -196,7 +196,7 @@ io.sails.url = 'http://localhost:1337';
 // Send a GET request to `http://localhost:1337/` for check if BE is working
 io.socket.get('/', function serverResponded (body, JWR) {
     console.log('server loaded: ', io.socket._raw.connected);
-    pathToLoad = '/client/index.html';
+    pathToLoad = '/client/index.html#/login';
     mainWindow.loadUrl('file://' + __dirname + pathToLoad);
     // clear the browser history
     mainWindow.webContents.clearHistory();

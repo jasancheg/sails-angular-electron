@@ -78,7 +78,7 @@
                         'unknown target';
                     var msg = 'Error routing to ' + destination + '. ' + (rejection.msg || '');
                     logger.warning(msg, [current]);
-                    $location.path('/home');
+                    $location.path('/login');
                 }
             );
         }
