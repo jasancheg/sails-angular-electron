@@ -14,13 +14,28 @@
         .controller('RegisterCtrl', RegisterCtrl);
 
     /* @ngInject */
-    function RegisterCtrl(logger) {
+    function RegisterCtrl($scope, $http, $log, logger, alert) {
 
         var vm = this;
 
         vm.title = 'Register';
         vm.submit = function () {
-            console.log('yep, llegoooo', vm);
+            var url = 'http://localhost:1337/api/auth/register',
+                user = {
+                    email: $scope.input_email,
+                    password: $scope.password
+                };
+
+            $http.post(url, user)
+                .success(function(res) {
+                    $log.info('success: ', res);
+                    alert('success', 'Hi!', 'You are now registered');
+                })
+                .error(function(err) {
+                    $log.error('Error: ', err);
+                    alert('warning', 'Opps!', 'Could not register');
+                });
+
             // $auth.signup({
             //     email: $scope.email,
             //     password: $scope.password

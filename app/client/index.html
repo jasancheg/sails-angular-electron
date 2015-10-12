@@ -27,7 +27,7 @@
     <body ng-app="app">
         <titlebar></titlebar>
 
-        <div class="alert alert-{{alert.type}} animated main-alert ng-cloak" ng-class="{'flipInY': alert.show, 'flipOutY': !alert.show, 'alert-hidden': !alert.hasBeenShown}"><strong>{{alert.title}}</strong> {{alert.message}}</div>
+        <div id="alert" class="alert alert-{{alert.type}} animated main-alert n-cloak hide" ng-class="{'fadeInDown': alert.show, 'fadeOutUp': !alert.show, 'alert-hidden': !alert.hasBeenShown}"><strong>{{alert.title}}</strong> {{alert.message}}</div>
         
         <app-shell></app-shell>
 

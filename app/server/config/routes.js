@@ -36,5 +36,9 @@ module.exports.routes = {
         view: 'homepage'
     },
 
-    'GET /api/avengers/show': 'AvengersController.showInfo' // Show the Avengers list
+    // Show the Avengers list
+    'GET /api/avengers/show': 'AvengersController.showInfo',
+     
+    // Register a User
+    'POST /api/auth/register': 'AuthController.register'
 };
