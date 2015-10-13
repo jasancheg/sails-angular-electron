@@ -13,15 +13,20 @@ module.exports = {
      * @return      {[json]} data:object [App Object Info object]
      */
     showInfo: function (req, res) {
-        var appObjInfo = Utils.avengersInfo(),
-            appObj = {
-               success:'E_Retrieve',
-               status: 200,
-               summary: 'App info',
-               model: 'App',
-               data: appObjInfo
-            };
-        return res.json(appObj);
+        // check if user is logged in 
+        if(req.headers.authorization) {
+            var appObjInfo = Utils.avengersInfo(),
+                appObj = {
+                   success:'E_Retrieve',
+                   status: 200,
+                   summary: 'App info',
+                   model: 'App',
+                   data: appObjInfo
+                };
+            return res.json(appObj);
+        } else {
+            return res.json({msg: 'you have not authorization'});
+        }
     }
 };
 
