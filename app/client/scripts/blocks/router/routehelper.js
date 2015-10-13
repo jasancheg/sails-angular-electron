@@ -8,6 +8,7 @@
 
     // Must configure via the routehelperConfigProvider
     function routehelperConfig() {
+
         this.config = {
             // These are the properties we need to set
             $routeProvider: undefined,
@@ -24,6 +25,7 @@
 
     /* @ngInject */
     function routehelper($location, $rootScope, $route, logger, routehelperConfig) {
+
         var handlingRouteChangeError = false,
             routeCounts = {
                 errors: 0,

@@ -29,7 +29,6 @@
                     return !!authToken.getToken();
                 },
                 removeToken: function() {
-                    //alert('yep, is working :)');
                     cachedToken = null;
                     storage.removeItem(userToken);
                     isAuthenticated = false;

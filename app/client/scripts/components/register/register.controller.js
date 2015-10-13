@@ -35,12 +35,13 @@
             $http.post(url, user)
                 .success(function(res) {
                     $log.info('success: ', res);
-                    alert('success', 'Hi!', 'You are now registered');
+                    console.log("res: ", res)
+                    alert('success', 'Account Created!', 'Welcome, ' + res.user.email + '! Please email activate your account in the next several days.');
                     authToken.setToken(res.user.token);
                 })
                 .error(function(err) {
                     $log.error('Error: ', err);
-                    alert('warning', 'Opps!', 'Could not register');
+                    alert('warning', 'Unable to create account, ', err.message);
                 });
 
             // $auth.signup({
