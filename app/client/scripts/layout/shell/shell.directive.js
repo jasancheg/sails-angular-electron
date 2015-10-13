@@ -26,7 +26,7 @@
             controller: 'ShellCtrl',
             controllerAs: 'vm',
             link: function (scope, element, attrs, ctrl) {
-                console.log("UI loaded - shell directive");
+                // console.log("UI loaded - shell directive");
             }
         };
     }

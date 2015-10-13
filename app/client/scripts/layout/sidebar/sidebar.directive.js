@@ -35,7 +35,7 @@
         return directive;
 
         function link(scope, element, attrs) {
-            console.log("side nav directive");
+            // console.log("side nav directive");
                 
             var $sidebarInner = element.find('.sidebar-inner');
             var $dropdownElement = element.find('.sidebar-dropdown a');

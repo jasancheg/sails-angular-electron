@@ -25,7 +25,7 @@
             templateUrl: 'scripts/layout/mainview/mainview.html',
             controller: 'MainViewCtrl',
             link: function (scope, element, attrs, ctrl) {
-                console.log("main view directive");
+                // console.log("main view directive");
             }
         };
     }

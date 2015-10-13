@@ -121,7 +121,8 @@
                 } else {
                     $wifiElem.removeClass('ico-success');
                 }
-                console.log('rendered process: ', status);
+                // it uses global logger to display notification
+                dataOs.logger.info('rendered process: ', status);
             };
 
         window.addEventListener('online',  sendOnlineStatus);

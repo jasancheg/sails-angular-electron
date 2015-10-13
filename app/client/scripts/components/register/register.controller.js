@@ -35,7 +35,6 @@
             $http.post(url, user)
                 .success(function(res) {
                     $log.info('success: ', res);
-                    console.log("res: ", res)
                     alert('success', 'Account Created!', 'Welcome, ' + res.user.email + '! Please email activate your account in the next several days.');
                     authToken.setToken(res.user.token);
                 })

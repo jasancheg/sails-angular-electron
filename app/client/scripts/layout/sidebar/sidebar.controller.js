@@ -18,9 +18,7 @@
 
         vm.isCurrent = isCurrent;
         vm.sidebarReady = function(){console.log('done animating menu')}; // example
-        console.log('done animating menu')
 
-        
         activate();
 
         function activate() { getNavRoutes(); }
