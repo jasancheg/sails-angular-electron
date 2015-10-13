@@ -44,7 +44,7 @@
                 .then(getAvengersComplete)
                 .catch(function(message) {
                     exception.catcher('XHR Failed for getAvengers')(message);
-                    $location.url('/dashboard');
+                    $location.url('/');
                 });
 
             function getAvengersComplete(response) {
