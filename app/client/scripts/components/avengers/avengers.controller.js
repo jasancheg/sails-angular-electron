@@ -44,11 +44,17 @@
                 .then(getAvengersComplete)
                 .catch(function(message) {
                     exception.catcher('XHR Failed for getAvengers')(message);
-                    $location.url('/');
+                    $location.url('/dashboard');
                 });
 
             function getAvengersComplete(response) {
-                vm.avengers = response.data[0].data.results;
+                if(!response.msg){
+                    vm.avengers = response.data[0].data.results;
+                } else {
+                    logger.warning('Warning: ' + response.msg, null);
+                    $location.url('/login');
+                }
+                
                 return vm.avengers;
             }
 

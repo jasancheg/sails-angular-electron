@@ -16,7 +16,7 @@
             controllerAs: 'vm',
             scope: {},
             link: function (scope, element, attrs, ctrl) {
-                console.log("titlebar directive");
+                // console.log("titlebar directive");
             }
         };
     }

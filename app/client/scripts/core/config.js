@@ -21,10 +21,10 @@
     core.value('config', config);
     
     /* @ngInject */
-    function configure ($logProvider, $routeProvider, $httpProvider, authInterceptor,
+    function configure ($httpProvider, $logProvider, $routeProvider, 
         routehelperConfigProvider, exceptionHandlerProvider) {
 
-        //
+        // http authentification interceptors
         $httpProvider.interceptors.push('authInterceptor');
 
         // turn debugging off/on (no info or warn)

@@ -26,7 +26,7 @@
             controller: 'HeaderNavCtrl',
             controllerAs: 'header',
             link: function (scope, element, attrs, ctrl) {
-                console.log("header  nav directive");
+                // console.log("header  nav directive");
             }
         };
     }

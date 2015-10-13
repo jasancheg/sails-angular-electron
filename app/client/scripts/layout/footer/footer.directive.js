@@ -26,7 +26,7 @@
             controller: 'FooterNavCtrl',
             controllerAs: 'footer',
             link: function (scope, element, attrs, ctrl) {
-                console.log("footer nav directive");
+                // console.log("footer nav directive");
             }
         };
     }
