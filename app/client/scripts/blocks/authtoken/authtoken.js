@@ -7,6 +7,8 @@
 
     /* @ngInject */
     function authToken($window) {
+
+        //$window.localStorage.clear();
         var storage = $window.localStorage,
             cachedToken,
             userToken = 'userToken',
@@ -18,15 +20,16 @@
                     isAuthenticated = true;
                 },
                 getToken: function() {
-                    if (!cachedToken)
+                    if (!cachedToken){
                         cachedToken = storage.getItem(userToken);
-
+                    }
                     return cachedToken;
                 },
                 isAuthenticated: function() {
                     return !!authToken.getToken();
                 },
                 removeToken: function() {
+                    //alert('yep, is working :)');
                     cachedToken = null;
                     storage.removeItem(userToken);
                     isAuthenticated = false;

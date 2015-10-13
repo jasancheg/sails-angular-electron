@@ -14,10 +14,9 @@
         .controller('LogoutCtrl', LogoutCtrl);
 
     function LogoutCtrl($location, logger, authToken) {
-        alert("yep");
-        console.log("XXXXXXXXXXXXXXXXXXXXX si que esta llegando");
         authToken.removeToken();
         logger.info('User has logout');
+        // redirect to login page
         $location.path('#/login')
     }
 })(); 
