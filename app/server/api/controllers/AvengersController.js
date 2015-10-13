@@ -13,9 +13,25 @@ module.exports = {
      * @return      {[json]} data:object [App Object Info object]
      */
     showInfo: function (req, res) {
+        
+        var token,
+            payload,
+            appObjInfo,
+            appObj;
+
         // check if user is logged in 
-        if(req.headers.authorization) {
-            var appObjInfo = Utils.avengersInfo(),
+        if(!req.headers.authorization) {
+            return res.json({msg: 'you have not authorization'});
+        } else {
+            token = req.headers.authorization.split(' ')[1];
+            payload = JWT.decode(token, 'shhh..');
+
+            if(!payload.sub){
+                appObj = {
+                    msg: "Authorization failed"
+                };
+            } else {
+                appObjInfo = Utils.avengersInfo();
                 appObj = {
                    success:'E_Retrieve',
                    status: 200,
@@ -23,9 +39,9 @@ module.exports = {
                    model: 'App',
                    data: appObjInfo
                 };
+            } 
+
             return res.json(appObj);
-        } else {
-            return res.json({msg: 'you have not authorization'});
         }
     }
 };
