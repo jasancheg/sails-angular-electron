@@ -23,11 +23,13 @@
             {
                 url: '/logout',
                 config: {
+                    template: '',
                     controller: 'LogoutCtrl',
+                    title: 'Logout',
                     settings: {
-                        type:'admin',
-                        nav: 5,
-                        content: '<i class="fa fa-logout"></i> Logout'
+                        type:'logout',
+                        nav: 1,
+                        icon: '<i class="fa fa-sign-out"></i>'
                     }
                 }
             }

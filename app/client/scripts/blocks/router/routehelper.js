@@ -6,15 +6,13 @@
         .provider('routehelperConfig', routehelperConfig)
         .factory('routehelper', routehelper);
 
-
     // Must configure via the routehelperConfigProvider
     function routehelperConfig() {
-        /* jshint validthis:true */
         this.config = {
             // These are the properties we need to set
             $routeProvider: undefined,
             docTitle: '',
-            resolveAlways: {ready: function(){ } }
+            resolveAlways: {ready: function(){}}
         };
 
         this.$get = function() {
@@ -33,11 +31,10 @@
             },
             routes = [],
             $routeProvider = routehelperConfig.config.$routeProvider,
-
             service = {
+                routeCounts: routeCounts,
                 configureRoutes: configureRoutes,
-                getRoutes: getRoutes,
-                routeCounts: routeCounts
+                getRoutes: getRoutes
             };
 
         init();
@@ -57,6 +54,45 @@
                 $routeProvider.when(route.url, route.config);
             });
             $routeProvider.otherwise({redirectTo: '/login'});
+        }
+
+        /**
+         * get routes by filter
+         * @param  {[prop]} filter optional prop value of object
+         * @return {[type]}        list of routes
+         */
+        function getRoutes(filter) {
+            
+            // if routes was already defined
+            if (routes.length) {
+                routes = [];
+            }
+
+            for (var prop in $route.routes) {
+                if ($route.routes.hasOwnProperty(prop)) {
+                    var route = $route.routes[prop];
+                    var isRoute = !!route.title;
+                    if (isRoute) {
+                        routes.push(route);
+                    }
+                }
+            }
+            
+            if (filter) {
+                routes = _.filter(routes, filter);
+            }
+
+            return routes;
+        }
+
+        /**
+         * init
+         * @return {[type]} [description]
+         */
+        function init() {
+            handleRoutingErrors();
+            handleRoutingClasses();
+            updateDocTitle();
         }
 
         /** 
@@ -97,7 +133,7 @@
                     logger.success(msg, [current]);
                     
                     // define stage area elements
-                    if($route.current.$$route.settings.type === 'admin'){
+                    if($route.current.$$route && $route.current.$$route.settings.type === 'admin'){
                         $('body').addClass('hide-navs');
                     } else {
                         $('body').removeClass('hide-navs');
@@ -107,45 +143,6 @@
                     renderedProccessApi.historyBtns();
                 }
             );
-        }
-
-        /**
-         * init
-         * @return {[type]} [description]
-         */
-        function init() {
-            handleRoutingClasses()
-            handleRoutingErrors();
-            updateDocTitle();
-        }
-
-        /**
-         * get routes by filter
-         * @param  {[prop]} filter optional prop value of object
-         * @return {[type]}        list of routes
-         */
-        function getRoutes(filter) {
-            
-            // if routes was already defined
-            if (routes.length) {
-                routes = [];
-            }
-
-            for (var prop in $route.routes) {
-                if ($route.routes.hasOwnProperty(prop)) {
-                    var route = $route.routes[prop];
-                    var isRoute = !!route.title;
-                    if (isRoute) {
-                        routes.push(route);
-                    }
-                }
-            }
-            
-            if (filter) {
-                routes = _.filter(routes, filter);
-            }
-
-            return routes;
         }
 
         /**

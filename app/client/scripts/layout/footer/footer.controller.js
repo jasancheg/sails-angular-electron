@@ -8,17 +8,58 @@
         .module('app.layout')
         .controller('FooterNavCtrl', FooterNavCtrl);
 
-    function FooterNavCtrl (logger, authToken) {
+    /* @ngInject */
+    function FooterNavCtrl ($q, $route, routehelper, logger, authToken) {
 
         var footer = this,
-            notificationsState = dataOs.showDevNotifications;
+            notificationsState = dataOs.showDevNotifications,
+            routes = routehelper.getRoutes({settings:{type: 'logout'}});
+        
+        footer.notificationsClass = '';
+        footer.isAuthenticated = isAuthenticated;
+        footer.toggleNotifications = toggleNotifications; 
 
-        footer.isAuthenticated = function() {
-            return authToken.isAuthenticated;
+        // activate online offline notifications envents and DOM state color
+        renderedProccessApi.managetOnlineOfflineStatus();
+
+         activate();
+
+        /**
+         * controller init
+         * @return {[asynchronously execution]} activate
+         */
+        function activate() { 
+            return $q.all([getNavRoutes()]).then(function() {
+                logger.success('footer nav loaded!', null);
+            });
         }
 
-        footer.notificationsClass = '';
-        footer.toggleNotifications = function(e){
+        /**
+         * define routes for main menu by type [mainnav]
+         * @return {[obj]} ordered list of routes
+         */
+        function getNavRoutes() {
+            footer.navRoutes = routes.filter(function(r) {
+                return r.settings && r.settings.nav;
+            }).sort(function(r1, r2) {
+                return r1.settings.nav - r2.settings.nav;
+            });
+        }
+
+        /**
+         * [isAuthenticated description]
+         * @return {Boolean} [description]
+         */
+        function isAuthenticated() {
+            return authToken.isAuthenticated();
+        }
+
+        /**
+         * [toggleNotifications description]
+         * @param  {[type]} e [description]
+         * @return {[type]}   [description]
+         */
+        function toggleNotifications(e){
             if(notificationsState) {
                 notificationsState = false;
                 footer.notificationsClass = '';
@@ -31,10 +72,6 @@
             dataOs.showDevNotifications = notificationsState;
         }
 
-        // activate online offline notifications envents and DOM state color
-        renderedProccessApi.managetOnlineOfflineStatus();
-
-        logger.success('footer nav loaded!', null);
     }
 
 })();
