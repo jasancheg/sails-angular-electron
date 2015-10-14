@@ -4,12 +4,14 @@
     <main-view></main-view>
     <footer-nav></footer-nav>
 
+    <div id="alert" class="alert alert-{{alert.type}} animated main-alert n-cloak hide" ng-class="{'fadeInDown': alert.show, 'fadeOutUp': !alert.show, 'alert-hidden': !alert.hasBeenShown}"><strong>{{alert.title}}</strong> {{alert.message}}</div>
+    
     <div id="splash-page" data-ng-show="vm.showSplash" class="dissolve-animation">
         <div class="loading">
             <span class="preloader" title="loading Rest Api"></span> <span class="preloader-text">Initializing UI</span>
         </div>
     </div>
-    
+
     <div ngplus-overlay
          ngplus-overlay-delay-in="50"
          ngplus-overlay-delay-out="700"

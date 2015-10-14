@@ -40,5 +40,7 @@ module.exports.routes = {
     'GET /api/avengers/show': 'AvengersController.showInfo',
      
     // Register a User
-    'POST /api/auth/register': 'AuthController.register'
+    'POST /api/auth/register': 'AuthController.register',
+    // User login
+    'POST /api/auth/login': 'AuthController.login'
 };

@@ -14,46 +14,45 @@
         .controller('RegisterCtrl', RegisterCtrl);
 
     /* @ngInject */
-    function RegisterCtrl($scope, $http, $log, logger, alert, authToken) {
+    function RegisterCtrl($log, logger, alert, auth, authToken) {
 
         var vm = this;
 
         vm.title = 'Register';
 
-        if(authToken.isAuthenticated) {
+        if(authToken.isAuthenticated()) {
             logger.info('the user is logged in');
-            //alert('success','STATUS: ', 'the user is logged in');
+            alert('info','STATUS: ', 'the user is logged in');
         }
 
         vm.submit = function () {
-            var url = 'http://localhost:1337/api/auth/register',
-                user = {
-                    email: $scope.input_email,
-                    password: $scope.password
-                };
-
-            $http.post(url, user)
-                .success(function(res) {
-                    $log.info('success: ', res);
-                    alert('success', 'Account Created!', 'Welcome, ' + res.user.email + '! Please email activate your account in the next several days.');
-                    authToken.setToken(res.user.token);
+            auth
+                .register(vm.email, vm.password)
+                .then(function (res) {
+                    alert(
+                        'success', 
+                        'Account Created!', 
+                        'Welcome, ' + res.data.data.email + '! Please email activate your account in the next several days.'
+                    );
                 })
-                .error(function(err) {
-                    $log.error('Error: ', err);
-                    alert('warning', 'Unable to create account, ', err.message);
-                });
-
-            // $auth.signup({
-            //     email: $scope.email,
-            //     password: $scope.password
-            // })
-            //     .then(function (res) {
-            //         alert('success', 'Account Created!', 'Welcome, ' + res.data.user.email + '! Please email activate your account in the next several days.');
-            //     })
-            //     .catch(function (err) {
-            //         alert('warning', 'Unable to create account :(', err.message);
-            //     });
+                .catch(handleError);
         };
+
+        // $auth.signup({
+        //     email: $scope.email,
+        //     password: $scope.password
+        // })
+        //     .then(function (res) {
+        //         alert('success', 'Account Created!', 'Welcome, ' + res.data.user.email + '! Please email activate your account in the next several days.');
+        //     })
+        //     .catch(function (err) {
+        //         alert('warning', 'Unable to create account :(', err.message);
+        //     });
+
+        function handleError(err) {
+            $log.error('Error: ', err.message);
+            alert('warning', 'Unable to create account :() ', err.message);
+        }
 
         logger.info('Activated Register View');
     }

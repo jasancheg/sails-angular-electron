@@ -17,8 +17,8 @@
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.logger', 'blocks.alert', 'blocks.router',
-        'blocks.authToken', 'blocks.authInterceptor',
+        'blocks.exception', 'blocks.alert', 'blocks.logger', 'blocks.router',
+        'blocks.authToken', 'blocks.auth', 'blocks.authInterceptor',
         /*
          * 3rd Party modules
          */

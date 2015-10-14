@@ -10,6 +10,14 @@ section#shell {
     overflow:hidden;
 }
 
+#alert {
+    position: absolute;
+    width: calc(100% - 270px);
+    top: 90px;
+    z-index: 99999;
+    margin: 0 10px 0 250px;
+}
+
 /*#region Splash */
 #splash-page {
     z-index: 99998;

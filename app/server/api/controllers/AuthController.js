@@ -5,6 +5,17 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var jwt = require('jwt-simple'),
+    Passwords = require('machinepack-passwords');
+
+function createToken(user) {
+    var payload = {
+            iss: 'localhost',
+            sub: user.id
+        };
+    return jwt.encode(payload, "shhh..");
+}
+
 module.exports = {
     
     /**
@@ -18,8 +29,7 @@ module.exports = {
         
         var successData,
             payload,
-            token,
-            Passwords = require('machinepack-passwords');
+            token;
 
         Passwords.encryptPassword({
             password: req.param('password'),
@@ -33,7 +43,6 @@ module.exports = {
                 User.create({
                     email: req.param('email'),
                     password: encryptedPassword,
-                    //encryptedPassword: encryptedPassword,
                     lastLoggedIn: new Date()
                 }, function (err, newUser) {
                     if (err) {
@@ -44,18 +53,12 @@ module.exports = {
                     }
 
                     req.session.user = newUser.id;
-
-                    payload = {
-                        iss: 'localhost',
-                        sub: newUser.id
-                    },
-                    token = JWT.encode(payload, 'shhh..');
-
+                    token = createToken(newUser);
                     successData = {
                         success: 'E_CREATION',
                         summary: 'User have been created',//req.__('201Code', {type: 'User'}),
                         model: 'User',
-                        user: {
+                        data: {
                             id: newUser.id,
                             email: newUser.email,
                             isAdmin: !!newUser.admin,
@@ -68,5 +71,79 @@ module.exports = {
             }
         });
 
+    },
+
+    /**
+     * [login description]
+     * @param  {[type]}   req  [description]
+     * @param  {[type]}   res  [description]
+     * @param  {Function} next [description]
+     * @return {[type]}        [description]
+     */
+    login: function(req, res, next) {
+
+        var token, 
+            successData,
+            cUserEmail = req.param('email'),
+            errData = {
+                error: 'E_AUTH',
+                model: 'User',
+                data: {
+                    username: cUserEmail
+                }
+            };
+        console.log("LOGIN: ", cUserEmail);
+        User.findOne({
+            email: cUserEmail
+        }).exec(function (err, user) {
+            if (err) {
+                return res.negotiate(err);
+            }
+
+            if (!user) {
+                errData.summary = '404 user not found';//req.__('404User', cUserName);
+                return res.notFound(errData);
+            }
+            
+            Passwords.checkPassword({
+                passwordAttempt: req.param('password'),
+                encryptedPassword: user.password
+            }).exec({
+                error: function (err) {
+                    return res.negotiate(err);
+                },
+                incorrect: function () {
+                    errData.summary = '403 no authorized';//req.__('403User', cUserName);
+                    return res.forbidden(errData);
+                },
+                success: function () {
+                    token = createToken(user);
+                    successData = {
+                        success: 'E_AUTH',
+                        summary: '200 ok',//req.__('200User'),
+                        model: 'User',
+                        data: {
+                            id: user.id,
+                            email: user.email,
+                            isAdmin: !!user.admin,
+                            lastLoggedIn: user.lastLoggedIn,
+                            token: token
+                        }
+                    };
+
+                    // set session variable
+                    req.session.user = user.id;
+                    // update the las login date on DB
+                    user.lastLoggedIn = new Date();
+
+                    user.save(function (err) {
+                        if (err) {
+                            return res.negotiate(err);
+                        }
+                        return res.ok(successData);
+                    });
+                }
+            });
+        });
     }
 };
