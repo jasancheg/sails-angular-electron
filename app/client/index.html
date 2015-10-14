@@ -26,9 +26,6 @@
     </head>
     <body ng-app="app">
         <titlebar></titlebar>
-
-        <div id="alert" class="alert alert-{{alert.type}} animated main-alert n-cloak hide" ng-class="{'fadeInDown': alert.show, 'fadeOutUp': !alert.show, 'alert-hidden': !alert.hasBeenShown}"><strong>{{alert.title}}</strong> {{alert.message}}</div>
-        
         <app-shell></app-shell>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -78,6 +75,8 @@
         <script src="scripts/blocks/authtoken/authtoken.js"></script>
         <script src="scripts/blocks/authinterceptor/authinterceptor.module.js"></script>
         <script src="scripts/blocks/authinterceptor/authinterceptor.js"></script>
+        <script src="scripts/blocks/auth/auth.module.js"></script>
+        <script src="scripts/blocks/auth/auth.js"></script>
         <!-- core module -->
         <script src="scripts/core/core.module.js"></script>
         <script src="scripts/core/constants.js"></script>
@@ -111,11 +110,11 @@
         <!-- build:js({.tmp,app/client}) scripts/components.js -->
         <!-- Components -->
         <script src="scripts/components/components.module.js"></script>
-        <!-- log in -->
+        <!-- login -->
         <script src="scripts/components/log-in/login.module.js"></script>
         <script src="scripts/components/log-in/login.config.route.js"></script>
         <script src="scripts/components/log-in/login.controller.js"></script>
-        <!-- log in -->
+        <!-- logout -->
         <script src="scripts/components/logout/logout.module.js"></script>
         <script src="scripts/components/logout/logout.config.route.js"></script>
         <script src="scripts/components/logout/logout.controller.js"></script>

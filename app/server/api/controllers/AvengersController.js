@@ -17,15 +17,16 @@ module.exports = {
         var token,
             payload,
             appObjInfo,
-            appObj;
+            appObj
+            jwt = require('jwt-simple');
 
         // check if user is logged in 
         if(!req.headers.authorization) {
             return res.json({msg: 'you have not authorization'});
         } else {
             token = req.headers.authorization.split(' ')[1];
-            payload = JWT.decode(token, 'shhh..');
-
+            payload = jwt.decode(token, 'shhh..');
+            
             if(!payload.sub){
                 appObj = {
                     msg: "Authorization failed"

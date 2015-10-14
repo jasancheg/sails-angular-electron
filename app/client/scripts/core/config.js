@@ -51,9 +51,9 @@
     core.config(configure);
 
     /* @ngInject */
-    function Sails ($sailsProvider, RestangularProvider) {
-        RestangularProvider.setBaseUrl('http://localhost:1337/');
-        $sailsProvider.url = 'http://localhost:1337/';
+    function Sails ($sailsProvider, RestangularProvider, API_URL) {
+        RestangularProvider.setBaseUrl(API_URL);
+        $sailsProvider.url = API_URL;
     }
     core.config(Sails);
 

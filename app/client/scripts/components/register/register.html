@@ -12,13 +12,13 @@
                 required="" ng-model="username"> -->
 
         <div class="form-group has-feedback" 
-            ng-class="{'has-success': register.input_email.$dirty && register.input_email.$valid, 'has-error': register.input_email.$dirty && register.input_email.$invalid }">
-            <label for="input_email" class="sr-only">Email address</label>
-            <input type="email" id="input_email" class="form-control" placeholder="Email address"
-                required="" ng-model="input_email" name="input_email">
+            ng-class="{'has-success': register.email.$dirty && register.email.$valid, 'has-error': register.email.$dirty && register.email.$invalid }">
+            <label for="email" class="sr-only">Email address</label>
+            <input type="email" id="email" class="form-control" placeholder="Email address"
+                required="" ng-model="vm.email" name="email">
             <span class="glyphicon form-control-feedback" aria-hidden="true"
-                ng-class="{'hide': register.input_email.$pristine, 'glyphicon-ok': register.input_email.$valid, 'glyphicon-remove': register.input_email.$invalid }"></span>
-            <p class="help-block" ng-show="register.input_email.$dirty && register.input_email.$invalid">Please enter a proper email.</p>
+                ng-class="{'hide': register.email.$pristine, 'glyphicon-ok': register.email.$valid, 'glyphicon-remove': register.email.$invalid }"></span>
+            <p class="help-block" ng-show="register.email.$dirty && register.email.$invalid">Please enter a proper email.</p>
         </div>
         
         <!-- <label for="confirm_email" class="sr-only">Confirm email address</label>
@@ -30,14 +30,14 @@
             ng-class="{'has-success': register.confirm_password.$dirty && register.confirm_password.$valid, 'has-error': register.confirm_password.$dirty && register.confirm_password.$invalid }">
             <label for="password" class="sr-only">Password</label>
             <input type="password" class="form-control" placeholder="Password"
-                    required="" ng-model="password" name="password">
+                    required="" ng-model="vm.password" name="password">
         </div>
 
         <div class="form-group has-feedback" 
             ng-class="{'has-success': register.confirm_password.$dirty && register.confirm_password.$valid, 'has-error': register.confirm_password.$dirty && register.confirm_password.$invalid }">
             <label for="confirm_password" class="sr-only">Password</label>
             <input type="password" class="form-control" placeholder="Confirm password" name="confirm_password"
-                required="" ng-model="confirm_password" validate-equals='password'>
+                required="" ng-model="vm.confirm_password" validate-equals='vm.password'>
             <span class="glyphicon form-control-feedback" aria-hidden="true"
                 ng-class="{'hide': register.confirm_password.$pristine, 'glyphicon-ok': register.confirm_password.$valid, 'glyphicon-remove': register.confirm_password.$invalid }"></span>
             <p class="help-block" ng-show="register.confirm_password.$dirty && register.confirm_password.$invalid">please match the passwords.</p>

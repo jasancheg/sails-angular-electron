@@ -1,22 +1,30 @@
 ﻿<section id="login-view" class="main-content">
-    <form class="form-signin">
+    <form ng-submit="vm.submit()" name="login" class="form-signin" novalidate>
         <h2 class="form-signin-heading">Please sign in</h2>
 
-         <div class="form-group has-feedback">
-
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+         <div class="form-group has-feedback" ng-class="{'has-success': login.email.$dirty && login.email.$valid, 'has-error': login.email.$dirty && login.email.$invalid }">
+            <label for="email" class="sr-only">Email address</label>
+            <input name="email" ng-model="vm.email" type="email" id="email" 
+                class="form-control" placeholder="Email address" required="" autofocus="">
+            <span class="glyphicon form-control-feedback" aria-hidden="true" ng-class="{'hide': login.email.$pristine, 'glyphicon-ok': login.email.$valid, 'glyphicon-remove': login.email.$invalid }"></span>
+            <p class="help-block" ng-show="login.email.$dirty && login.email.$invalid">Please enter a proper email.</p>
         </div>
+
         <div class="form-group has-feedback">
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <input name="password" ng-model="vm.password" type="password" 
+                id="password" class="form-control" placeholder="Password" required="">
        </div>
+
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <a class="btn btn-link btn-block" href="#/register">Register</a>
+        <button ng-disabled="login.$invalid" class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        <a class="btn btn-link btn-block" href="#/register">Create an account!</a>
+        
+        <button ng-click="vm.authenticate('google')" class="btn btn-lg btn-link btn-block" type="button"><i class="fa fa-google"></i> Google</button>
+        <button ng-click="vm.authenticate('facebook')" class="btn btn-lg btn-link btn-block" type="button"><i class="fa fa-facebook-official"></i> Facebook</button>
     </form>
 </section>
