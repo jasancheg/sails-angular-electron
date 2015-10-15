@@ -50,8 +50,10 @@
         //     });
 
         function handleError(err) {
-            $log.error('Error: ', err.message);
-            alert('warning', 'Unable to create account :() ', err.message);
+            // check type: for email exist or bad request
+            var errorMsg = err.status === 409 ? err.data.data.email[0].message : err.message;
+            $log.error('Error: ', errorMsg);
+            alert('warning', 'Unable to create account: ', errorMsg);
         }
 
         logger.info('Activated Register View');
