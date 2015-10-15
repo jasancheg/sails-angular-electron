@@ -6,9 +6,7 @@
  */
 
 var jwt = require('jwt-simple'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    Passwords = require('machinepack-passwords');
+    passport = require('passport');
 
 function createToken(user) {
     var payload = {
@@ -32,25 +30,29 @@ module.exports = {
         var successData,
             token;
 
-        passport.authenticate('local-register', function (err, user) {
+        passport.authenticate('local-register', function (err, user, msg) {
             if (err) {
                 return res.negotiate(err);
             }
+            if(!err && !user) {
+                return res.emailInUse();
+            }
             
-                token = createToken(user);
-                req.session.user = user.id;
-                successData = {
-                    success: 'E_CREATION',
-                    summary: 'User have been created',//req.__('201Code', {type: 'User'}),
-                    model: 'User',
-                    data: {
-                        id: user.id,
-                        email: user.email,
-                        isAdmin: !!user.admin,
-                        token: token
-                    }
-                };
-                return res.ok(successData);
+            token = createToken(user);
+            req.session.user = user.id;
+            successData = {
+                success: 'E_CREATION',
+                summary: 'User have been created',//req.__('201Code', {type: 'User'}),
+                model: 'User',
+                data: {
+                    id: user.id,
+                    email: user.email,
+                    isAdmin: !!user.admin,
+                    token: token
+                }
+            };
+
+            return res.ok(successData);
             
         })(req, res);
     },

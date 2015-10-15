@@ -16,7 +16,7 @@ module.exports = function emailInUse (){
     var res = this.res,
         req = this.req;
     res.status(409);
-    return res.badRequest({
+    return res.json({
         err: 'E_VALIDATION',
         summary: '409 already taken',//req.__('409User'),
         model: 'User',
@@ -29,5 +29,4 @@ module.exports = function emailInUse (){
             ]
         }
     });
-
 };

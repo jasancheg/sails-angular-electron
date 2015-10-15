@@ -40,11 +40,14 @@ localStrategy = {
         };
 
         User.findOne(searchUser).exec(function (err, user) {
-            if (err) return done(err);
-
-            if (!user) return done(null, false, {
-                message: 'Wrong email/password'
-            });
+            if (err) {
+                return done(err);
+            }
+            if (!user) { 
+                return done(null, false, {
+                    message: 'Wrong email/password'
+                });
+            }
 
             Passwords.checkPassword({
                 passwordAttempt: password,
