@@ -38,7 +38,7 @@ module.exports = {
             if(!err && !user) {
                 return res.emailInUse();
             }
-            
+
             token = createToken(user);
             req.session.user = user.id;
             successData = {
@@ -155,13 +155,78 @@ module.exports = {
                 headers: headers, 
                 json: true
             }, function (err, response, profile) {
-                console.log(profile);
-                io.sockets.emit('googleauth', profile);
+
+                var googleSearchUser = {googleId: profile.sub};
+
+                User.findOne(googleSearchUser).exec(function (err, foundUser) {
+                    
+                    var token,
+                        successData = {
+                            success: 'E_AUTH',
+                            summary: '200 ok',//req.__('200User'),
+                            model: 'User',
+                            data: {}
+                        };
+
+                    if (err) {
+                        return res.negotiate(err);
+                    }
+                    if (foundUser) {
+                        token = createToken(foundUser);
+                        successData.data = {
+                            id: foundUser.id,
+                            email: foundUser.email,
+                            isAdmin: !!foundUser.admin,
+                            lastLoggedIn: foundUser.lastLoggedIn,
+                            displayName: profile.name,
+                            picture: profile.picture,
+                            token: token
+                        };
+                        // set session variable
+                        req.session.user = foundUser.id;
+                        // update the las login date on DB
+                        foundUser.lastLoggedIn = new Date();
+                        // save last login date 
+                        foundUser.save(function (err) {
+                            if (err) {
+                                return res.negotiate(err);
+                            }
+                            console.log(profile);
+                            io.sockets.emit('googleauth', successData);
+                            return res.ok(successData);
+                        });
+                    } else {
+
+                        User.create({
+                            email: profile.email,
+                            displayName: profile.name,
+                            googleId: profile.sub,
+                            lastLoggedIn: new Date()
+                        }, function (err, newUser) {
+                            if (err) {
+                                return res.negotiate(err);
+                            }
+
+                            token = createToken(newUser);
+                            req.session.newUser = newUser.id;
+                            successData.data = {
+                                id: newUser.id,
+                                displayName: newUser.displayName,
+                                //email: newUser.email,
+                                isAdmin: !!newUser.admin,
+                                token: token
+                            };
+                            io.sockets.emit('googleauth', profile);
+                            return res.ok(successData);
+                        });
+
+                    }
+                });
             });
 
         });
 
-        res.json({status:'loading...'});
+        //res.json({status:'loading...'});
     }
 
 };

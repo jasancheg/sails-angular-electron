@@ -34,17 +34,6 @@
                 'top=' + ($window.outerHeight - 500) / 2.5
             ];
 
-        /**
-         * Init socket to check for updates on the googleauth code
-         * @param  {[string]} message [Received google authentification code]
-         */
-        $sails.on('googleauth', function (token) {
-            googleauth = token;
-            console.log(token);
-            popup.close();
-            //alert('googleauth: ' + message.code);
-        });
-
         // helper function: store token in local storage and redirect to the home view
         function authSuccessful(res) {
             authToken.setToken(res.data.token);
@@ -67,10 +56,24 @@
 
         this.googleAuth = function() {
             var options = popupOptions.join(','),
-                url = authUri + "?" + urlBuilder.join('&');
-            
+                url = authUri + "?" + urlBuilder.join('&'),
+                deferred = $q.defer();
+
             popup = $window.open(url, '', options);
             $window.focus();
+
+            /**
+             * Init socket to check for updates on the googleauth code
+             * @param  {[string]} message [Received google authentification code]
+             */
+            $sails.on('googleauth', function (token) {
+                console.log(token);
+                popup.close();
+                authSuccessful(token);
+                deferred.resolve(token);
+            });
+
+            return deferred.promise;
         }
 
     }

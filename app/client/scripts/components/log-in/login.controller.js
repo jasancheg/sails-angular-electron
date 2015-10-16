@@ -13,7 +13,7 @@
         .module('app.components.login')
         .controller('LoginCtrl', LoginCtrl);
 
-    function LoginCtrl(logger, alert, auth) {
+    function LoginCtrl($q, logger, alert, auth) {
 
         var vm = this;
 
@@ -40,7 +40,11 @@
         };
 
         vm.authenticate = function (provider) {
-            auth.googleAuth()//.then();
+            auth.googleAuth().then(function (res) {
+                if(res.data){
+                    alert('success', 'Welcome', 'Thanks for coming back ' + res.data.displayName + '!');
+                }
+            }, handleError);
             // $auth.authenticate(provider).then(function (res) {
             //     alert('success', 'Welcome', 'Thanks for coming back ' + res.data.user.displayName + '!');
             // }, handleError);
