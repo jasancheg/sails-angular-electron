@@ -40,6 +40,7 @@
         };
 
         vm.authenticate = function (provider) {
+            auth.googleAuth()//.then();
             // $auth.authenticate(provider).then(function (res) {
             //     alert('success', 'Welcome', 'Thanks for coming back ' + res.data.user.displayName + '!');
             // }, handleError);

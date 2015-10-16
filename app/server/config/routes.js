@@ -39,8 +39,10 @@ module.exports.routes = {
     // Show the Avengers list
     'GET /api/avengers/show': 'AvengersController.showInfo',
      
+    // User login
+    'POST /api/auth/login': 'AuthController.login',
     // Register a User
     'POST /api/auth/register': 'AuthController.register',
-    // User login
-    'POST /api/auth/login': 'AuthController.login'
+    // google authentification endpoint for received code
+    'GET /api/auth/googleauth': 'AuthController.googleauth'
 };

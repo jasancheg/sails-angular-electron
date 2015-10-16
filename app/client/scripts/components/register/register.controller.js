@@ -56,6 +56,9 @@
             alert('warning', 'Unable to create account: ', errorMsg);
         }
 
+        /**
+         * log module init
+         */
         logger.info('Activated Register View');
     }
 })(); 

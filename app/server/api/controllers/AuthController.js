@@ -6,6 +6,7 @@
  */
 
 var jwt = require('jwt-simple'),
+    request = require('request'),
     passport = require('passport');
 
 function createToken(user) {
@@ -115,5 +116,52 @@ module.exports = {
                 });
             });
         })(req, res);
+    },
+
+    /**
+     * [googleauth description]
+     * @param  {[type]}   req  [description]
+     * @param  {[type]}   res  [description]
+     * @param  {Function} next [description]
+     * @return {[type]}        [description]
+     */
+    googleauth: function(req, res) {
+        var io = sails.io,
+            reqParams = req.allParams()
+            url = 'https://accounts.google.com/o/oauth2/token',
+            apiUrl = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect',
+            params = {
+                client_id: '124193795163-3me354kp9ujfkmv01pe1acldjpce0spg.apps.googleusercontent.com',
+                redirect_uri: 'http://localhost:1337/api/auth/googleauth',
+                code: decodeURIComponent(reqParams.code),
+                grant_type: 'authorization_code',
+                client_secret: 'WwnRnKuD0Lc0o5SvWnOxjOd4' //config.GOOGLE_SECRET
+            };
+
+        request.post(url, {
+            json: true,
+            form: params
+        }, function (err, response, token) {
+
+            console.log(token);
+            
+            var accesstoken = token.access_token,
+                headers = {
+                    Authorization: 'Bearer ' + accesstoken
+                };
+
+            request.get({
+                url: apiUrl,
+                headers: headers, 
+                json: true
+            }, function (err, response, profile) {
+                console.log(profile);
+                io.sockets.emit('googleauth', profile);
+            });
+
+        });
+
+        res.json({status:'loading...'});
     }
+
 };

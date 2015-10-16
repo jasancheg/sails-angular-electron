@@ -14,8 +14,38 @@
         .service('auth', auth);
 
     /* @ngInject */
-    function auth($http, API_URL, authToken, $location) {
-        
+    function auth($q, $http, $sails, $window, API_URL, authToken, $location) {
+        var popup,
+            // google config data
+            googleauth,
+            authUri = 'https://accounts.google.com/o/oauth2/auth',
+            servUri = API_URL + 'api/auth/googleauth',
+            clientId = '124193795163-3me354kp9ujfkmv01pe1acldjpce0spg.apps.googleusercontent.com',
+            urlBuilder = [
+                'response_type=code',
+                'client_id=' + clientId,
+                'redirect_uri=' + servUri,
+                'scope=profile email'
+            ], 
+            popupOptions = [
+                'width=500',
+                'height=500',
+                'left=' + ($window.outerWidth - 500) / 2,
+                'top=' + ($window.outerHeight - 500) / 2.5
+            ];
+
+        /**
+         * Init socket to check for updates on the googleauth code
+         * @param  {[string]} message [Received google authentification code]
+         */
+        $sails.on('googleauth', function (token) {
+            googleauth = token;
+            console.log(token);
+            popup.close();
+            //alert('googleauth: ' + message.code);
+        });
+
+        // helper function: store token in local storage and redirect to the home view
         function authSuccessful(res) {
             authToken.setToken(res.data.token);
             $location.path('/');
@@ -35,19 +65,18 @@
             }).success(authSuccessful);
         }
 
+        this.googleAuth = function() {
+            var options = popupOptions.join(','),
+                url = authUri + "?" + urlBuilder.join('&');
+            
+            popup = $window.open(url, '', options);
+            $window.focus();
+        }
+
     }
 }());
 
 
-
-
-    // var urlBuilder = [];
-    // var clientId = '755194447289-i6qu5n18jnh4lhph17j19cq08i0fq6f4.apps.googleusercontent.com';
-
-    // urlBuilder.push('response_type=code',
-    //     'client_id=' + clientId,
-    //     'redirect_uri=' + window.location.origin,
-    //     'scope=profile email')
 
     // this.googleAuth = function () {
     //     var url = "https://accounts.google.com/o/oauth2/auth?" + urlBuilder.join('&');
