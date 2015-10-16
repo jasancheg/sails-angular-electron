@@ -46,9 +46,16 @@ module.exports = {
         //     type: 'string',
         //     required: true
         // },
-        password: {
+        googleId: {
             type: 'string',
-            required: true
+            defaultsTo: null
+        },
+        displayName: {
+            type: 'string'
+        },
+        password: {
+            type: 'string'
+            //required: true
         },
         // Boolean to store admin condition
         // default to []
