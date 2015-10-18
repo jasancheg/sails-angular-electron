@@ -1,4 +1,14 @@
 <div id="sidebar" >
+    <div class="row" id="authBox">
+        <div class="col-xs-5 col-md-5">
+            <div class="thumbnail">
+                <img src="{{vm.picture}}" alt="...">
+            </div>
+        </div>
+        <div class="col-xs-7 col-md-7 name-input">
+            <p>{{vm.username}}</p>
+        </div>
+    </div>
     <ul class="nav nav-sidebar">
         <li class="nPurple fade-selection-animation" 
             data-ng-class="vm.isCurrent(m)"

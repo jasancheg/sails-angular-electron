@@ -14,6 +14,7 @@
                 if (token) {
                     config.headers.Authorization = 'Bearer ' + token;
                 }
+
                 return config;
             },
             response: function(response) {

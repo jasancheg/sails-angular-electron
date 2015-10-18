@@ -5,16 +5,45 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var jwt = require('jwt-simple'),
-    request = require('request'),
+var request = require('request'),
     passport = require('passport');
 
-function createToken(user) {
-    var payload = {
-            iss: 'localhost',
-            sub: user.id
+function resolveResponse(req, user, success, summary) {
+    console.log('user: ', user);
+    var token = JWT.createToken(user),
+        successData = {
+            success: success,
+            summary: summary,//req.__('201Code', {type: 'User'}),
+            model: 'User',
+            token: token,
+            data: {
+                id: user.id,
+                email: user.email,
+                isAdmin: !!user.admin,
+                lastLoggedIn: user.lastLoggedIn,
+                displayName: 'aa',
+                picture: ''
+            }
         };
-    return jwt.encode(payload, "shhh..");
+    // set session variable
+    req.session.user = user.id;
+
+    return successData;
+}
+
+function updateUserlastLoggedIn(res, user, successData, cb) {
+    // update the las login date on DB
+    user.lastLoggedIn = new Date();
+    // save last login date 
+    user.save(function (err) {
+        if (err) {
+            return res.negotiate(err);
+        }
+        if(cb){
+            cb();
+        }
+        return res.ok(successData);
+    });
 }
 
 module.exports = {
@@ -29,7 +58,8 @@ module.exports = {
     register: function(req, res) {
         
         var successData,
-            token;
+            token,
+            io = sails.io;
 
         passport.authenticate('local-register', function (err, user, msg) {
             if (err) {
@@ -39,22 +69,10 @@ module.exports = {
                 return res.emailInUse();
             }
 
-            token = createToken(user);
-            req.session.user = user.id;
-            successData = {
-                success: 'E_CREATION',
-                summary: 'User have been created',//req.__('201Code', {type: 'User'}),
-                model: 'User',
-                data: {
-                    id: user.id,
-                    email: user.email,
-                    isAdmin: !!user.admin,
-                    token: token
-                }
-            };
+            io.sockets.emit('sessionstate', {msg: 'session has started for first time'});
 
-            return res.ok(successData);
-            
+            return res.ok(resolveResponse(req, user, 'E_CREATION', 'User have been created'));
+
         })(req, res);
     },
 
@@ -67,8 +85,8 @@ module.exports = {
      */
     login: function(req, res) {
 
-        var token, 
-            successData,
+        var successData,
+            io = sails.io,
             cUserEmail = req.param('email'),
             errData = {
                 error: 'E_AUTH',
@@ -77,6 +95,17 @@ module.exports = {
                     email: cUserEmail
                 }
             };
+
+        var Gravatar = require('machinepack-gravatar');
+
+        // Build the URL of a gravatar image for a particular email address.
+        // Gravatar.getImageUrl({
+        //     emailAddress: cUserEmail,
+        //     gravatarSize: 400,
+        //     defaultImage: 'http://example.com/images/avatar.jpg',
+        //     rating: 'g',
+        //     useHttps: true,
+        // }).execSync();
 
         passport.authenticate('local-login', function (err, user) {
             if (err) {
@@ -90,30 +119,10 @@ module.exports = {
                 if (err) {
                     return res.negotiate(err);
                 }
-                token = createToken(user);
-                successData = {
-                    success: 'E_AUTH',
-                    summary: '200 ok',//req.__('200User'),
-                    model: 'User',
-                    data: {
-                        id: user.id,
-                        email: user.email,
-                        isAdmin: !!user.admin,
-                        lastLoggedIn: user.lastLoggedIn,
-                        token: token
-                    }
-                };
-                // set session variable
-                req.session.user = user.id;
-                // update the las login date on DB
-                user.lastLoggedIn = new Date();
-                // save last login date 
-                user.save(function (err) {
-                    if (err) {
-                        return res.negotiate(err);
-                    }
-                    return res.ok(successData);
-                });
+                
+                successData = resolveResponse(req, user, 'E_AUTH', '200 ok');
+                io.sockets.emit('sessionstate', {msg: 'session has started'});
+                updateUserlastLoggedIn(res, user, successData);
             });
         })(req, res);
     },
@@ -143,13 +152,11 @@ module.exports = {
             form: params
         }, function (err, response, token) {
 
-            console.log(token);
-            
             var accesstoken = token.access_token,
                 headers = {
                     Authorization: 'Bearer ' + accesstoken
                 };
-
+            
             request.get({
                 url: apiUrl,
                 headers: headers, 
@@ -159,44 +166,23 @@ module.exports = {
                 var googleSearchUser = {googleId: profile.sub};
 
                 User.findOne(googleSearchUser).exec(function (err, foundUser) {
-                    
-                    var token,
-                        successData = {
-                            success: 'E_AUTH',
-                            summary: '200 ok',//req.__('200User'),
-                            model: 'User',
-                            data: {}
-                        };
+
+                    var successData;
 
                     if (err) {
                         return res.negotiate(err);
                     }
                     if (foundUser) {
-                        token = createToken(foundUser);
-                        successData.data = {
-                            id: foundUser.id,
-                            email: foundUser.email,
-                            isAdmin: !!foundUser.admin,
-                            lastLoggedIn: foundUser.lastLoggedIn,
-                            displayName: profile.name,
-                            picture: profile.picture,
-                            token: token
-                        };
-                        // set session variable
-                        req.session.user = foundUser.id;
-                        // update the las login date on DB
-                        foundUser.lastLoggedIn = new Date();
-                        // save last login date 
-                        foundUser.save(function (err) {
-                            if (err) {
-                                return res.negotiate(err);
-                            }
-                            console.log(profile);
-                            io.sockets.emit('googleauth', successData);
-                            return res.ok(successData);
+                        successData = resolveResponse(req, foundUser, 'E_AUTH', '200 ok');
+                        successData.data.displayName = profile.name;
+                        successData.data.picture = profile.picture;
+                        // Indicates it is a existing user
+                        successData.type = 'exist';
+                        updateUserlastLoggedIn(res, foundUser, successData, function () {
+                            sails.io.sockets.emit('googleauth', successData);
+                            sails.io.sockets.emit('sessionstate', {msg: 'session has started'});
                         });
                     } else {
-
                         User.create({
                             email: profile.email,
                             displayName: profile.name,
@@ -206,17 +192,13 @@ module.exports = {
                             if (err) {
                                 return res.negotiate(err);
                             }
-
-                            token = createToken(newUser);
-                            req.session.newUser = newUser.id;
-                            successData.data = {
-                                id: newUser.id,
-                                displayName: newUser.displayName,
-                                //email: newUser.email,
-                                isAdmin: !!newUser.admin,
-                                token: token
-                            };
-                            io.sockets.emit('googleauth', profile);
+                            successData = resolveResponse(req, newUser, 'E_CREATION', 'User have been created');
+                            successData.data.displayName = profile.name;
+                            successData.data.picture = profile.picture;
+                            // Indicate it is a new user
+                            successData.type = 'new';
+                            io.sockets.emit('googleauth', successData);
+                            sails.io.sockets.emit('sessionstate', {msg: 'session has started'});
                             return res.ok(successData);
                         });
 
@@ -227,6 +209,29 @@ module.exports = {
         });
 
         //res.json({status:'loading...'});
+    },
+
+    /**
+     * [facebookauth description]
+     * @param  {[type]} req [description]
+     * @param  {[type]} res [description]
+     * @return {[type]}     [description]
+     */
+    facebookauth: function(req, res) {
+        console.log('DE QUE LLEGO LLEGO: ', req.allParams());
+        //Authentification.fb(req, res);
+    },
+
+    /**
+     * [logout description]
+     * @param  {[type]} req [description]
+     * @param  {[type]} res [description]
+     * @return {[type]}     [description]
+     */
+    logout: function(req, res) {
+        req.session = null;
+        sails.io.sockets.emit('sessionstate', {msg: 'session has ended'});
+        return res.ok();
     }
 
 };

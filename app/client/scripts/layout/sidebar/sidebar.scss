@@ -59,3 +59,13 @@
     color: #fff;
     background-color: $purple-darker;
 }
+//
+#authBox {
+    .name-input {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    p {
+        padding-top: 20px;
+    }
+}

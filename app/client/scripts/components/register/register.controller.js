@@ -14,40 +14,35 @@
         .controller('RegisterCtrl', RegisterCtrl);
 
     /* @ngInject */
-    function RegisterCtrl($log, logger, alert, auth, authToken) {
+    function RegisterCtrl($log, $auth, $location, logger, alert, User) {
 
         var vm = this;
 
         vm.title = 'Register';
 
-        if(authToken.isAuthenticated()) {
+        if($auth.isAuthenticated()) {
             logger.info('the user is logged in');
             alert('info','STATUS: ', 'the user is logged in');
         }
 
         vm.submit = function () {
-            auth
-                .register(vm.email, vm.password)
+            $auth
+                .signup({
+                    email: vm.email, 
+                    password: vm.password
+                })
                 .then(function (res) {
+                    $auth.setToken(res.data.token);
+                    User.setUser(JSON.stringify(res.data));
                     alert(
                         'success', 
                         'Account Created!', 
                         'Welcome, ' + res.data.data.email + '! Please email activate your account in the next several days.'
                     );
+                    $location.path('/');
                 })
                 .catch(handleError);
         };
-
-        // $auth.signup({
-        //     email: $scope.email,
-        //     password: $scope.password
-        // })
-        //     .then(function (res) {
-        //         alert('success', 'Account Created!', 'Welcome, ' + res.data.user.email + '! Please email activate your account in the next several days.');
-        //     })
-        //     .catch(function (err) {
-        //         alert('warning', 'Unable to create account :(', err.message);
-        //     });
 
         function handleError(err) {
             // check type: for email exist or bad request

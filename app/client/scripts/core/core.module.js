@@ -17,11 +17,11 @@
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.alert', 'blocks.logger', 'blocks.router',
-        'blocks.authToken', 'blocks.auth', 'blocks.authInterceptor',
+        'blocks.logger', 'blocks.exception', 'blocks.user',  'blocks.alert',
+        'blocks.router', 'blocks.authToken', 'blocks.auth',  'blocks.authInterceptor',
         /*
          * 3rd Party modules
          */
-        'ngplus', 'ngSails', 'restFactory' //, 'ui.router' 
+        'ngplus', 'ngSails', 'satellizer', 'restFactory' //, 'ui.router' 
     ]);
 })();

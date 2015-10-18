@@ -7,6 +7,8 @@
  * @docs        :: http://localhost:?/#!documentation/models
  */
 
+var Passwords = require('machinepack-passwords');
+
 module.exports = {
     attributes: {
         // Id of the user
@@ -40,22 +42,17 @@ module.exports = {
         //     type: 'string',
         //     defaultsTo: ''
         // },
-        // The encrypted password for the user
-        // e.g. asdgh8a249321e9dhgaslcbqn2913051#T(@GHASDGA
-        // encryptedPassword: {
-        //     type: 'string',
-        //     required: true
-        // },
         googleId: {
             type: 'string',
             defaultsTo: null
         },
         displayName: {
-            type: 'string'
+            type: 'string',
+            defaultsTo: ''
         },
+        // The encrypted password for the user
         password: {
             type: 'string'
-            //required: true
         },
         // Boolean to store admin condition
         // default to []
@@ -69,6 +66,43 @@ module.exports = {
             type: 'date',
             required: true,
             defaultsTo: new Date()
+        },
+        toJSON: function() {
+            var obj = this.toObject();
+            delete obj.password;
+            //delete obj._csrf;
+            return obj;
+        }
+    },
+
+    /**
+     * [beforeCreate description]
+     * @param  {[type]} req [description]
+     * @param  {[type]} res [description]
+     * @return {[type]}     [description]
+     */
+    beforeCreate: function(values, next) {
+        console.log('values: ', values);
+        // checks to make sure the password param is present before creating record
+        if(!values.password) {
+            // password is not required value, social login don't use password, so skip this step
+            next();
+        } else {
+            // Encrypt a string using the BCrypt algorithm.
+            Passwords.encryptPassword({
+                password: values.password,
+                difficulty: 10,
+            }).exec({
+                // An unexpected error occurred.
+                error: function (err) {
+                    if(err) return next(err);
+                },
+                // OK.
+                success: function (encryptedPassword) {
+                    values.password = encryptedPassword;
+                    next();
+                }
+            });
         }
     }
 };

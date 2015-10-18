@@ -8,20 +8,21 @@
         .module('app.layout')
         .controller('SideBarCtrl', SideBarCtrl);
 
-    function SideBarCtrl ($route, routehelper, logger) {
-        
-        logger.success('Side Bar loaded!', null);
-    
-        var vm = this;
-        var routesAdmin = routehelper.getRoutes({settings:{type: 'admin'}});
-        var routesMain = routehelper.getRoutes({settings:{type: 'mainnav'}});
+    function SideBarCtrl ($timeout, $route, $sails, routehelper, logger, User) {
+
+        var vm = this,
+            routesAdmin = routehelper.getRoutes({settings:{type: 'admin'}}),
+            routesMain = routehelper.getRoutes({settings:{type: 'mainnav'}});
 
         vm.isCurrent = isCurrent;
-        vm.sidebarReady = function(){console.log('done animating menu')}; // example
-
+        
         activate();
 
-        function activate() { getNavRoutes(); }
+        function activate() { 
+            getNavRoutes();
+            updateUserInfo(); 
+            logger.success('Side Bar loaded!', {vm:vm});
+        }
 
         function getNavRoutes() {
             vm.mainNavRoutes = routesMain.filter(function(r) {
@@ -44,6 +45,24 @@
             return $route.current.title.substr(0, menuName.length) === menuName ? 'current' : '';
         }
 
+        function updateUserInfo(){
+            if(User.isAuthenticated()) {
+                var user = User.getUser();
+                vm.username = user.displayName;
+                vm.picture = user.picture;
+            } else {
+                vm.username = 'Please sign in';
+                vm.picture = 'assets/images/smile_128x128.png';
+            }
+        }
+
+        // update user info on change session
+        $sails.on('sessionstate', function(message){
+            console.log("LA SESSION HA CAMBIADO DE NUEVO: ", User.getUser());
+            $timeout(function() {
+                updateUserInfo();
+            }, 200);
+        });
     }
 })();
 

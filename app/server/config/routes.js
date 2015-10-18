@@ -41,8 +41,12 @@ module.exports.routes = {
      
     // User login
     'POST /api/auth/login': 'AuthController.login',
+    // User logout
+    'GET /api/auth/logout': 'AuthController.logout',
     // Register a User
     'POST /api/auth/register': 'AuthController.register',
     // google authentification endpoint for received code
-    'GET /api/auth/googleauth': 'AuthController.googleauth'
+    'GET /api/auth/googleauth': 'AuthController.googleauth',
+    // facebook authentification endpoint for received code
+    'GET /api/auth/facebookauth': 'AuthController.facebookauth'
 };

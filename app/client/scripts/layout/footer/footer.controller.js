@@ -9,7 +9,7 @@
         .controller('FooterNavCtrl', FooterNavCtrl);
 
     /* @ngInject */
-    function FooterNavCtrl ($q, $route, routehelper, logger, authToken) {
+    function FooterNavCtrl ($q, $auth, $route, routehelper, logger) {
 
         var footer = this,
             notificationsState = dataOs.showDevNotifications,
@@ -30,7 +30,7 @@
          */
         function activate() { 
             return $q.all([getNavRoutes()]).then(function() {
-                logger.success('footer nav loaded!', null);
+                logger.success('footer nav loaded!', {footer:footer});
             });
         }
 
@@ -51,7 +51,8 @@
          * @return {Boolean} [description]
          */
         function isAuthenticated() {
-            return authToken.isAuthenticated();
+            //console.log('$auth.isAuthenticated: ', $auth.isAuthenticated());
+            return $auth.isAuthenticated();
         }
 
         /**

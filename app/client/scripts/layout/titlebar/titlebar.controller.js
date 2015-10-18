@@ -40,7 +40,7 @@
 
         vm.listBtn = currentBtns;
         
-        logger.success('titlebar loaded!', null);
+        logger.success('titlebar loaded!', {vm:vm});
 
         if(!dataOs.showDevNotifications){
             logger.notif('Press " ctrl + n + i " to activate debug notifications', null)

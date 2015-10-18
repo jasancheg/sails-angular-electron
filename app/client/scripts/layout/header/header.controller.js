@@ -28,7 +28,7 @@
          */
         function activate() { 
             return $q.all([getNavRoutes()]).then(function() {
-                logger.success('header nav loaded!', null);
+                logger.success('header nav loaded!', {header:header});
             });
         }
 
