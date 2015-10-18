@@ -11,7 +11,7 @@
         //$window.localStorage.clear();
         var storage = $window.localStorage,
             cachedToken,
-            userToken = 'userToken',
+            userToken = 'satellizer_token', //'userToken'
             isAuthenticated = false,
             authToken = {
                 setToken: function(token) {

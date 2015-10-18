@@ -24,7 +24,7 @@
         <button ng-disabled="login.$invalid" class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
         <a class="btn btn-link btn-block" href="#/register">Create an account!</a>
         
-        <button ng-click="vm.authenticate('google')" class="btn btn-lg btn-link btn-block" type="button"><i class="fa fa-google"></i> Google</button>
+        <button ng-click="vm.googleAuth()" class="btn btn-lg btn-link btn-block" type="button"><i class="fa fa-google"></i> Google</button>
         <button ng-click="vm.authenticate('facebook')" class="btn btn-lg btn-link btn-block" type="button"><i class="fa fa-facebook-official"></i> Facebook</button>
     </form>
 </section>

@@ -83,28 +83,16 @@ localStrategy = {
                 message: 'email already exists'
             });
 
-            Passwords.encryptPassword({
-                password: password,
-                difficulty: 10
-            }).exec({
-                error: function (err) {
+            User.create({
+                email: email,
+                password: password
+            }, function (err, newUser) {
+                if (err) {
                     return done(err);
-                },
-                success: function (encryptedPassword) {
-
-                    User.create({
-                        email: email,
-                        password: encryptedPassword,
-                        lastLoggedIn: new Date()
-                    }, function (err, newUser) {
-                        if (err) {
-                            return done(err);
-                        }
-                        return done(null, newUser, {
-                            message: 'Account successfully created'
-                        });
-                    });
                 }
+                return done(null, newUser, {
+                    message: 'Account successfully created'
+                });
             });
         });
     })

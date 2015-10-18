@@ -9,7 +9,7 @@
         .controller('MainViewCtrl', MainViewCtrl);
 
     function MainViewCtrl (logger) {
-        logger.success('main view loaded!', null);
+        logger.success('main view loaded!', {vm:null});
     }
 
 })();

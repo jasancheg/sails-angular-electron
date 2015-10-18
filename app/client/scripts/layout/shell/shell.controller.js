@@ -16,7 +16,7 @@
         activate();
 
         function activate() {
-            logger.success('UI loaded!', null);
+            logger.success('UI loaded!', {vm:vm});
             hideSplash();
         }
 
