@@ -14,7 +14,7 @@
         .service('auth', auth);
 
     /* @ngInject */
-    function auth($q, $http, $sails, $window, $location, $auth, API_URL, authToken) {
+    function auth($q, $log, $sails, $window, $location, $auth, API_URL, authToken) {
         var popup,
             // google config data
             authUri = 'https://accounts.google.com/o/oauth2/auth',
@@ -35,9 +35,54 @@
 
         // helper function: store token in local storage and redirect to the home view
         function authSuccessful(res) {
-            //authToken.setToken(res.data.token);
             $auth.setToken(res.token);
             $location.path('/');
+        }
+
+        // helper function: error function callback
+        function handleError(err) {
+            $log.warn('warning: Something went wrong', err.message);
+        }
+
+        /**
+         * [authenticate description]
+         * @param  {[type]} provider [description]
+         * @return {[type]}          [description]
+         */
+        this.authenticate = function (provider) {
+
+            $log.warn('POR AQUI ANDA: ', provider);
+
+            var deferred = $q.defer();
+            $window.focus();
+
+            // $auth.unlink(provider)
+            //     .then(function(response) {
+            //         // You have unlinked a GitHub account.
+            //         $auth.authenticate(provider);
+            //     })
+            //     .catch(function(response) {
+            //         // Handle errors here.
+            //         $log.error('UNLINK: ', response);
+            //     });
+
+            $auth.authenticate(provider);
+            // for some reason this callback is not working :P
+            //.then(function (res) {
+            //     $log.warn('RES: ', res);
+            // }, handleError);
+
+            /**
+             * for reason that the promise is no working this socket is used
+             * Init socket to check for updates on the googleauth or facebookauth code
+             * @param  {[string]} message [Received [google|facebook] authentification code]
+             */
+            $sails.on(provider + 'auth', function (data) {
+                authSuccessful(data);
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
         }
 
         this.googleAuth = function() {
@@ -59,20 +104,6 @@
             });
 
             return deferred.promise;
-        }
-
-        this.login = function (email, password) {
-            return $http.post(API_URL + 'api/auth/login', {
-                email: email,
-                password: password
-            }).success(authSuccessful);
-        }
-
-        this.register = function (email, password) {
-            return $http.post(API_URL + 'api/auth/register', {
-                email: email,
-                password: password
-            }).success(authSuccessful);
         }
     }
 }());

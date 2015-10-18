@@ -42,9 +42,10 @@
             redirectUri: API_URL + 'api/auth/googleauth'
         });
         $authProvider.facebook({
-            clientId: '698580886903269',
-            url: API_URL + 'api/auth/facebook',
-            redirectUri: API_URL + 'api/auth/facebookauth'
+            clientId: '1639177299653724',
+            url: API_URL + 'api/auth/facebookauth',
+            redirectUri: API_URL + 'api/auth/facebookauth'//,
+            //scope: ['user_about_me', 'email', 'user_photos']
         });
     }
     core.config(httpAutherntificationProviders);

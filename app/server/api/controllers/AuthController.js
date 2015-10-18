@@ -186,8 +186,7 @@ module.exports = {
                         User.create({
                             email: profile.email,
                             displayName: profile.name,
-                            googleId: profile.sub,
-                            lastLoggedIn: new Date()
+                            googleId: profile.sub
                         }, function (err, newUser) {
                             if (err) {
                                 return res.negotiate(err);
@@ -218,8 +217,7 @@ module.exports = {
      * @return {[type]}     [description]
      */
     facebookauth: function(req, res) {
-        console.log('DE QUE LLEGO LLEGO: ', req.allParams());
-        //Authentification.fb(req, res);
+        Authentification.fb(req, res, sails.io, resolveResponse);
     },
 
     /**
