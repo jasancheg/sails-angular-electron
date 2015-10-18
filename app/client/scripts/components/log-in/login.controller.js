@@ -49,7 +49,8 @@
             auth.googleAuth().then(function (res) {
                 var message = [
                     'Welcome', 
-                    'Thanks for coming back '
+                    'Thanks for coming back ',
+                    res.data.displayName + '!'
                 ];
                 if (res.type && res.type === 'new') {
                     message = [
@@ -66,11 +67,22 @@
         }
 
         vm.authenticate = function (provider) {
-            $auth.authenticate(provider).then(function (res) {
-                console.log('JOJOJOJOJOJ');
-                $window.localStorage.setItem('active_user', JSON.stringify(res.data));
+            auth.authenticate(provider).then(function (res) {
+                var message = [
+                    'Welcome', 
+                    'Thanks for coming back ',
+                    res.data.displayName + '!'
+                ];
+                if (res.type && res.type === 'new') {
+                    message = [
+                        'Account created!', 
+                        'Welcome, ' + res.data.displayName + '! Please email activate your account in the next several days.'
+                    ];
+                }
                 if(res.data){
-                    alert('success', 'Welcome', 'Thanks for coming back ' + res.data.displayName + '!');
+                    // store active user in localstorage
+                    User.setUser(JSON.stringify(res.data));
+                    alert('success', message[0], message[1]);
                 }
             }, handleError);
         }

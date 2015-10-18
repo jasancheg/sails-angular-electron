@@ -46,6 +46,10 @@ module.exports = {
             type: 'string',
             defaultsTo: null
         },
+        facebookId: {
+            type: 'string',
+            defaultsTo: null
+        },
         displayName: {
             type: 'string',
             defaultsTo: ''

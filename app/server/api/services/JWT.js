@@ -10,7 +10,7 @@ module.exports = {
         var payload = {
                 //iss: 'localhost',
                 sub: user.id,
-                exp: moment().add(10, 'days').unix()
+                exp: moment().add(1, 'hours').unix()
             };
         return jwt.encode(payload, "shhh..");
     }
