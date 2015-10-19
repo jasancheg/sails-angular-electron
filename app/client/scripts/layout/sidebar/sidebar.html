@@ -2,11 +2,11 @@
     <div class="row" id="authBox">
         <div class="col-xs-5 col-md-5">
             <div class="thumbnail">
-                <img src="{{vm.picture}}" alt="...">
+                <i class='fa fa-question-circle' ng-class="{hide: vm.picture}"></i><img ng-show="vm.picture" src="{{vm.picture}}" alt="...">
             </div>
         </div>
         <div class="col-xs-7 col-md-7 name-input">
-            <p>{{vm.username}}</p>
+            <p>{{vm.username}}<span ng-show="!vm.username"><a href="#" class="btn btn-link"><i class="fa fa-edit"></i> Edit</a></span></p>
         </div>
     </div>
     <ul class="nav nav-sidebar">
@@ -14,6 +14,13 @@
             data-ng-class="vm.isCurrent(m)"
             data-ng-repeat="m in vm.mainNavRoutes">
             <a href="#{{m.originalPath}}" data-ng-bind-html="m.settings.content"></a>
+        </li>
+    </ul>
+    <hr>
+    <ul class="nav nav-sidebar">
+        <li class="nPurple fade-selection-animation" ng-show="vm.isAuthenticated()"  data-ng-repeat="r in vm.logoutNavRoutes">
+            <a href="#{{r.originalPath}}"
+                data-ng-bind-html="r.settings.icon + ' ' + r.title"></a>
         </li>
     </ul>
     <hr>

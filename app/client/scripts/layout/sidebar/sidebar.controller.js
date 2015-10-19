@@ -8,20 +8,26 @@
         .module('app.layout')
         .controller('SideBarCtrl', SideBarCtrl);
 
-    function SideBarCtrl ($timeout, $route, $sails, routehelper, logger, User) {
+    function SideBarCtrl ($q, $timeout, $route, $auth, $sails, routehelper, logger, User) {
 
         var vm = this,
             routesAdmin = routehelper.getRoutes({settings:{type: 'admin'}}),
-            routesMain = routehelper.getRoutes({settings:{type: 'mainnav'}});
+            routesMain = routehelper.getRoutes({settings:{type: 'mainnav'}}),
+            routesLogout = routehelper.getRoutes({settings:{type: 'logout'}});
 
         vm.isCurrent = isCurrent;
+        vm.isAuthenticated = isAuthenticated;
         
         activate();
 
+        /**
+         * controller init
+         * @return {[asynchronously execution]} activate
+         */
         function activate() { 
-            getNavRoutes();
-            updateUserInfo(); 
-            logger.success('Side Bar loaded!', {vm:vm});
+            return $q.all([getNavRoutes(), updateUserInfo()]).then(function() {
+                logger.success('Side Bar loaded!', {vm:vm});
+            });
         }
 
         function getNavRoutes() {
@@ -31,6 +37,11 @@
                 return r1.settings.nav - r2.settings.nav;
             });
             vm.adminNavRoutes = routesAdmin.filter(function(r) {
+                return r.settings && r.settings.nav;
+            }).sort(function(r1, r2) {
+                return r1.settings.nav - r2.settings.nav;
+            });
+            vm.logoutNavRoutes = routesLogout.filter(function(r) {
                 return r.settings && r.settings.nav;
             }).sort(function(r1, r2) {
                 return r1.settings.nav - r2.settings.nav;
@@ -54,6 +65,15 @@
                 vm.username = 'Please sign in';
                 vm.picture = 'assets/images/smile_128x128.png';
             }
+        }
+
+        /**
+         * [isAuthenticated description]
+         * @return {Boolean} [description]
+         */
+        function isAuthenticated() {
+            //console.log('$auth.isAuthenticated: ', $auth.isAuthenticated());
+            return $auth.isAuthenticated();
         }
 
         // update user info on change session
