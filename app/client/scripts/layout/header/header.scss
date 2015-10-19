@@ -15,6 +15,7 @@ header > .navbar.navbar-fixed-top {
                 transition: ease-out all 0.3s 0.4s;
 }
 header.header {
+    z-index: 99998;
     .box-back-forward {
         padding: 8px 0 0 10px;
         -webkit-app-region: no-drag;

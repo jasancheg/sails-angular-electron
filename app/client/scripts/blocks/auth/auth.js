@@ -56,16 +56,6 @@
             var deferred = $q.defer();
             $window.focus();
 
-            // $auth.unlink(provider)
-            //     .then(function(response) {
-            //         // You have unlinked a GitHub account.
-            //         $auth.authenticate(provider);
-            //     })
-            //     .catch(function(response) {
-            //         // Handle errors here.
-            //         $log.error('UNLINK: ', response);
-            //     });
-
             $auth.authenticate(provider);
             // for some reason this callback is not working :P
             //.then(function (res) {
