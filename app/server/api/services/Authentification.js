@@ -9,7 +9,7 @@ function execResponse (res, io, successData, profile, provider, type) {
 
     io.sockets.emit(provider + 'auth', successData);
     io.sockets.emit('sessionstate', {msg: 'session has started'});
-    res.status(200);
+
     return res.ok();
 }
 
