@@ -9,7 +9,6 @@ var request = require('request'),
     passport = require('passport');
 
 function resolveResponse(req, user, success, summary) {
-    console.log('user: ', user);
     var token = JWT.createToken(user),
         successData = {
             success: success,
@@ -21,7 +20,7 @@ function resolveResponse(req, user, success, summary) {
                 email: user.email,
                 isAdmin: !!user.admin,
                 lastLoggedIn: user.lastLoggedIn,
-                displayName: 'aa',
+                displayName: '',
                 picture: ''
             }
         };
@@ -85,7 +84,9 @@ module.exports = {
      */
     login: function(req, res) {
 
-        var successData,
+        var picture,
+            Gravatar = require('machinepack-gravatar'),
+            successData,
             io = sails.io,
             cUserEmail = req.param('email'),
             errData = {
@@ -95,17 +96,6 @@ module.exports = {
                     email: cUserEmail
                 }
             };
-
-        var Gravatar = require('machinepack-gravatar');
-
-        // Build the URL of a gravatar image for a particular email address.
-        // Gravatar.getImageUrl({
-        //     emailAddress: cUserEmail,
-        //     gravatarSize: 400,
-        //     defaultImage: 'http://example.com/images/avatar.jpg',
-        //     rating: 'g',
-        //     useHttps: true,
-        // }).execSync();
 
         passport.authenticate('local-login', function (err, user) {
             if (err) {
@@ -119,9 +109,20 @@ module.exports = {
                 if (err) {
                     return res.negotiate(err);
                 }
+
+                // Build the URL of a gravatar image for a particular email address.
+                picture = Gravatar.getImageUrl({
+                    emailAddress: cUserEmail,
+                    gravatarSize: 50,
+                    defaultImage: 'http://inideaweb.com/projects/2015/smile_128x128.png',
+                    rating: 'g',
+                    useHttps: true,
+                }).execSync();
                 
                 successData = resolveResponse(req, user, 'E_AUTH', '200 ok');
+                successData.data.picture = picture;
                 io.sockets.emit('sessionstate', {msg: 'session has started'});
+                console.log("successData login: ", successData);
                 updateUserlastLoggedIn(res, user, successData);
             });
         })(req, res);

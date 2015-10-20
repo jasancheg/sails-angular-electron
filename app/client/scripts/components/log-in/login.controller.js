@@ -32,14 +32,13 @@
                 })
                 .then(function (res) {
                     var message = 'Thanks for coming back ' + res.data.data.email + '!';
-
                     if (!res.data.data.active) {
                         message = 'Just a reminder, please activate your account soon :)';
                     }
 
                     alert('success', 'Welcome', message);
                     // store active user in localstorage
-                    User.setUser(JSON.stringify(res.data));
+                    User.setUser(JSON.stringify(res.data.data));
                     $location.path('/');
                 })
                 .catch(handleError);

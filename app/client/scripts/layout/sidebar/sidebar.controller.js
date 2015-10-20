@@ -57,13 +57,14 @@
         }
 
         function updateUserInfo(){
+            console.log('Vino por aca pero : ', User.getUser());
             if(User.isAuthenticated()) {
                 var user = User.getUser();
                 vm.username = user.displayName;
                 vm.picture = user.picture;
             } else {
                 vm.username = 'Please sign in';
-                vm.picture = 'assets/images/smile_128x128.png';
+                vm.picture = 'http://inideaweb.com/projects/2015/smile_128x128.png';
             }
         }
 
