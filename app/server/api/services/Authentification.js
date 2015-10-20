@@ -1,6 +1,18 @@
 var request = require('request'),
     qs = require('querystring');
 
+function execResponse (res, io, successData, profile, provider, type) {
+    successData.data.displayName = profile.name;
+    successData.data.picture = profile.picture.data.url;
+    // Indicate it is a new user
+    successData.type = type;
+
+    io.sockets.emit(provider + 'auth', successData);
+    io.sockets.emit('sessionstate', {msg: 'session has started'});
+    res.status(200);
+    return res.ok();
+}
+
 module.exports = {
 
     /**
@@ -25,6 +37,7 @@ module.exports = {
             url: accessTokenUrl,
             qs: params
         }, function (err, response, accessToken) {
+
             accessToken = qs.parse(accessToken);
             // indicate wanted inputs
             accessToken.fields = 'id,name,picture,email';
@@ -38,27 +51,23 @@ module.exports = {
                     facebookId: profile.id
                 }, function (err, existingUser) {
                     if (existingUser) {
-                        return JWT.createToken(existingUser);
+                        JWT.createToken(existingUser);
+                        successData = resolveResponse(req, existingUser, 'E_AUTH', 'User is log in');
+                        execResponse(res, io, successData, profile, 'facebook', 'exist');
+                    } else {
+                        User.create({
+                            email: profile.email,
+                            displayName: profile.name,
+                            facebookId: profile.id
+                        }, function (err, newUser) {
+                            if (err) {
+                                return res.negotiate(err);
+                            }
+                            JWT.createToken(newUser);
+                            successData = resolveResponse(req, newUser, 'E_CREATION', 'User have been created');
+                            execResponse(res, io, successData, profile, 'facebook', 'new');
+                        });
                     }
-
-                    User.create({
-                        email: profile.email,
-                        displayName: profile.name,
-                        facebookId: profile.id
-                    }, function (err, newUser) {
-                        if (err) {
-                            return res.negotiate(err);
-                        }
-                        JWT.createToken(newUser);
-                        successData = resolveResponse(req, newUser, 'E_CREATION', 'User have been created');
-                        successData.data.displayName = profile.name;
-                        successData.data.picture = profile.picture.data.url;
-                        // Indicate it is a new user
-                        successData.type = 'new';
-                        io.sockets.emit('facebookauth', successData);
-                        io.sockets.emit('sessionstate', {msg: 'session has started'});
-                        return res.view();
-                    });
 
                 })
             });

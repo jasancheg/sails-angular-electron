@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 /* global angular */
 
 (function () {
@@ -29,7 +30,7 @@
     core.config(SailsRestServicesProviders);
 
     /* @ngInject */
-    function httpAutherntificationProviders ($httpProvider, $authProvider, API_URL) {
+    function httpAutherntificationProviders ($httpProvider, $authProvider, API_URL, Config) {
         // http authentification interceptors
         $httpProvider.interceptors.push('authInterceptor');
 
@@ -37,14 +38,14 @@
         $authProvider.loginUrl = API_URL + 'api/auth/login';
         $authProvider.signupUrl = API_URL + 'api/auth/register';
         $authProvider.google({
-            clientId: '124193795163-3me354kp9ujfkmv01pe1acldjpce0spg.apps.googleusercontent.com',
-            url: API_URL + 'api/auth/googleauth',
-            redirectUri: API_URL + 'api/auth/googleauth'
+            clientId: Config.GOOGlE_CLIENT_ID,
+            url: API_URL + Config.GOOGLE_REDIRECT_URL,
+            redirectUri: API_URL + Config.GOOGLE_REDIRECT_URL
         });
         $authProvider.facebook({
-            clientId: '1639177299653724',
-            url: API_URL + 'api/auth/facebookauth',
-            redirectUri: API_URL + 'api/auth/facebookauth'//,
+            clientId: Config.FACEBOOK_CLIENT_ID,
+            url: API_URL + Config.FACEBOOK_REDIRECT_URL,
+            redirectUri: API_URL + Config.FACEBOOK_REDIRECT_URL//,
             //scope: ['user_about_me', 'email', 'user_photos']
         });
     }
