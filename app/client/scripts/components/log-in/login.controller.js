@@ -45,8 +45,8 @@
                 .catch(handleError);
         };
 
-        vm.googleAuth = function () {
-            auth.googleAuth().then(function (res) {
+        vm.manualAuth = function (provider) {
+            auth.manualAuth(provider).then(function (res) {
                 var message = [
                     'Welcome', 
                     'Thanks for coming back ',

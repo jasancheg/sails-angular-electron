@@ -14,24 +14,28 @@
         .service('auth', auth);
 
     /* @ngInject */
-    function auth($q, $log, $sails, $window, $location, $auth, API_URL, authToken) {
+    function auth($q, $log, $sails, $window, $location, $auth, API_URL, authToken, Config) {
         var popup,
-            // google config data
-            authUri = 'https://accounts.google.com/o/oauth2/auth',
-            servUri = API_URL + 'api/auth/googleauth',
-            clientId = '124193795163-3me354kp9ujfkmv01pe1acldjpce0spg.apps.googleusercontent.com',
-            urlBuilder = [
-                'response_type=code',
-                'client_id=' + clientId,
-                'redirect_uri=' + servUri,
-                'scope=profile email'
-            ], 
-            popupOptions = [
-                'width=500',
-                'height=500',
-                'left=' + ($window.outerWidth - 500) / 2,
-                'top=' + ($window.outerHeight - 500) / 2.5
-            ];
+            // Social auth config data
+            authUri = { 
+                google: Config.GOOGLE_URL_AUTH
+            },
+            urlBuilder = {
+                google: [
+                    'response_type=code',
+                    'client_id=' + Config.GOOGlE_CLIENT_ID,
+                    'redirect_uri=' + API_URL + Config.GOOGLE_REDIRECT_URL,
+                    'scope=profile email'
+                ]
+            },
+            popupOptions = {
+                google: [
+                    'width=500',
+                    'height=500',
+                    'left=' + ($window.outerWidth - 500) / 2,
+                    'top=' + ($window.outerHeight - 500) / 2.5
+                ]
+            };
 
         // helper function: store token in local storage and redirect to the home view
         function authSuccessful(res) {
@@ -51,16 +55,14 @@
          */
         this.authenticate = function (provider) {
 
-            $log.warn('POR AQUI ANDA: ', provider);
-
             var deferred = $q.defer();
             $window.focus();
 
-            $auth.authenticate(provider);
-            // for some reason this callback is not working :P
-            //.then(function (res) {
-            //     $log.warn('RES: ', res);
-            // }, handleError);
+            $auth.authenticate(provider)
+            //for some reason this callback is not working :P
+            .then(function (res) {
+                $log.info('RES: ', res);
+            }, handleError);
 
             /**
              * for reason that the promise is no working this socket is used
@@ -75,9 +77,15 @@
             return deferred.promise;
         }
 
-        this.googleAuth = function() {
-            var options = popupOptions.join(','),
-                url = authUri + "?" + urlBuilder.join('&'),
+        /**
+         * [googleAuth description]
+         * @param  {[type]} provider [description]
+         * @return {[type]}          [description]
+         */
+        this.manualAuth = function(provider) {
+
+            var options = popupOptions[provider].join(','),
+                url = authUri[provider] + "?" + urlBuilder[provider].join('&'),
                 deferred = $q.defer();
 
             popup = $window.open(url, '', options);
@@ -87,7 +95,7 @@
              * Init socket to check for updates on the googleauth code
              * @param  {[string]} message [Received google authentification code]
              */
-            $sails.on('googleauth', function (data) {
+            $sails.on(provider + 'auth', function (data) {
                 popup.close();
                 authSuccessful(data);
                 deferred.resolve(data);
